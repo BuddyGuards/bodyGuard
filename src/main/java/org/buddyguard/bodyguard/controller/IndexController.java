@@ -16,6 +16,10 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/help")
+    public String helpHandel() {
 
+        return "help";
+    }
 
 }
