@@ -15,8 +15,12 @@
         select * from users where email = #{email}
     </select>
 
-
-
-
+    <update id="updateUserProfileByEmail">
+        update users set nickname = #{request.nickname}, image_url = #{request.imageUrl},
+        gender = #{request.gender}, height = #{request.height},
+        weight = #{request.weight}, age = #{request.age}, goal = #{request.goal},
+        info_public = #{request.infoPublic}
+        where email = #{email}
+    </update>
 
 </mapper>

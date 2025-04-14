@@ -21,10 +21,11 @@ public class User {
     private String verified;
     private LocalDateTime createdAt;
 
-    private String infoPublic;
     private String gender;
     private double height;
     private double weight;
     private int age;
     private String goal;
+    private String infoPublic;   // 프로필 공개 여부
+
 }
