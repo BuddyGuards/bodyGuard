@@ -75,7 +75,15 @@ public class AuthController {
     }
     @GetMapping("/about")
     public String aboutHandle(Model model) {
+
         return "auth/about";
     }
+    @GetMapping("/create")
+    public String createHandle(Model model) {
+
+        return "group/create";
+    }
+
+
 
 }

@@ -4,113 +4,159 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인 | bodyGuard</title>
-  <link rel="icon" th:href="@{/images/helzzang.png}" type="image/png">
+  <link rel="icon" th:href="@{/images/9.png}" type="image/png">
 
-</head>
-<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+
   <style>
-    @keyframes fadeSlideIn {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    * {
+      box-sizing: border-box;
+      font-family: 'Pretendard', sans-serif;
     }
 
-    .fade-title {
-      animation: fadeSlideIn 1s ease forwards;
+    body {
+      margin: 0;
+      background-color: #f9fafc;
+      color: #333;
     }
 
     .login-container {
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      animation: fadeSlideIn 1.2s ease forwards;
+      max-width: 400px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo img {
+      height: 70px;
     }
 
     .login-box {
+      background-color: white;
+      border-radius: 16px;
       padding: 30px;
-      border: 0.0062em solid rgba(0, 0, 0, 0.1);
-      border-radius: 6px;
-      background-color: #f6f8fa;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-      animation: fadeSlideIn 1.4s ease forwards;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .login-box input {
-      padding: 8px;
+    .login-box h2 {
+      font-weight: 600;
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      color: #4f46e5;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      display: block;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
-      border: 1px solid rgba(0, 0, 0, 0.3);
-      border-radius: 4px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 15px;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus {
+      border-color: #4f46e5;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .sub-links {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .sub-links a {
+      color: #4f46e5;
+      text-decoration: none;
     }
 
     .login-box button {
       width: 100%;
-      padding: 10px;
-      background-color: slategray;
+      padding: 12px;
+      background-color: #4f46e5;
       color: white;
-      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 600;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s;
     }
 
     .login-box button:hover {
-      background-color: #2f4f4f;
+      background-color: #3730a3;
+    }
+
+    .social-login {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .social-login img {
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 12px;
     }
   </style>
 </head>
 
 <body>
 <div class="login-container">
-  <h2 class="fade-title" style="font-weight: 300; margin-bottom: 20px;">로그인</h2>
+  <div class="logo">
+    <a href="/">
+      <img src="/images/9.png" alt="로고" />
+    </a>
+  </div>
 
   <div class="login-box">
-    <form th:action="@{/auth/login}" method="post" autocomplete="off" style="margin-bottom: 30px;">
-      <div style="margin-bottom: 10px;">
-        <div style="display: flex; justify-content: space-between; font-size: small; margin-bottom: 4px;">
-          <label>이메일주소</label>
-          <a th:href="@{/auth/signup}">회원가입</a>
-        </div>
-        <input type="text" name="email" placeholder="이메일주소"/>
+    <h2>로그인</h2>
+    <form th:action="@{/auth/login}" method="post" autocomplete="off">
+      <label>이메일주소</label>
+      <input type="text" name="email" placeholder="이메일주소"/>
+
+      <div class="sub-links">
+        <a th:href="@{/auth/signup}">회원가입</a>
+        <a th:href="@{/auth/find-password}">비밀번호찾기</a>
       </div>
 
-      <div style="margin-bottom: 10px;">
-        <div style="display: flex; justify-content: space-between; font-size: small; margin-bottom: 4px;">
-          <label>비밀번호</label>
-          <a th:href="@{/auth/find-password}">비밀번호찾기</a>
-        </div>
-        <input type="password" name="password" placeholder="비밀번호"/>
-      </div>
+      <label>비밀번호</label>
+      <input type="password" name="password" placeholder="비밀번호"/>
 
       <button type="submit">로그인</button>
     </form>
-    <div>
+
+    <div class="social-login">
       <a th:href="@{https://kauth.kakao.com/oauth/authorize
             (client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code' )}">
-        <img th:src="@{/images/kakao_login.png}"/>
+        <img th:src="@{/images/kakao_login.png}" alt="카카오 로그인"/>
       </a>
-    </div>
-    <div>
       <a th:href="@{https://nid.naver.com/oauth2.0/authorize(response_type='code', client_id=${naverClientId},
                                     redirect_uri=${naverRedirectUri}, state='codenova')}">
-        <img th:src="@{/images/naver_login.png}"/>
+        <img th:src="@{/images/naver_login.png}" alt="네이버 로그인"/>
       </a>
     </div>
-
   </div>
 </div>
 </body>
-
-
-
-
-
-
-
+</html>
 
 
 

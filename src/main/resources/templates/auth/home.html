@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>bodyGuard | 홈</title>
-  <link rel="icon" th:href="@{/images/helzzang.png}" type="image/png">
+  <link rel="icon" th:href="@{/images/9.png}" type="image/png">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -55,12 +55,18 @@
       cursor: pointer;
       overflow: hidden;
     }
-    @keyframes slideLeftRight {
-      0%, 100% {
-        transform: translateX(0px);
+    @keyframes slideRight {
+      0% {
+        transform: translateX(0%);
       }
-      50% {
-        transform: translateX(10px);
+      33% {
+        transform: translateX(100%);
+      }
+      66% {
+        transform: translateX(200%);
+      }
+      100% {
+        transform: translateX(0%);
       }
     }
 
@@ -146,16 +152,32 @@
       opacity: 0;
       animation: fadeInUp 1.6s ease-out forwards;
     }
+    .slider-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin: 40px 0;
+    }
 
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .slider-track {
+      display: flex;
+      animation: slideOneByOne 12s linear infinite;
+      width: max-content;
+    }
+
+    .slide {
+      flex: 0 0 100vw; /* 전체 화면 너비 하나씩 */
+      height: 400px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    @keyframes slideOneByOne {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-320px); }
+      50% { transform: translateX(-640px); }
+      75% { transform: translateX(-960px); }
+      100% { transform: translateX(0); }
     }
     .modal {
       position: fixed;
@@ -207,10 +229,18 @@
       background-color: #3730a3;
     }
 
-    @keyframes slideUp {
+    @keyframes scrollSlide {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-50%); /* 절반 이동 (3칸) */
+      }
+    }
+    @keyframes fadeInUp {
       0% {
         opacity: 0;
-        transform: translateY(40px);
+        transform: translateY(20px);
       }
       100% {
         opacity: 1;
@@ -218,10 +248,6 @@
       }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
 
   </style>
 </head>
@@ -253,7 +279,13 @@
       <h2 class="overlay-text">레시피 저장소</h2>
     </div>
   </div>
-
+  <section class="slider-wrapper">
+    <div class="slider-track">
+      <div class="slide" style="background-image: url('/images/6.jpg');"></div>
+      <div class="slide" style="background-image: url('/images/7.jpg');"></div>
+      <div class="slide" style="background-image: url('/images/8.jpg');"></div>
+    </div>
+  </section>
 </main>
 
 
