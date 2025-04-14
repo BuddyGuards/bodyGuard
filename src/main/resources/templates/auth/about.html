@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>About Us | bodyMate</title>
+  <style>
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background-color: #fafafa;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1.2s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #4f46e5;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    em {
+      display: block;
+      font-style: italic;
+      color: #4f46e5;
+      font-weight: 500;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+<h1 class="fade-in" style="animation-delay: 0.2s;">우리는 bodyGuard 팀입니다!</h1>
+<p class="fade-in" style="animation-delay: 0.4s;">2025년 설립 🗓<br>건강한 삶을 지향하는 개발자들이 모여 만들었어요.</p>
+<p class="fade-in" style="animation-delay: 0.6s;">
+  👤 팀원<br>
+  • 병재 - 기획<br>
+  • 예린 - Backend<br>
+  • 진수 - Frontend<br>
+
+</p>
+<em class="fade-in" style="animation-delay: 0.8s;">"작은 습관이 쌓여, 당신의 하루가 바뀝니다.”</em>
+</body>
+</html>
