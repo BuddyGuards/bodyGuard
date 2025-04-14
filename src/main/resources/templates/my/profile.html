@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보디가드 | 마이페이지</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<div class="bottom-border-div">
+    <div class="index-header wrap">
+        <h2>마이페이지</h2>
+        <div>
+            <a th:href="@{/index}"></a>
+        </div>
+        <div>
+            <a th:href="@{/my/profile}"></a>
+        </div>
+    </div>
+</div>
+
+<div class="my-main wrap">
+    <ul class="my-main-nav">
+        <li class="active">내정보</li>
+        <li>내가 쓴 글</li>
+        <li>가입신청 중인 모임</li>
+        <li><a th:href="@{/auth/logout}">로그아웃</a></li>
+    </ul>
+
+    <div class="content">
+        <div class="account">
+            <h3>로그인 계정</h3>
+            <ul>
+                <li>아이디 : <span th:text="${user.id}"></span></li>
+                <li>닉네임 : <span th:text="${user.nickname}"></span></li>
+                <li>프로필 사진 : <span th:text="${user.imageUrl}"></span></li>
+                <li>성별 : <span th:text="${user.gender}"></span></li>
+                <li>키 : <span th:text="${user.height}"></span></li>
+                <li>몸무게 : <span th:text="${user.weight}"></span></li>
+                <li>나이 : <span th:text="${user.age}"></span></li>
+                <li>목표 : <span th:text="${user.goal}"></span></li>
+            </ul>
+        </div>
+        <div class="submit-btn">
+            <a th:href="@{/my/profile-update}" class="btn-submit">수정하기</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

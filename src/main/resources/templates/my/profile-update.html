@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보디가드 | 프로필 수정</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+<div class="bottom-border-div">
+    <div class="index-header wrap">
+        <h2>마이페이지</h2>
+        <div>
+            <a th:href="@{/index}"></a>
+        </div>
+        <div>
+            <a th:href="@{/my/profile}"></a>
+        </div>
+    </div>
+</div>
+
+<div class="my-main wrap">
+    <ul class="my-main-nav">
+        <li><a th:href="@{/my/profile}">내정보</a></li>
+        <li class="active">프로필 수정</li>
+        <li>내가 쓴 글</li>
+        <li>가입신청 중인 모임</li>
+        <li><a th:href="@{/auth/logout}">로그아웃</a></li>
+    </ul>
+
+    <div class="content">
+        <form th:action="@{/my/profile-update}" method="post" class="profile-update-form">
+            <div class="account">
+                <h3>로그인 계정</h3>
+                <ul>
+                    <li>아이디 : <span th:text="${user.id}"></span></li>
+                    <li>닉네임 : <input type="text" th:value="${user.nickname}" name="nickname"/></li>
+                    <li>프로필 사진 : <input type="text" th:value="${user.imageUrl}" name="imageUrl"/></li>
+                    <li>성별
+                        <select name="gender" th:value="${user.gender}">
+                            <option value="male">남성</option>
+                            <option value="female">여성</option>
+                            <option value="other">기타</option>
+                        </select>
+                    </li>
+                    <li>키 : <input type="number" th:value="${user.height}" name="height"/></li>
+                    <li>몸무게 : <input type="number" th:value="${user.weight}" name="weight"/></li>
+                    <li>나이 : <input type="number" th:value="${user.age}" name="age"/></li>
+                    <li>목표 : <input type="text" th:value="${user.goal}" name="goal"/></li>
+                </ul>
+            </div>
+            <div class="submit-btn">
+                <button type="submit">저장하기</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
