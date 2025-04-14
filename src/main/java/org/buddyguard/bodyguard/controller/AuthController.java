@@ -28,6 +28,7 @@ public class AuthController {
         return "auth/signup";
     }
 
+
     @PostMapping("/signup")
     public String signupPostHandle(@ModelAttribute User user){
 
@@ -84,6 +85,7 @@ public class AuthController {
 
         return "group/create";
     }
+
 
 
 
