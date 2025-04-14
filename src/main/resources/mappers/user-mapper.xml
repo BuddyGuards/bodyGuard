@@ -18,8 +18,7 @@
     <update id="updateUserProfileByEmail">
         update users set nickname = #{nickname}, image_url = #{imageUrl},
         gender = #{gender}, height = #{height},
-        weight = #{weight}, age = #{age}, goal = #{goal},
-        info_public = #{infoPublic}
+        weight = #{weight}, age = #{age}, goal = #{goal}
         where email = #{email}
     </update>
 

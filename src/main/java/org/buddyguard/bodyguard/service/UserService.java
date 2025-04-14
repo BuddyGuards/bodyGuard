@@ -12,6 +12,15 @@ public class UserService {
     private final UserRepository userRepository;
 
     public void updateUserProfile(String email, ProfileUpdateRequest request) {
-        userRepository.updateUserProfileByEmail(email, request);
+        userRepository.updateUserProfileByEmail(
+                request.getNickname(),
+                request.getImageUrl(),
+                request.getGender(),
+                request.getHeight(),
+                request.getWeight(),
+                request.getAge(),
+                request.getGoal(),
+                email
+        );
     }
 }

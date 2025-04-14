@@ -39,7 +39,6 @@
                         <select name="gender" th:value="${user.gender}">
                             <option value="남성">남성</option>
                             <option value="여성">여성</option>
-                            <option value="기타">기타</option>
                         </select>
                     </li>
                     <li>키 : <input type="number" th:value="${user.height}" name="height"/></li>
@@ -48,7 +47,7 @@
                     <li>목표 : <input type="text" th:value="${user.goal}" name="goal"/></li>
                 </ul>
             </div>
-            <div class="submit-btn">
+            <div>
                 <button type="submit">저장하기</button>
             </div>
         </form>
