@@ -16,10 +16,9 @@
     </select>
 
     <update id="updateUserProfileByEmail">
-        update users set nickname = #{request.nickname}, image_url = #{request.imageUrl},
-        gender = #{request.gender}, height = #{request.height},
-        weight = #{request.weight}, age = #{request.age}, goal = #{request.goal},
-        info_public = #{request.infoPublic}
+        update users set nickname = #{nickname}, image_url = #{imageUrl},
+        gender = #{gender}, height = #{height},
+        weight = #{weight}, age = #{age}, goal = #{goal}
         where email = #{email}
     </update>
 
