@@ -55,7 +55,9 @@
         </div>
         <div th:if="${status == 'MEMBER'}">
           <p>
-            <button style="width: 100%; padding: 5px; font-size:1em;" disabled>모임 탈퇴하기</button>
+            <a th:href="@{/group/{groupId}/leave(groupId=${group.id})}">
+            <button style="width: 100%; padding: 5px; font-size:1em;" >모임 탈퇴하기</button>
+            </a>
           </p>
         </div>
         <div th:if="${status != 'NOT_JOINED' and status != 'PENDING' and status != 'MEMBER'}">

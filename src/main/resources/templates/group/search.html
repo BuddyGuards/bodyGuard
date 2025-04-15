@@ -18,8 +18,8 @@ background-color: #afafaf; color:white" placeholder="모임 검색" th:value="${
       </form>
     </div>
     <div>
-      <a href="${pageContext.request.contextPath}/my/profile">
-        <img src="${pageContext.request.contextPath}${user.avatarUrl}" style="height: 35px"/>
+      <a th:href="@{/my/profile}">
+        <img th:src="@{/images/10.png}" style="height: 35px"/>
       </a>
     </div>
   </div>
