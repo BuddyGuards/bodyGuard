@@ -2,56 +2,193 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>모임 만들기 | 보디가드</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
+  <title>모임 검색 | bodyGuard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #f0f4f8, #e3e6f6);
+      overflow-x: hidden;
+    }
+
+    .bg-deco {
+      position: fixed;
+      top: 0;
+      width: 250px;
+      height: 100vh;
+      object-fit: cover;
+      filter: brightness(90%) blur(1px);
+      opacity: 0.12;
+      z-index: -1;
+    }
+
+    .bg-deco.left {
+      left: 0;
+    }
+
+    .bg-deco.right {
+      right: 0;
+      transform: scaleX(-1);
+    }
+
+    .bottom-border-div {
+      padding: 16px 0;
+      backdrop-filter: blur(12px);
+      background-color: rgba(255, 255, 255, 0.6);
+      border-bottom: 1px solid #ddd;
+    }
+
+    .index-header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      max-width: 1000px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    .logo-area, .user-area {
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-area {
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-input {
+      border: none;
+      border-radius: 25px;
+      padding: 12px 24px;
+      width: 300px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      color: #333;
+      transition: box-shadow 0.3s ease;
+      box-shadow: 0 0 6px rgba(79, 70, 229, 0.05);
+    }
+
+    .search-input::placeholder {
+      color: #aaa;
+    }
+
+    .search-input:focus {
+      outline: none;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.2);
+    }
+
+    .status-text {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      color: #585858;
+      font-style: italic;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .group-main {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .group-card {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .group-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .group-main h3 a {
+      text-decoration: none;
+      color: #3f51b5;
+      font-size: 1.2em;
+    }
+
+    .group-main h3 a:hover {
+      text-decoration: underline;
+    }
+
+    .group-info {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
+
+
+<img th:src="@{/images/bg_diet_left.jpg}" class="bg-deco left" alt="left background">
+<img th:src="@{/images/bg_diet_right.jpg}" class="bg-deco right" alt="right background">
+
+
 <div class="bottom-border-div">
-  <div class="index-header wrap">
-    <div style="display:flex; gap:15px; align-items: center">
+  <div class="index-header">
+    <div class="logo-area">
       <a th:href="@{/index}">
         <img th:src="@{/images/10.png}" style="height: 35px"/>
       </a>
-      <form th:action="@{/group/search}" method="get" style="margin: 0">
-        <input type="text" name="word" style="border-radius: 20px; width:300px; padding:4px 15px;
-background-color: #afafaf; color:white" placeholder="모임 검색" th:value="${param.word}">
+    </div>
+    <div class="search-area">
+      <form th:action="@{/group/search}" method="get">
+        <input type="text" name="word" class="search-input" placeholder="모임 검색" th:value="${param.word}">
       </form>
     </div>
-    <div>
+    <div class="user-area">
       <a th:href="@{/my/profile}">
         <img th:src="@{/images/10.png}" style="height: 35px"/>
       </a>
     </div>
   </div>
 </div>
-<div>
-  <div class="group-main wrap">
-    <div th:text="'검색결과 ' + ${count}" style="font-size:1.5em; margin-top:20px;"></div>
 
-    <div th:each="one : ${result}"
-         style="border-bottom: 1px solid rgba(0,0,0,.08); padding: 20px 0px;">
 
-      <h3 style="font-weight: 400">
-        <a th:href="@{/group/{id}(id=${one.group.id})}"
-           style="text-underline-offset: 10px"
-           th:text="${one.group.name}">모임명</a>
-      </h3>
+<div class="status-text" id="moodMessage">“당신은 지금 잘하고 있어요 💙”</div>
 
-      <div th:text="${one.group.goal}">
-        목표 설명
-      </div>
 
-      <div style="display: flex; gap: 15px; margin-top: 2px; font-size: 0.85em">
-        <div style="color: #7f7f7f">
-          멤버 <span th:text="${one.group.memberCount}">0</span>
-        </div>
-        <div style="color: #7f7f7f">
-          리더 <span th:text="${one.creator.nickname}">이름</span>
-        </div>
-      </div>
+<div class="group-main wrap">
+  <div th:text="'검색결과 ' + ${count}" style="font-size:1.5em; margin-bottom:30px;"></div>
 
+  <div th:each="one : ${result}" class="group-card">
+    <h3>
+      <a th:href="@{/group/{id}(id=${one.group.id})}" th:text="${one.group.name}">모임명</a>
+    </h3>
+    <div class="group-info" th:text="${one.group.goal}">목표 설명</div>
+    <div class="group-info">
+      멤버 <span th:text="${one.group.memberCount}">0</span> ·
+      리더 <span th:text="${one.creator.nickname}">이름</span>
     </div>
   </div>
 </div>
+
+
+<script>
+  const moodList = [
+    "💡 작은 습관이 쌓여, 당신의 하루가 바뀝니다. ",
+
+  ];
+  document.getElementById("moodMessage").innerText =
+          moodList[Math.floor(Math.random() * moodList.length)];
+</script>
+
 </body>
 </html>
