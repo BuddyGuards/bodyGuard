@@ -13,4 +13,8 @@ public interface GroupRepository {
 
     public List<Group> findByNameLikeOrGoalLike (String word);
 
+    public Group findById (String id);
+
+    public int subtractMemberCountById (String id);
+
 }

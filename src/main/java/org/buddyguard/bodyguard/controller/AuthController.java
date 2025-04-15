@@ -52,8 +52,7 @@ public class AuthController {
     @PostMapping("/signup")
     public String signupPostHandle(@ModelAttribute User user) {
 
-        User found = userRepository.findByEmail(user
-                .getEmail());
+        User found = userRepository.findByEmail(user.getEmail());
         if (found == null) {
             user.setProvider("LOCAL");
             user.setVerified("F");
@@ -101,11 +100,6 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    @GetMapping("/home")
-    public String homeHandel(Model model) {
-
-        return "auth/home";
-    }
 
     @GetMapping("/about")
     public String aboutHandle(Model model) {

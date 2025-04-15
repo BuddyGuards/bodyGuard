@@ -15,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -85,6 +82,82 @@ public class GroupController {
 
 
         return "group/search";
+    }
+
+    // 모임 상세보기 핸들러
+    @GetMapping("/{id}")
+    public String viewHandle(@PathVariable("id") String id, Model model, @SessionAttribute("user") User user) {
+
+        Group group = groupRepository.findById(id);
+        if (group == null) {
+            return "redirect:/";
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("groupId", id);
+        map.put("userId", user.getId());
+        GroupMember status = groupMemberRepository.findByUserIdAndGroupId(map);
+        if (status == null) {
+            // 아직 참여한적이 없다
+            model.addAttribute("status", "NOT_JOINED");
+        } else if (status.getJoinedAt() == null) {
+            // 승인대기중
+            model.addAttribute("status", "PENDING");
+        } else if (status.getRole().equals("멤버")) {
+            // 멤버이다
+            model.addAttribute("status", "MEMBER");
+        } else {
+            // 리더이다.
+            model.addAttribute("status", "LEADER");
+        }
+
+        model.addAttribute("group", group);
+
+
+
+        return "group/view";
+    }
+
+    //모임 가입 처리
+    @Transactional
+    @GetMapping("/{id}/join")
+    public String joinHandle(@PathVariable("id") String id, @SessionAttribute("user") User user) {
+
+
+        boolean exist = false;
+        List<GroupMember> list = groupMemberRepository.findByUserId(user.getId());
+        for (GroupMember one : list) {
+            if (one.getGroupId().equals(id)) {
+                exist = true;
+                break;
+            }
+        }
+
+        if (!exist) {
+            GroupMember member = GroupMember.builder().
+                    userId(user.getId()).groupId(id).role("멤버").build();
+            Group group = groupRepository.findById(id);
+            if (group.getType().equals("공개")) {
+                groupMemberRepository.createApproved(member);
+                groupRepository.addMemberCountById(id);
+            } else {
+                groupMemberRepository.createPending(member);
+            }
+        }
+
+        return "redirect:/group/" + id;
+    }
+
+    // 탈퇴 요청 처리 핸들러
+    @GetMapping("/{groupId}/leave")
+    public String leaveHandle(@PathVariable("groupId") String groupId, @SessionAttribute("user") User user) {
+        int userId = user.getId();
+        Map map = Map.of("groupId", groupId, "userId", userId);
+
+        GroupMember found = groupMemberRepository.findByUserIdAndGroupId(map);
+        groupMemberRepository.deleteById(found.getId());
+
+        groupRepository.subtractMemberCountById(groupId);
+        return "redirect:/";
     }
 
 
