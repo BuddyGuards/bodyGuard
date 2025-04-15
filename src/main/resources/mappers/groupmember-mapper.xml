@@ -7,8 +7,22 @@
         insert into bodyguard.group_members (user_id, group_id, role, applied_at, joined_at)
         values (#{userId}, #{groupId}, #{role}, now(), now() )
     </insert>
+    <insert id="createPending" parameterType="groupMember">
+        insert into group_members (user_id, group_id, role, applied_at)
+        values
+        (#{userId}, #{groupId}, #{role}, now() )
+    </insert>
 
     <select id="findByUserIdAndGroupId" resultType="groupMember" parameterType="map">
         select * from group_members where user_id = #{userId} and group_id = #{groupId}
     </select>
+    <select id="findByUserId" parameterType="int" resultType="groupMember">
+        select * from group_members where user_id = #{userId}
+    </select>
+
+    <delete id="deleteById" parameterType="int">
+        delete from group_members where id = #{id}
+    </delete>
+
+
 </mapper>

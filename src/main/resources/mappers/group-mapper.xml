@@ -19,4 +19,9 @@
         select * from bodyguard.groups where id = #{id}
     </select>
 
+    <update id="subtractMemberCountById" parameterType="string">
+        update bodyguard.groups set member_count = member_count - 1 where id = #{id}
+    </update>
+
+
 </mapper>

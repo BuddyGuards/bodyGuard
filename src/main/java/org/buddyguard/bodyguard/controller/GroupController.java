@@ -117,6 +117,50 @@ public class GroupController {
         return "group/view";
     }
 
+    //모임 가입 처리
+    @Transactional
+    @GetMapping("/{id}/join")
+    public String joinHandle(@PathVariable("id") String id, @SessionAttribute("user") User user) {
+
+
+        boolean exist = false;
+        List<GroupMember> list = groupMemberRepository.findByUserId(user.getId());
+        for (GroupMember one : list) {
+            if (one.getGroupId().equals(id)) {
+                exist = true;
+                break;
+            }
+        }
+
+        if (!exist) {
+            GroupMember member = GroupMember.builder().
+                    userId(user.getId()).groupId(id).role("멤버").build();
+            Group group = groupRepository.findById(id);
+            if (group.getType().equals("공개")) {
+                groupMemberRepository.createApproved(member);
+                groupRepository.addMemberCountById(id);
+            } else {
+                groupMemberRepository.createPending(member);
+            }
+        }
+
+        return "redirect:/group/" + id;
+    }
+
+    // 탈퇴 요청 처리 핸들러
+    @GetMapping("/{groupId}/leave")
+    public String leaveHandle(@PathVariable("groupId") String groupId, @SessionAttribute("user") User user) {
+        int userId = user.getId();
+        Map map = Map.of("groupId", groupId, "userId", userId);
+
+        GroupMember found = groupMemberRepository.findByUserIdAndGroupId(map);
+        groupMemberRepository.deleteById(found.getId());
+
+        groupRepository.subtractMemberCountById(groupId);
+        return "redirect:/";
+    }
+
+
 
 
 

@@ -15,4 +15,6 @@ public interface GroupRepository {
 
     public Group findById (String id);
 
+    public int subtractMemberCountById (String id);
+
 }
