@@ -22,7 +22,7 @@ public class IndexController {
     public String indexHandel(Model model,
                               @SessionAttribute(value = "user", required = false) User user) {
         model.addAttribute("user", user);
-        return "auth/index"; // templates/index.html
+        return "auth/index"; // templates
     }
 
 //    @GetMapping("/index")
