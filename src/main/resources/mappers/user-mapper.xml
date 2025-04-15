@@ -18,6 +18,10 @@
         select * from users where id = #{id}
     </select>
 
+    <select id="findByProviderAndProviderId" resultType="user">
+        select * from users where provider=#{provider} and provider_id=#{providerId}
+    </select>
+
     <update id="updateUserProfileByEmail">
         update users set nickname = #{nickname}, image_url = #{imageUrl},
         gender = #{gender}, height = #{height},
