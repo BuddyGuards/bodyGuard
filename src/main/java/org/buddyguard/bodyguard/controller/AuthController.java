@@ -9,7 +9,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buddyguard.bodyguard.entity.User;
+import org.buddyguard.bodyguard.entity.Verification;
 import org.buddyguard.bodyguard.repository.UserRepository;
+import org.buddyguard.bodyguard.repository.VerificationRepository;
 import org.buddyguard.bodyguard.request.FindPasswordRequest;
 import org.buddyguard.bodyguard.request.LoginRequest;
 import org.buddyguard.bodyguard.service.KakaoApiService;
@@ -20,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Slf4j
@@ -31,7 +34,7 @@ public class AuthController {
     private UserRepository userRepository;
     private KakaoApiService kakaoApiService;
     private MailService mailService;
-
+    private VerificationRepository verificationRepository;
 
     // 회원가입 페이지
     @GetMapping("/signup")
@@ -45,8 +48,7 @@ public class AuthController {
     @PostMapping("/signup")
     public String signupPostHandle(@ModelAttribute User user) {
 
-        User found = userRepository.findByEmail(user
-                .getEmail());
+        User found = userRepository.findByEmail(user.getEmail());
         if (found == null) {
             user.setProvider("LOCAL");
             user.setVerified("F");
@@ -90,11 +92,7 @@ public class AuthController {
         session.invalidate();
         return "redirect:/auth/login";
     }
-    @GetMapping("/home")
-    public String homeHandel(Model model){
 
-        return "auth/home";
-    }
 
     @GetMapping("/about")
     public String aboutHandle(Model model) {
@@ -106,6 +104,10 @@ public class AuthController {
 
         return "group/create";
     }
+
+
+
+
 
     // 카카오 소셜 로그인 처리
     @GetMapping("/kakao/callback")
@@ -195,5 +197,46 @@ public class AuthController {
     }
 
 
+    // 이메일 토큰 유효성 검사
+    @GetMapping("/email-verify")
+    public String emailVerifyHandle(@RequestParam("token") String token, Model model) {
 
+        Verification found = verificationRepository.findByToken(token);
+
+        if (found == null) {
+            model.addAttribute("error", "유효하지 않은 인증토큰 입니다.");
+
+            return "auth/email-verify-error";
+        }
+
+        if (LocalDateTime.now().isAfter(found.getExpiresAt())) {
+            model.addAttribute("error", "유효기간이 만료된 인증토큰 입니다.");
+
+            return "auth/email-verify-error";
+        }
+
+        String userEmail = found.getUserEmail();
+        userRepository.updateVerifiedByEmail(userEmail);
+
+        return "auth/email-verify-success";
+    }
+
+    // 인증 메일 재전송
+    @GetMapping("/send-token")
+    public String sendTokenHandle(@SessionAttribute("user") User user,
+                                  Model model) {
+
+        String token = UUID.randomUUID().toString().replace("-", "");
+
+        Verification one = Verification.builder()
+                .token(token)
+                .expiresAt(LocalDateTime.now().plusDays(1))
+                .userEmail(user.getEmail())
+                .build();
+
+        verificationRepository.save(one);
+        mailService.sendVerificationMessage(user, one);
+
+        return "auth/send-token";
+    }
 }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>인증 토큰 전송 완료 | 보디가드</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body style="margin: 0">
+<div style="padding : 30px 0px; margin-top:20px; text-align: center">
+    <a th:href="@{/index}">
+        <img th:src="@{/favicon.ico}" style="width:64px"/>
+    </a>
+</div>
+
+<div style="display: flex; align-items: center; flex-direction: column; ">
+
+    <h2 style="font-weight: 200">인증 토큰 전송 완료</h2>
+    <div style="padding: 30px; border : 0.0062em solid rgba(0, 0, 0, 0.1); border-radius: 4px; background-color: #f6f8fa; max-width: 400px; text-align: center">
+
+        <p style="font-size: small; line-height: 1.6;">
+            입력하신 이메일 주소로 인증토큰을 보내드렸습니다. <br/>
+            메일함을 확인해주세요.
+        </p>
+
+        <p style="font-size: small; color: gray; margin-top: 10px;">
+            ※ 메일이 도착하지 않았다면 스팸함도 확인해주세요.
+        </p>
+    </div>
+
+</div>
+</body>
+</html>

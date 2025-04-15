@@ -9,4 +9,7 @@
         insert into verifications (token, user_email, expires_at) values (#{token}, #{userEmail}, #{expiresAt} )
     </insert>
 
+    <select id="findByToken" resultType="verification">
+        select * from verifications where token=#{token}
+    </select>
 </mapper>

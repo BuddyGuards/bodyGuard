@@ -13,15 +13,15 @@ public interface UserRepository {
 
     public User findByEmail(String email);
 
-
     public User findById (int Id);
 
-  
     public User findByProviderAndProviderId(@Param("provider") String provider,
                                             @Param("providerId") String providerId);
 
     public int updatePasswordByEmail(@Param("email") String email,
                                      @Param("password") String password);
+
+    public int updateVerifiedByEmail(@Param("email") String email);
 
     public void updateUserProfileByEmail(@Param("nickname") String nickname,
                                          @Param("imageUrl") String imageUrl,

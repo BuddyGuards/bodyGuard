@@ -32,6 +32,11 @@
         update users set password=#{password} where email=#{email}
     </update>
 
+    <!-- 토큰 인증 -->
+    <update id="updateVerifiedByEmail">
+        update users set verified='T' where email=#{email}
+    </update>
+
     <!-- 유저 프로필 수정-->
     <update id="updateUserProfileByEmail">
         update users set nickname = #{nickname}, image_url = #{imageUrl},
