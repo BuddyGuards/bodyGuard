@@ -19,18 +19,11 @@
 </div>
 
 <div class="my-main wrap">
-    <ul class="my-main-nav">
-        <li><a th:href="@{/my/profile}">내정보</a></li>
-        <li class="active">프로필 수정</li>
-        <li>내가 쓴 글</li>
-        <li>가입신청 중인 모임</li>
-        <li><a th:href="@{/auth/logout}">로그아웃</a></li>
-    </ul>
+
 
     <div class="content">
         <form th:action="@{/my/profile-update}" method="post" class="profile-update-form">
             <div class="account">
-                <h3>로그인 계정</h3>
                 <ul>
                     <li>아이디 : <span th:text="${user.id}"></span></li>
                     <li>닉네임 : <input type="text" th:value="${user.nickname}" name="nickname"/></li>
@@ -41,17 +34,21 @@
                             <option value="여성">여성</option>
                         </select>
                     </li>
-                    <li>키 : <input type="number" th:value="${user.height}" name="height"/></li>
-                    <li>몸무게 : <input type="number" th:value="${user.weight}" name="weight"/></li>
+                    <li>키 : <input type="number" th:step="0.1" th:value="${user.height}" name="height"/></li>
+                    <li>몸무게 : <input type="number" th:step="0.1" th:value="${user.weight}" name="weight"/></li>
                     <li>나이 : <input type="number" th:value="${user.age}" name="age"/></li>
                     <li>목표 : <input type="text" th:value="${user.goal}" name="goal"/></li>
                 </ul>
             </div>
             <div>
-                <button type="submit">저장하기</button>
+                <button type="submit">수정하기</button>
+            </div>
+            <div class="my-main-nav">
+                <button onclick="location.href='/my/profile'" class="back-btn">뒤로가기</button>
             </div>
         </form>
     </div>
 </div>
 </body>
 </html>
+

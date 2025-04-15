@@ -78,12 +78,7 @@ public class AuthController {
         session.invalidate();
         return "redirect:/auth/login";
     }
-    @GetMapping("/home")
-    public String homeHandel(Model model){
 
-
-        return "auth/home";
-    }
     @GetMapping("/about")
     public String aboutHandle(Model model) {
 

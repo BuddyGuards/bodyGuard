@@ -257,9 +257,15 @@
 <header>
   <div class="logo">bodyGuard</div>
   <div class="nav-links">
-    <a th:href="@{/auth/login}">로그인</a>
-    <a th:href="@{/auth/signup}">회원가입</a>
-    <a th:href="@{/logout}">로그아웃</a>
+    <th:block th:if="${user != null}">
+      <span th:text="${user.nickname} + '님 반가워요'"></span>
+      <a th:href="@{/my/profile}">마이페이지</a>
+      <a th:href="@{/auth/logout}">로그아웃</a>
+    </th:block>
+    <th:block th:unless="${user != null}">
+      <a th:href="@{/auth/login}">로그인</a>
+      <a th:href="@{/auth/signup}">회원가입</a>
+    </th:block>
   </div>
 </header>
 
