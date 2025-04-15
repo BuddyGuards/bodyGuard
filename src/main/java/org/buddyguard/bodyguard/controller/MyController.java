@@ -31,6 +31,7 @@ public class MyController {
         return "my/profile";
     }
 
+
     // 마이페이지 업데이트 핸들러
     @GetMapping("/profile-update")
     public String profileUpdateHandle(Model model, @SessionAttribute("user") @Nullable User user) {
