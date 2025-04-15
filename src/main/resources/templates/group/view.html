@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${group.name} + ' | 보디가드'"></title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="bottom-border-div">
+  <div class="index-header wrap">
+    <div style="display:flex; gap:15px; align-items: center">
+      <a th:href="@{/index}">
+        <img th:src="@{/images/10.png}" style="height: 35px"/>
+      </a>
+      <form th:action="@{/group/search}" style="margin: 0">
+        <input type="text" name="word"
+               style="border-radius: 20px; width:300px; padding:4px 15px;
+                       background-color: #afafaf; color:white"
+               placeholder="모임 검색"
+               th:value="${param.word}">
+      </form>
+    </div>
+    <div>
+      <a th:href="@{/my/profile}">
+        <img th:src="@{/images/10.png}" style="height: 35px"/>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div style="padding : 20px 0px;background-color: #F5F6F8;">
+  <div class="group-main wrap">
+    <div style="display: flex; gap:20px">
+      <div style="width: 200px; background-color: white ; padding : 12px">
+        <h2 th:text="${group.name}"></h2>
+        <div style="font-size : 0.8em">
+          멤버 <span th:text="${group.memberCount}"></span> •
+          리더 <span th:text="${group.creatorId}"></span>
+        </div>
+        <div style="font-size : 0.8em">
+          개설일 <span th:text="${group.createdAt}"></span>
+        </div>
+
+        <div th:if="${status == 'NOT_JOINED'}">
+          <p>
+            <a th:href="@{/group/{id}/join(id=${group.id})}">
+              <button style="width: 100%; padding: 5px; font-size:1em;">모임 가입하기</button>
+            </a>
+          </p>
+        </div>
+        <div th:if="${status == 'PENDING'}">
+          <p>
+            <button style="width: 100%; padding: 5px; font-size:1em;" disabled>승인 대기중</button>
+          </p>
+        </div>
+        <div th:if="${status == 'MEMBER'}">
+          <p>
+            <a th:href="@{/group/{groupId}/leave(groupId=${group.id})}">
+            <button style="width: 100%; padding: 5px; font-size:1em;" >모임 탈퇴하기</button>
+            </a>
+          </p>
+        </div>
+        <div th:if="${status != 'NOT_JOINED' and status != 'PENDING' and status != 'MEMBER'}">
+          <p>
+            <button style="width: 100%; padding: 5px; font-size:1em;" disabled>모임 해산하기</button>
+          </p>
+        </div>
+
+        <div style="font-size: 0.75em" th:if="${group.type == '공개'}">
+          누구나 모임을 검색해 찾을 수 있고, <b>가입할 수 있습니다</b>.
+        </div>
+        <div style="font-size: 0.75em" th:unless="${group.type == '공개'}">
+          누구나 모임을 검색해 찾을 수 있지만, <b>가입에는 승인이 필요합니다</b>.
+        </div>
+      </div>
+
+      <div style="flex:1">
+        <h3 style="border-bottom: 1px solid rgba(0, 0, 0, .3); padding-bottom : 10px">게시글</h3>
+
+        <form th:action="@{/group/{id}/post(id=${group.id})}" method="post">
+          <input type="hidden" name="groupId" th:value="${group.id}"/>
+          <textarea style="width: 100%; height:100px; resize: none; padding : 4px"
+                    name="content" id="content"></textarea>
+          <p style="text-align: right">
+            <button type="submit" style="padding : 4px 12px;">게시</button>
+          </p>
+        </form>
+
+        <!--/*
+        <div th:each="one : ${postMetas}" style="margin: 6px 0px; background-color: white; padding: 16px;">
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <img th:src="@{${one.writerAvatar}}" style="width: 48px;"/>
+            <div>
+              <b th:text="${one.writerName}"></b>
+              <div style="font-size: small" th:text="${one.time}"></div>
+            </div>
+          </div>
+          <p style="font-size: small; white-space: pre-wrap" th:text="${one.content}"></p>
+          <div>
+                        <span th:each="t : ${one.reactions}">
+                            <span th:switch="${t.feeling}">
+                                <span th:case="'happy'">😍</span>
+                                <span th:case="'excited'">😆</span>
+                                <span th:case="'sad'">😥</span>
+                                <span th:case="'angry'">😡</span>
+                                <span th:case="*">😐</span>
+                            </span>
+                            <span style="font-size: small" th:text="${t.count}"></span>
+                        </span>
+          </div>
+        </div>
+        */-->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+</script>
+</body>
+</html>

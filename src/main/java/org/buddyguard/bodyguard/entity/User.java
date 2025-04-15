@@ -20,11 +20,10 @@ public class User {
     private String providerId;
     private String verified;
     private LocalDateTime createdAt;
-
     private String gender;
-    private double height;
-    private double weight;
-    private int age;
+    private Double height;
+    private Double weight;
+    private Integer age;
     private String goal;
     private String infoPublic;   // 프로필 공개 여부
 

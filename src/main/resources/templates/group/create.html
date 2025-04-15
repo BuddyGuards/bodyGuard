@@ -34,7 +34,7 @@
             border-bottom: 1px solid #ddd;
         }
 
-        .study-main {
+        .group-main {
             background: white;
             padding: 30px;
             border-radius: 16px;
@@ -180,20 +180,21 @@
 <div class="wrap">
     <div class="index-header" style="display: flex; justify-content: center; padding: 20px 0; border-bottom: 1px solid #ddd;">
         <a href="/">
-            <img src="/images/10.png" alt="로고" style="height: 100px;" />
+            <img th:src="@{/images/10.png}" alt="로고" style="height: 70px" />
         </a>
+
     </div>
 
 
-    <div class="study-main">
+    <div class="group-main">
        <form style="padding: 20px 0px;" th:action="@{/group/create/verify}" method="post">
 
 
             <label class="label">모임 이름</label>
-            <input type="text" placeholder="스터디 이름 입력" class="input-text" name="name"/>
+            <input type="text" placeholder="모임 이름 입력" class="input-text" name="name"/>
 
             <label class="label">모임 목표</label>
-            <input type="text" placeholder="스터디 목표 입력" class="input-text" name="goal"/>
+            <input type="text" placeholder="모임 목표 입력" class="input-text" name="goal"/>
 
             <label class="label">모임 커버 이미지</label>
             <input type="file" id="coverImage" accept="image/*" class="input-text" onchange="previewImage(event)" />

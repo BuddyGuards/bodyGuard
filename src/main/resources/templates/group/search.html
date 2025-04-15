@@ -18,21 +18,21 @@ background-color: #afafaf; color:white" placeholder="모임 검색" th:value="${
       </form>
     </div>
     <div>
-      <a href="${pageContext.request.contextPath}/my/profile">
-        <img src="${pageContext.request.contextPath}${user.avatarUrl}" style="height: 35px"/>
+      <a th:href="@{/my/profile}">
+        <img th:src="@{/images/10.png}" style="height: 35px"/>
       </a>
     </div>
   </div>
 </div>
 <div>
   <div class="group-main wrap">
-    <div style="font-size:1.5em; margin-top:20px;">검색결과 ${count}</div>
+    <div th:text="'검색결과 ' + ${count}" style="font-size:1.5em; margin-top:20px;"></div>
 
     <div th:each="one : ${result}"
          style="border-bottom: 1px solid rgba(0,0,0,.08); padding: 20px 0px;">
 
       <h3 style="font-weight: 400">
-        <a th:href="@{/study/{id}(id=${one.group.id})}"
+        <a th:href="@{/group/{id}(id=${one.group.id})}"
            style="text-underline-offset: 10px"
            th:text="${one.group.name}">모임명</a>
       </h3>
