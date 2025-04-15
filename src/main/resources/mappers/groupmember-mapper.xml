@@ -28,5 +28,9 @@
         delete from group_members where group_id = #{groupId}
     </delete>
 
+    <update id="updateJoinedAtById" parameterType="int">
+        update group_members set joined_at = now() where id= #{id }
+    </update>
+
 
 </mapper>

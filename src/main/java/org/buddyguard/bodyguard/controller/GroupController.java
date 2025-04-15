@@ -190,6 +190,31 @@ public class GroupController {
         }
     }
 
+    //모임 가입 승인
+    //이것도 연결을 만들어야함.
+    @RequestMapping("/{groupId}/approve")
+    public String approveHandle(@PathVariable("groupId") String groupId,
+                                @RequestParam("targetUserId") String targetUserId,
+                                @SessionAttribute("user") User user) {
+
+        Group group = groupRepository.findById(groupId);
+
+
+        if (group != null && group.getCreatorId() == user.getId() ) {
+            GroupMember found = groupMemberRepository.findByUserIdAndGroupId(
+                    Map.of("userId", targetUserId, "groupId", groupId)
+            );
+
+            if (found != null) {
+                groupMemberRepository.updateJoinedAtById(found.getId());
+                groupRepository.addMemberCountById(groupId);
+            }
+        }
+
+        return "redirect:/group/" + groupId;
+    }
+
+
 
 
 
