@@ -13,6 +13,22 @@ public interface UserRepository {
 
     public User findByEmail(String email);
 
-    public void updateUserProfileByEmail(@Param("email") String email,
-                                         @Param("request") ProfileUpdateRequest request);
+
+    public User findById (int Id);
+
+  
+    public User findByProviderAndProviderId(@Param("provider") String provider,
+                                            @Param("providerId") String providerId);
+
+
+    public void updateUserProfileByEmail(@Param("nickname") String nickname,
+                                         @Param("imageUrl") String imageUrl,
+                                         @Param("gender") String gender,
+                                         @Param("height") double height,
+                                         @Param("weight") double weight,
+                                         @Param("age") int age,
+                                         @Param("goal") String goal,
+                                         @Param("email") String email);
+
+
 }

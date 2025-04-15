@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>모임 만들기 | 보디가드</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
+</head>
+<body>
+<div class="bottom-border-div">
+  <div class="index-header wrap">
+    <div style="display:flex; gap:15px; align-items: center">
+      <a th:href="@{/index}">
+        <img th:src="@{/images/10.png}" style="height: 35px"/>
+      </a>
+      <form th:action="@{/group/search}" style="margin: 0">
+        <input type="text" name="word" style="border-radius: 20px; width:300px; padding:4px 15px;
+background-color: #afafaf; color:white" placeholder="모임 검색" th:value="${param.word}">
+      </form>
+    </div>
+    <div>
+      <a href="${pageContext.request.contextPath}/my/profile">
+        <img src="${pageContext.request.contextPath}${user.avatarUrl}" style="height: 35px"/>
+      </a>
+    </div>
+  </div>
+</div>
+<div>
+  <div class="group-main wrap">
+    <div style="font-size:1.5em; margin-top:20px;">검색결과 ${count}</div>
+
+    <div th:each="one : ${result}"
+         style="border-bottom: 1px solid rgba(0,0,0,.08); padding: 20px 0px;">
+
+      <h3 style="font-weight: 400">
+        <a th:href="@{/study/{id}(id=${one.group.id})}"
+           style="text-underline-offset: 10px"
+           th:text="${one.group.name}">모임명</a>
+      </h3>
+
+      <div th:text="${one.group.goal}">
+        목표 설명
+      </div>
+
+      <div style="display: flex; gap: 15px; margin-top: 2px; font-size: 0.85em">
+        <div style="color: #7f7f7f">
+          멤버 <span th:text="${one.group.memberCount}">0</span>
+        </div>
+        <div style="color: #7f7f7f">
+          리더 <span th:text="${one.creator.nickname}">이름</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

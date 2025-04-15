@@ -14,12 +14,18 @@
     <select id="findByEmail" resultType="user">
         select * from users where email = #{email}
     </select>
+    <select id="findById" resultType="user">
+        select * from users where id = #{id}
+    </select>
+
+    <select id="findByProviderAndProviderId" resultType="user">
+        select * from users where provider=#{provider} and provider_id=#{providerId}
+    </select>
 
     <update id="updateUserProfileByEmail">
-        update users set nickname = #{request.nickname}, image_url = #{request.imageUrl},
-        gender = #{request.gender}, height = #{request.height},
-        weight = #{request.weight}, age = #{request.age}, goal = #{request.goal},
-        info_public = #{request.infoPublic}
+        update users set nickname = #{nickname}, image_url = #{imageUrl},
+        gender = #{gender}, height = #{height},
+        weight = #{weight}, age = #{age}, goal = #{goal}
         where email = #{email}
     </update>
 
