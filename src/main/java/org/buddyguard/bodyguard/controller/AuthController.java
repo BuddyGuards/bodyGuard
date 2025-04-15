@@ -190,7 +190,6 @@ public class AuthController {
         return "redirect:/index";
     }
 
-
     // 비밀번호 찾기 페이지
     @GetMapping("/find-password")
     public String findPasswordHandle(Model model) {
