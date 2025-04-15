@@ -23,5 +23,8 @@
         update bodyguard.groups set member_count = member_count - 1 where id = #{id}
     </update>
 
+    <delete id="deleteById" parameterType="string">
+        delete from bodyguard.groups where id = #{id}
+    </delete>
 
 </mapper>

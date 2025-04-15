@@ -160,6 +160,38 @@ public class GroupController {
         return "redirect:/";
     }
 
+    // 신청 철회 요청 핸들러
+    // 승인 대기중일때 신청 철회버튼으로 변경 기능 만들어야함
+    @GetMapping("/{groupId}/cancel")
+    public String cancelHandle(@PathVariable("groupId") String groupId, @SessionAttribute("user") User user) {
+        int userId = user.getId();
+        Map map = Map.of("groupId", groupId, "userId", userId);
+
+        GroupMember found = groupMemberRepository.findByUserIdAndGroupId(map);
+        if (found != null && found.getJoinedAt() == null && found.getRole().equals("멤버")) {
+            groupMemberRepository.deleteById(found.getId());
+        }
+
+        return "redirect:/group/" + groupId;
+    }
+
+    //모임 해산
+    @Transactional
+    @RequestMapping("/{groupId}/remove")
+    public String removeHandle(@PathVariable("groupId") String groupId, @SessionAttribute("user") User user) {
+        Group group = groupRepository.findById(groupId);
+
+        if (group != null && group.getCreatorId() == user.getId()) {
+            groupMemberRepository.deleteByGroupId(groupId);
+            groupRepository.deleteById(groupId);
+            return "redirect:/";
+        } else {
+            return "redirect:/group/" + groupId;
+        }
+    }
+
+
+
 
 
 

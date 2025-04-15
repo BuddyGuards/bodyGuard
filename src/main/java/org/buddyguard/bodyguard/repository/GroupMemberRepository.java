@@ -18,4 +18,6 @@ public interface GroupMemberRepository {
     public int createPending (GroupMember groupMember);
 
     public int deleteById (int id);
+
+    public int deleteByGroupId (String groupId);
 }
