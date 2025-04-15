@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.buddyguard.bodyguard.repository.UserRepository">
 
+    <!-- 회원 정보를 DB에 저장 -->
     <insert id="save" parameterType="user">
         insert into
             users(email, password, nickname, image_url, provider, provider_id, verified, created_at)
@@ -11,17 +12,27 @@
             (#{email}, #{password}, #{nickname}, #{imageUrl}, #{provider}, #{providerId}, #{verified}, now() )
     </insert>
 
+    <!--이메일로 회원 정보 조회-->
     <select id="findByEmail" resultType="user">
         select * from users where email = #{email}
     </select>
+
+    <!---->
     <select id="findById" resultType="user">
         select * from users where id = #{id}
     </select>
 
+    <!--소셜 로그인 회원 정보 조회 -->
     <select id="findByProviderAndProviderId" resultType="user">
         select * from users where provider=#{provider} and provider_id=#{providerId}
     </select>
 
+    <!-- 비밀번호 찾기 -->
+    <update id="updatePasswordByEmail">
+        update users set password=#{password} where email=#{email}
+    </update>
+
+    <!-- 유저 프로필 수정-->
     <update id="updateUserProfileByEmail">
         update users set nickname = #{nickname}, image_url = #{imageUrl},
         gender = #{gender}, height = #{height},

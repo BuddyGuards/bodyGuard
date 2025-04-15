@@ -20,10 +20,8 @@ public class User {
     private String providerId;
     private String verified;
     private LocalDateTime createdAt;
-
     private String gender;
     private Double height;
-
     private Double weight;
     private Integer age;
     private String goal;
