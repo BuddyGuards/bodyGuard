@@ -7,12 +7,17 @@ import org.buddyguard.bodyguard.entity.GroupMember;
 import org.buddyguard.bodyguard.entity.User;
 import org.buddyguard.bodyguard.repository.GroupMemberRepository;
 import org.buddyguard.bodyguard.repository.GroupRepository;
+import org.buddyguard.bodyguard.repository.UserRepository;
+import org.buddyguard.bodyguard.vo.GroupWithCreator;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -21,8 +26,9 @@ import java.util.UUID;
 @RequestMapping("/group")
 public class GroupController {
 
-    private final GroupRepository groupRepository;
-    private final GroupMemberRepository groupMemberRepository;
+    private GroupRepository groupRepository;
+    private GroupMemberRepository groupMemberRepository;
+    private UserRepository userRepository;
 
     @GetMapping("/create")
     public String createHandle(Model model) {
@@ -33,6 +39,7 @@ public class GroupController {
     }
 
 
+    @Transactional
     @PostMapping("/create/verify")
     public String createVerifyHandle(@ModelAttribute Group group,
                                      @SessionAttribute("user") User user) {
@@ -52,6 +59,32 @@ public class GroupController {
         groupRepository.addMemberCountById(group.getId());
 
         return "redirect:/group/" + randomId;
+    }
+
+    @GetMapping("/search")
+    public String searchHandle(@RequestParam("word") Optional<String> word, Model model) {
+        if (word.isEmpty()) {
+            return "redirect:/";
+        }
+        String wordValue = word.get();
+        List<Group> result = groupRepository.findByNameLikeOrGoalLike("%" + wordValue + "%");
+        List<GroupWithCreator> convertedResult = new ArrayList<>();
+
+        for (Group one : result) {
+            User found = userRepository.findById(one.getCreatorId());
+
+
+            GroupWithCreator c = GroupWithCreator.builder().group(one).creator(found).build();
+            convertedResult.add(c);
+        }
+
+
+        System.out.println("search count : " + result.size());
+        model.addAttribute("count", convertedResult.size());
+        model.addAttribute("result", convertedResult);
+
+
+        return "group/search";
     }
 
 
