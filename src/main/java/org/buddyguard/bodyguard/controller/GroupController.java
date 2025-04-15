@@ -11,6 +11,7 @@ import org.buddyguard.bodyguard.repository.GroupRepository;
 import org.buddyguard.bodyguard.repository.PostRepository;
 import org.buddyguard.bodyguard.repository.UserRepository;
 import org.buddyguard.bodyguard.vo.GroupWithCreator;
+import org.buddyguard.bodyguard.vo.PostWithWriter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,13 +119,31 @@ public class GroupController {
         model.addAttribute("group", group);
 
 
+        User creator = userRepository.findById(group.getCreatorId());
+
+        GroupWithCreator GC = GroupWithCreator.builder().group(group).creator(creator).build();
+        model.addAttribute("groupWithCreator", GC);
+
+
+
+
         List<Post> posts = postRepository.findByGroupId(id);
+        List<PostWithWriter> postWithWriters = new ArrayList<>();
 
+        for (Post post : posts){
+            PostWithWriter pw = new PostWithWriter();
+            pw.setPost(post);
 
+            User writer = userRepository.findById(post.getWriterId());
+            pw.setWriter(writer);
+
+            postWithWriters.add(pw);
+        }
 
 
 
         model.addAttribute("posts", posts);
+        model.addAttribute("postWithWriters", postWithWriters);
 
         return "group/view";
     }
