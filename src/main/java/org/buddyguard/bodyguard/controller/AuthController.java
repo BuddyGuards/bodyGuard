@@ -32,6 +32,7 @@ public class AuthController {
         return "auth/signup";
     }
 
+
     // 회원가입 처리
     @PostMapping("/signup")
     public String signupPostHandle(@ModelAttribute User user) {
@@ -77,6 +78,25 @@ public class AuthController {
         session.invalidate();
         return "redirect:/auth/login";
     }
+    @GetMapping("/home")
+    public String homeHandel(Model model){
+
+
+        return "auth/home";
+    }
+    @GetMapping("/about")
+    public String aboutHandle(Model model) {
+
+        return "auth/about";
+    }
+    @GetMapping("/create")
+    public String createHandle(Model model) {
+
+        return "group/create";
+    }
+
+
+
 
 
     // 카카오 소셜 로그인 처리
