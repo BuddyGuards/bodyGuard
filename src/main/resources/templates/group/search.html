@@ -12,7 +12,7 @@
       <a th:href="@{/index}">
         <img th:src="@{/images/10.png}" style="height: 35px"/>
       </a>
-      <form th:action="@{/group/search}" style="margin: 0">
+      <form th:action="@{/group/search}" method="get" style="margin: 0">
         <input type="text" name="word" style="border-radius: 20px; width:300px; padding:4px 15px;
 background-color: #afafaf; color:white" placeholder="모임 검색" th:value="${param.word}">
       </form>
