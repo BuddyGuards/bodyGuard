@@ -4,6 +4,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buddyguard.bodyguard.entity.User;
+import org.buddyguard.bodyguard.entity.Verification;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -63,11 +64,50 @@ public class MailService {
 
         try {
             mailSender.send(message);
+
         } catch (Exception e) {
             log.error("error = {}", e);
+
             result = false;
         }
 
         return result;
+    }
+
+    // 이메일 인증 메일 전송
+    public boolean sendVerificationMessage(User user, Verification verification) {
+
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, "utf-8");
+
+            // 수신자 이메일 설정
+            messageHelper.setTo(user.getEmail());
+            // 메일 제목 설정
+            messageHelper.setSubject("[BuddyGuard] 보디가드 이메일 인증");
+
+            // HTML 형식의 메일 본문 작성
+            String html = "<p>안녕하세요, " + user.getNickname() + " 님!<br/></p>";
+            html += "<p>이메일 인증 토큰을 보내드립니다.</p>";
+            html += "<br/>";
+            html += "<p>토큰 값 : " + verification.getToken() + "</p>";
+            html += "<p>토큰 유효기간 : " + verification.getExpiresAt() + " 까지</p>";
+            html += "<br/>";
+            html += "<p><a href='http://localhost:8080/auth/email-verify?token=" + verification.getToken() + "'>인증하려면 링크를 클릭하세요.</a></p>";
+            html += "<br/>";
+            html += "<p>팀 BuddyGuard</p>";
+
+            messageHelper.setText(html, true);
+
+            mailSender.send(message);
+
+        } catch (Exception e) {
+            log.error("error = {}", e);
+
+            return false;
+        }
+
+        return true;
     }
 }

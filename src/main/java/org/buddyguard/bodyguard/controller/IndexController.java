@@ -19,7 +19,6 @@ public class IndexController {
     @GetMapping("/help")
     public String helpHandel() {
 
-
         return "help";
     }
 }
