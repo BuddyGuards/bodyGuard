@@ -38,7 +38,7 @@
           리더 <span th:text="${group.creatorId}"></span>
         </div>
         <div style="font-size : 0.8em">
-          개설일 <span th:text="${group.createdAt}"></span>
+          개설일 <span th:text="${#strings.replace(group.createdAt.toString(), 'T', '  ')}"></span>
         </div>
 
         <div th:if="${status == 'NOT_JOINED'}">
