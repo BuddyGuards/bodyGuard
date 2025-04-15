@@ -13,6 +13,9 @@ public interface UserRepository {
 
     public User findByEmail(String email);
 
+    public User findByProviderAndProviderId(@Param("provider") String provider,
+                                            @Param("providerId") String providerId);
+
     public void updateUserProfileByEmail(@Param("nickname") String nickname,
                                          @Param("imageUrl") String imageUrl,
                                          @Param("gender") String gender,
