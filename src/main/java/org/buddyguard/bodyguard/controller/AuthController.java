@@ -61,7 +61,7 @@ public class AuthController {
             mailService.sendWelcomeHtmlMessage(user);   // 환영 메일 발송
 
         }
-        return "redirect:/index";
+        return "index";
     }
 
     // 로그인 페이지
