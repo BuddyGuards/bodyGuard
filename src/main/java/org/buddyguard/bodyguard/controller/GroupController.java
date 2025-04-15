@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buddyguard.bodyguard.entity.Group;
 import org.buddyguard.bodyguard.entity.GroupMember;
+import org.buddyguard.bodyguard.entity.Post;
 import org.buddyguard.bodyguard.entity.User;
 import org.buddyguard.bodyguard.repository.GroupMemberRepository;
 import org.buddyguard.bodyguard.repository.GroupRepository;
+import org.buddyguard.bodyguard.repository.PostRepository;
 import org.buddyguard.bodyguard.repository.UserRepository;
 import org.buddyguard.bodyguard.vo.GroupWithCreator;
 import org.springframework.lang.Nullable;
@@ -15,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -26,6 +30,7 @@ public class GroupController {
     private GroupRepository groupRepository;
     private GroupMemberRepository groupMemberRepository;
     private UserRepository userRepository;
+    private PostRepository postRepository;
 
     @GetMapping("/create")
     public String createHandle(Model model) {
@@ -113,6 +118,13 @@ public class GroupController {
         model.addAttribute("group", group);
 
 
+        List<Post> posts = postRepository.findByGroupId(id);
+
+
+
+
+
+        model.addAttribute("posts", posts);
 
         return "group/view";
     }
@@ -177,7 +189,7 @@ public class GroupController {
 
     //모임 해산
     @Transactional
-    @RequestMapping("/{groupId}/remove")
+    @GetMapping("/{groupId}/remove")
     public String removeHandle(@PathVariable("groupId") String groupId, @SessionAttribute("user") User user) {
         Group group = groupRepository.findById(groupId);
 
@@ -192,7 +204,7 @@ public class GroupController {
 
     //모임 가입 승인
     //이것도 연결을 만들어야함.
-    @RequestMapping("/{groupId}/approve")
+    @GetMapping("/{groupId}/approve")
     public String approveHandle(@PathVariable("groupId") String groupId,
                                 @RequestParam("targetUserId") String targetUserId,
                                 @SessionAttribute("user") User user) {
@@ -214,8 +226,22 @@ public class GroupController {
         return "redirect:/group/" + groupId;
     }
 
+    // 그룹내 새글 등록
+    @PostMapping("/{groupId}/post")
+    public String postHandle(@PathVariable("groupId") String id,
+                             @ModelAttribute Post post,
+                             @SessionAttribute("user") User user) {
+        /*
+         모델 attribute 로 파라미터는 받았을텐데, 빠진 정보들이 있을거임. 이걸 추가로 set  .
+         postRepository를 이용해서 create 메서드 작성
+         */
+        post.setWriterId(user.getId());
+        post.setWroteAt(LocalDateTime.now());
 
+        postRepository.create(post);
 
+        return "redirect:/group/" + id;
+    }
 
 
 

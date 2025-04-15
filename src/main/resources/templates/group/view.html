@@ -79,7 +79,7 @@
       <div style="flex:1">
         <h3 style="border-bottom: 1px solid rgba(0, 0, 0, .3); padding-bottom : 10px">게시글</h3>
 
-        <form th:action="@{/group/{id}/post(id=${group.id})}" method="post">
+        <form th:action="@{/group/{groupId}/post(groupId=${group.id})}" method="post">
           <input type="hidden" name="groupId" th:value="${group.id}"/>
           <textarea style="width: 100%; height:100px; resize: none; padding : 4px"
                     name="content" id="content"></textarea>
@@ -87,6 +87,17 @@
             <button type="submit" style="padding : 4px 12px;">게시</button>
           </p>
         </form>
+
+        <div th:each="post : ${posts}">
+          <div style="margin-bottom: 16px; padding: 12px; background-color: white;">
+            <div style="font-size: 0.9em; color: #666;">
+              <span><strong>작성자 ID:</strong> <span th:text="${post.writerId}">1</span></span>
+              <span style="margin-left: 12px;"><strong>작성일:</strong> <span th:text="${#temporals.format(post.wroteAt, 'yyyy-MM-dd HH:mm')}">날짜</span></span>
+            </div>
+            <p style="margin-top: 8px;" th:text="${post.content}">게시글 내용</p>
+          </div>
+        </div>
+
 
         <!--/*
         <div th:each="one : ${postMetas}" style="margin: 6px 0px; background-color: white; padding: 16px;">
