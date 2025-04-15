@@ -27,10 +27,11 @@ public class IndexController {
                               @SessionAttribute(value = "user", required = false) User user) {
         model.addAttribute("user", user);
 
-        groupMemberRepository.findByUserId(user.getId());
+        if (user != null) {
+            groupMemberRepository.findByUserId(user.getId());
+        }
 
-        return "auth/index"; // templates
-
+        return "auth/index";
     }
 
 //    @GetMapping("/index")
