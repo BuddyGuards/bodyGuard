@@ -16,7 +16,10 @@ import org.buddyguard.bodyguard.request.FindPasswordRequest;
 import org.buddyguard.bodyguard.request.LoginRequest;
 import org.buddyguard.bodyguard.service.KakaoApiService;
 import org.buddyguard.bodyguard.service.MailService;
+import org.buddyguard.bodyguard.service.NaverApiService;
 import org.buddyguard.bodyguard.vo.KakaoTokenResponse;
+import org.buddyguard.bodyguard.vo.NaverProfileResponse;
+import org.buddyguard.bodyguard.vo.NaverTokenResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,8 +34,9 @@ import java.util.UUID;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private UserRepository userRepository;
     private KakaoApiService kakaoApiService;
+    private NaverApiService naverApiService;
+    private UserRepository userRepository;
     private MailService mailService;
     private VerificationRepository verificationRepository;
 
@@ -68,6 +72,9 @@ public class AuthController {
         model.addAttribute("kakaoClientId", "bf5fe161a4dc3d2d9956d3e8ac2ed43c");
         model.addAttribute("kakaoRedirectUri", "http://localhost:8080/auth/kakao/callback");
 
+        model.addAttribute("naverClientId", "2SReHWgzgwqdK2WrEcNr");
+        model.addAttribute("naverRedirectUri", "http://localhost:8080/auth/naver/callback");
+
         return "auth/login";
     }
 
@@ -93,8 +100,9 @@ public class AuthController {
         session.invalidate();
         return "redirect:/auth/login";
     }
+
     @GetMapping("/home")
-    public String homeHandel(Model model){
+    public String homeHandel(Model model) {
 
         return "auth/home";
     }
@@ -104,6 +112,7 @@ public class AuthController {
 
         return "auth/about";
     }
+
     @GetMapping("/create")
     public String createHandle(Model model) {
 
@@ -123,7 +132,7 @@ public class AuthController {
         DecodedJWT decodedJWT = JWT.decode(response.getIdToken());
         String sub = decodedJWT.getClaim("sub").asString();
         String nickname = decodedJWT.getClaim("nickname").asString();
-        String imageUrl = decodedJWT.getClaim("picture").asString();
+        String imageUrl = decodedJWT.getClaim("imageUrl").asString();
 
         User found = userRepository.findByProviderAndProviderId("KAKAO", sub);
 
@@ -143,21 +152,49 @@ public class AuthController {
             userRepository.save(user);
             session.setAttribute("user", user);
 
-            // session.setAttribute("userId", user.getId());
         }
-
-        // log.info("decodedJWT: sub={}, nickname={}, imageUrl={}", sub, nickname, picture);
 
         return "redirect:/";
     }
 
 
-    /*
+    // 네이버 소셜 로그인 처리
+    @GetMapping("/naver/callback")
+    public String naverCallbackHandle(@RequestParam("code") String code,
+                                      @RequestParam("state") String state,
+                                      HttpSession session) throws JsonProcessingException {
 
-        네이버 로그인 구현
+        NaverTokenResponse tokenResponse = naverApiService.exchangeToken(code, state);
+        NaverProfileResponse profileResponse = naverApiService.exchangeProfile(tokenResponse.getAccessToken());
+        log.info("profileResponse id = {}", profileResponse.getId());
+        log.info("profileResponse nickname = {}", profileResponse.getNickname());
+        log.info("profileResponse profileImage = {}", profileResponse.getProfileImage());
 
-     */
+        User found = userRepository.findByProviderAndProviderId("NAVER", profileResponse.getId());
 
+        // 세션에 user 값이 없다면
+        // user 객체를 만들어서 save
+        if (found == null) {
+            User user = User.builder()
+                    .provider("NAVER")
+                    .providerId(profileResponse.getId())
+                    .nickname(profileResponse.getNickname())
+                    .imageUrl(profileResponse.getProfileImage())
+                    .verified("T")
+                    .build();
+
+            userRepository.save(user);
+
+            session.setAttribute("user", user);
+
+
+        } else {   // DB에 있는 user 라면
+
+            session.setAttribute("user", found);
+        }
+
+        return "redirect:/index";
+    }
 
 
     // 비밀번호 찾기 페이지
