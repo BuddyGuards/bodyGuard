@@ -7,4 +7,8 @@
         insert into bodyguard.group_members (user_id, group_id, role, applied_at, joined_at)
         values (#{userId}, #{groupId}, #{role}, now(), now() )
     </insert>
+
+    <select id="findByUserIdAndGroupId" resultType="groupMember" parameterType="map">
+        select * from group_members where user_id = #{userId} and group_id = #{groupId}
+    </select>
 </mapper>
