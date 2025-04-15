@@ -13,6 +13,8 @@ public interface UserRepository {
 
     public User findByEmail(String email);
 
+    public User findById (int Id);
+
     public void updateUserProfileByEmail(@Param("nickname") String nickname,
                                          @Param("imageUrl") String imageUrl,
                                          @Param("gender") String gender,
@@ -21,4 +23,6 @@ public interface UserRepository {
                                          @Param("age") int age,
                                          @Param("goal") String goal,
                                          @Param("email") String email);
+
+
 }

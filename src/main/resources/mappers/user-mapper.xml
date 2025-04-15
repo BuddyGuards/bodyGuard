@@ -14,6 +14,9 @@
     <select id="findByEmail" resultType="user">
         select * from users where email = #{email}
     </select>
+    <select id="findById" resultType="user">
+        select * from users where id = #{id}
+    </select>
 
     <update id="updateUserProfileByEmail">
         update users set nickname = #{nickname}, image_url = #{imageUrl},
