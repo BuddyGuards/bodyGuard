@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>푸드 다이어리 | bodyGuard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Pretendard', sans-serif;
-      margin: 0; padding: 0;
-    }
-    body {
-      background-color: #f9f9f9;
-      color: #333;
-      padding: 40px 20px;
-    }
+    <meta charset="UTF-8">
+    <title>푸드 다이어리 | bodyGuard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Pretendard', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 40px 20px;
+        }
 
         h1 {
             text-align: center;
@@ -26,32 +28,33 @@
             letter-spacing: -0.5px;
         }
 
-    .meal-container {
-      display: flex;
-      justify-content: space-between;
-      max-width: 1200px;
-      margin: 0 auto;
-      gap: 20px;
-    }
+        .meal-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
+        }
 
-    .meal-box {
-      flex: 1;
-      min-width: 0;
-      height: 500px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-    .meal-box:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 25px rgba(0,0,0,0.08);
-    }
+        .meal-box {
+            flex: 1;
+            min-width: 0;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .meal-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.08);
+        }
 
         .meal-box::after {
             content: attr(data-type);
@@ -60,24 +63,24 @@
             color: #4f46e5;
         }
 
-    .add-btn {
-      position: absolute;
-      bottom: 15px;
-      font-size: 18px;
-      border: none;
-      background-color: #4f46e5;
-      color: white;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
+        .add-btn {
+            position: absolute;
+            bottom: 15px;
+            font-size: 18px;
+            border: none;
+            background-color: #4f46e5;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
 
 
-    .add-btn:hover {
-      background-color: #3730a3;
-    }
+        .add-btn:hover {
+            background-color: #3730a3;
+        }
 
         .popup {
             display: none;
@@ -94,10 +97,16 @@
             animation: fadeIn 0.3s ease forwards;
         }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, -60%); }
-      to { opacity: 1; transform: translate(-50%, -50%); }
-    }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
 
         .popup label {
             display: block;
@@ -131,39 +140,41 @@
             background-color: #3730a3;
         }
 
-    /* 뒷배경 흐림 처리 */
-    .overlay {
-      position: fixed;
-      display: none;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.3);
-      z-index: 998;
-    }
-    .rabbit {
-      position: fixed;
-      bottom: 20px;
-      left: -100px;
-      width: 80px;
-      animation: moveRabbit 20s linear infinite;
-      z-index: 1000;
-    }
+        /* 뒷배경 흐림 처리 */
+        .overlay {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 998;
+        }
 
-    @keyframes moveRabbit {
-      0% {
-        left: -100px;
-      }
-      50% {
-        left: 50%;
-        transform: translateX(-50%);
-      }
-      100% {
-        left: 100vw;
-      }
-    }
+        .rabbit {
+            position: fixed;
+            bottom: 20px;
+            left: -100px;
+            width: 120px;
+            animation: moveRabbit 20s linear infinite;
+            z-index: 1000;
+        }
 
-  </style>
+        @keyframes moveRabbit {
+            0% {
+                left: -100px;
+            }
+            50% {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            100% {
+                left: 100vw;
+            }
+        }
+
+    </style>
 </head>
 <body>
 
@@ -181,18 +192,18 @@
 </div>
 
 <div class="meal-container">
-  <div class="meal-box" data-type="아침">
-    <button class="add-btn">+</button>
-  </div>
-  <div class="meal-box" data-type="점심">
-    <button class="add-btn">+</button>
-  </div>
-  <div class="meal-box" data-type="저녁">
-    <button class="add-btn">+</button>
-  </div>
-  <div class="meal-box" data-type="간식/기타">
-    <button class="add-btn">+</button>
-  </div>
+    <div class="meal-box" data-type="아침">
+        <button class="add-btn">+</button>
+    </div>
+    <div class="meal-box" data-type="점심">
+        <button class="add-btn">+</button>
+    </div>
+    <div class="meal-box" data-type="저녁">
+        <button class="add-btn">+</button>
+    </div>
+    <div class="meal-box" data-type="간식/기타">
+        <button class="add-btn">+</button>
+    </div>
 </div>
 
 <div class="overlay" id="overlay"></div>
@@ -201,39 +212,40 @@
     <label>날짜 <input type="date" id="date" name="eatenDate"></label>
     <label>음식명 <input type="text" id="foodName"></label>
 
-    <label>섭취량 <input type="text" id="amount" placeholder="예: 150g 또는 2개" name="amount"></label>
+    <label>섭취량 <input type="text" id="amount" placeholder="예: 150g 또는 150ml" name="amount"></label>
     <label>칼로리 <input type="text" id="kcal" value="0" name="kcal" readonly></label>
     <input type="hidden" id="type" name="mealType">
     <button id="saveBtn">저장하기</button>
 </form>
+<div class="ant-track">
+    <img src="/images/18.jpg" alt="토끼" class="rabbit"/>
+</div>
 
 <script>
-  // 기존 코드들 아래에 추가해줘
+    // 기존 코드들 아래에 추가해줘
 
-  const eventPopup = document.getElementById('eventPopup');
-  const eventOverlay = document.getElementById('eventOverlay');
-  const eventCloseBtn = document.getElementById('eventCloseBtn');
+    const eventPopup = document.getElementById('eventPopup');
+    const eventOverlay = document.getElementById('eventOverlay');
+    const eventCloseBtn = document.getElementById('eventCloseBtn');
 
-  // 자동 팝업 (예: 접속 2초 후 등장)
-  setTimeout(() => {
-    eventPopup.style.display = 'block';
-    eventOverlay.style.display = 'block';
-  }, 2000);
+    // 자동 팝업 (예: 접속 2초 후 등장)
+    setTimeout(() => {
+        eventPopup.style.display = 'block';
+        eventOverlay.style.display = 'block';
+    }, 2000);
 
-  // 닫기 버튼 이벤트
-  eventCloseBtn.addEventListener('click', () => {
-    eventPopup.style.display = 'none';
-    eventOverlay.style.display = 'none';
-  });
+    // 닫기 버튼 이벤트
+    eventCloseBtn.addEventListener('click', () => {
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
 
-  // 오버레이 클릭 시 팝업 닫기
-  eventOverlay.addEventListener('click', () => {
-    eventPopup.style.display = 'none';
-    eventOverlay.style.display = 'none';
-  });
-</script>
+    // 오버레이 클릭 시 팝업 닫기
+    eventOverlay.addEventListener('click', () => {
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
 
-<script>
     const popup = document.getElementById('inputPopup');
     const overlay = document.getElementById('overlay');
     const foodNameInput = document.getElementById('foodName');
@@ -296,30 +308,10 @@
         dateInput.value = '';
     });
 
-    // 이벤트 배너 팝업
-    const eventPopup = document.getElementById('eventPopup');
-    const eventOverlay = document.getElementById('eventOverlay');
-    const eventCloseBtn = document.getElementById('eventCloseBtn');
 
-    setTimeout(() => {
-        eventPopup.style.display = 'block';
-        eventOverlay.style.display = 'block';
-    }, 2000);
 
-    eventCloseBtn.addEventListener('click', () => {
-        eventPopup.style.display = 'none';
-        eventOverlay.style.display = 'none';
-    });
-
-    eventOverlay.addEventListener('click', () => {
-        eventPopup.style.display = 'none';
-        eventOverlay.style.display = 'none';
-    });
-
-    <div class="ant-track">
-        <img src="/images/18.jpg" alt="토끼" class="rabbit">
-    </div>
 
 </script>
+
 </body>
 </html>
