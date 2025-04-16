@@ -3,21 +3,185 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title th:text="${group.name} + ' | 보디가드'"></title>
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard&family=Nanum+Myeongjo&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Pretendard', sans-serif;
+      background-color: #F5F6F8;
+      color: #333;
+    }
+
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .bottom-border-div {
+      border-bottom: 1px solid #ddd;
+      background-color: white;
+    }
+
+    .index-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+    }
+
+    .search-bar input {
+      border-radius: 20px;
+      padding: 8px 16px;
+      width: 280px;
+      background-color: #dcdcdc;
+      color: #333;
+      border: none;
+      font-size: 0.95em;
+    }
+
+    .group-main {
+      padding: 30px 0;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .sidebar h2 {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 1.4em;
+      margin-bottom: 8px;
+    }
+
+    .sidebar div {
+      margin-bottom: 6px;
+      font-size: 0.9em;
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 12px;
+      background-color: #7C7A77;
+      color: white;
+      font-size: 0.95em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar button:hover {
+      background-color: #5e5c59;
+    }
+
+    .info-note {
+      font-size: 0.75em;
+      color: #555;
+      margin-top: 12px;
+      line-height: 1.4;
+    }
+
+    .content-area {
+      flex: 1;
+    }
+
+    .post-form textarea {
+      width: 100%;
+      height: 100px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      resize: none;
+      font-size: 0.95em;
+      font-family: 'Pretendard';
+    }
+
+    .post-form button {
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: none;
+      background-color: #8d8c88;
+      color: white;
+      font-size: 0.9em;
+      margin-top: 8px;
+      float: right;
+    }
+
+    .post-form button:hover {
+      background-color: #6e6d6a;
+    }
+
+    .post-card {
+      background-color: white;
+      padding: 16px;
+      border-radius: 14px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+    }
+
+    .post-meta {
+      font-size: 0.85em;
+      color: #777;
+      margin-bottom: 6px;
+    }
+
+    .post-content {
+      margin-top: 6px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    @media (max-width: 768px) {
+      .index-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search-bar input {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .group-main > .wrap {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
+
+  </style>
 </head>
 <body>
+
+<!-- Header -->
 <div class="bottom-border-div">
   <div class="index-header wrap">
     <div style="display:flex; gap:15px; align-items: center">
       <a th:href="@{/index}">
         <img th:src="@{/images/10.png}" style="height: 35px"/>
       </a>
-      <form th:action="@{/group/search}" style="margin: 0">
-        <input type="text" name="word"
-               style="border-radius: 20px; width:300px; padding:4px 15px;
-                       background-color: #afafaf; color:white"
-               placeholder="모임 검색"
-               th:value="${param.word}">
+      <form th:action="@{/group/search}" class="search-bar">
+        <input type="text" name="word" placeholder="모임 검색" th:value="${param.word}">
       </form>
     </div>
     <div>
@@ -40,6 +204,9 @@
         <div style="font-size : 0.8em">
           개설일 <span th:text="${#strings.replace(group.createdAt.toString(), 'T', '  ')}"></span>
         </div>
+
+
+
 
         <div th:if="${status == 'NOT_JOINED'}">
           <p>
