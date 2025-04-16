@@ -14,7 +14,7 @@
         }
 
         body {
-            background-color: #fffdf9;
+            background-color: #f9f9f9;
             color: #333;
             padding: 40px 20px;
         }
@@ -28,59 +28,32 @@
             letter-spacing: -0.5px;
         }
 
-        .diary-wrap {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* 화면 세로 꽉 차게 */
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* 좌우 이미지 포스터 */
-        .poster {
-            width: 25vw;
-            height: 100vh;
-            background-size: cover;
-            background-position: center;
-            flex-shrink: 0;
-        }
-
-        .poster-left {
-            background-image: url('/images/15.jpg');
-        }
-
-        .poster-right {
-            background-image: url('/images/16.jpg');
-        }
-
         .meal-container {
             display: flex;
-            flex-direction: column;
-            gap: 30px;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            border-radius: 24px;
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            z-index: 1;
-            width: 350px;
-            max-height: 90vh;
-            overflow-y: auto;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
         }
 
         .meal-box {
-            width: 100%;
-            height: 100px;
-            background-color: #f8f1f1;
+            flex: 1;
+            min-width: 0;
+            height: 500px;
+            background: white;
             border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            font-size: 1.4rem;
+            align-items: center;
             position: relative;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .meal-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.08);
         }
 
         .meal-box::after {
@@ -91,18 +64,22 @@
         }
 
         .add-btn {
-            font-size: 2rem;
-            background: transparent;
-            border: none;
-            color: #ff7f9c;
-            cursor: pointer;
             position: absolute;
-            right: 20px;
+            bottom: 15px;
+            font-size: 18px;
+            border: none;
+            background-color: #4f46e5;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
         }
 
+
         .add-btn:hover {
-            transform: scale(1.2);
-            transition: 0.3s ease;
+            background-color: #3730a3;
         }
 
         .popup {
@@ -163,6 +140,7 @@
             background-color: #3730a3;
         }
 
+        /* 뒷배경 흐림 처리 */
         .overlay {
             position: fixed;
             display: none;
@@ -173,13 +151,36 @@
             background-color: rgba(0, 0, 0, 0.3);
             z-index: 998;
         }
+
+        .rabbit {
+            position: fixed;
+            bottom: 20px;
+            left: -100px;
+            width: 120px;
+            animation: moveRabbit 20s linear infinite;
+            z-index: 1000;
+        }
+
+        @keyframes moveRabbit {
+            0% {
+                left: -100px;
+            }
+            50% {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            100% {
+                left: 100vw;
+            }
+        }
+
     </style>
 </head>
 <body>
 
 <h1>오늘의 푸드 다이어리</h1>
 
-<!-- 자동 팝업 이벤트 배너 -->
+<!-- 이벤트 팝업 -->
 <div class="overlay" id="eventOverlay"></div>
 <div class="popup" id="eventPopup" style="max-width: 1200px;">
     <img src="/images/11.jpg" alt="이벤트 배너" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
@@ -190,41 +191,61 @@
     <button id="eventCloseBtn">닫기</button>
 </div>
 
-<div class="diary-wrap">
-    <div class="poster poster-left"></div>
-
-    <div class="meal-container">
-        <div class="meal-box" data-type="아침">
-            <button class="add-btn">+</button>
-        </div>
-        <div class="meal-box" data-type="점심">
-            <button class="add-btn">+</button>
-        </div>
-        <div class="meal-box" data-type="저녁">
-            <button class="add-btn">+</button>
-        </div>
-        <div class="meal-box" data-type="기타">
-            <button class="add-btn">+</button>
-        </div>
+<div class="meal-container">
+    <div class="meal-box" data-type="아침">
+        <button class="add-btn">+</button>
     </div>
-
-    <div class="poster poster-right"></div>
+    <div class="meal-box" data-type="점심">
+        <button class="add-btn">+</button>
+    </div>
+    <div class="meal-box" data-type="저녁">
+        <button class="add-btn">+</button>
+    </div>
+    <div class="meal-box" data-type="간식/기타">
+        <button class="add-btn">+</button>
+    </div>
 </div>
 
-<!-- 음식 입력 팝업 -->
 <div class="overlay" id="overlay"></div>
 <form class="popup" id="inputPopup">
     <input type="hidden" name="foodId"/>
     <label>날짜 <input type="date" id="date" name="eatenDate"></label>
     <label>음식명 <input type="text" id="foodName"></label>
 
-    <label>섭취량 <input type="text" id="amount" placeholder="예: 150g 또는 2개" name="amount"></label>
+    <label>섭취량 <input type="text" id="amount" placeholder="예: 150g 또는 150ml" name="amount"></label>
     <label>칼로리 <input type="text" id="kcal" value="0" name="kcal" readonly></label>
     <input type="hidden" id="type" name="mealType">
     <button id="saveBtn">저장하기</button>
 </form>
+<div class="ant-track">
+    <img src="/images/18.jpg" alt="토끼" class="rabbit"/>
+</div>
 
 <script>
+    // 기존 코드들 아래에 추가해줘
+
+    const eventPopup = document.getElementById('eventPopup');
+    const eventOverlay = document.getElementById('eventOverlay');
+    const eventCloseBtn = document.getElementById('eventCloseBtn');
+
+    // 자동 팝업 (예: 접속 2초 후 등장)
+    setTimeout(() => {
+        eventPopup.style.display = 'block';
+        eventOverlay.style.display = 'block';
+    }, 2000);
+
+    // 닫기 버튼 이벤트
+    eventCloseBtn.addEventListener('click', () => {
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
+
+    // 오버레이 클릭 시 팝업 닫기
+    eventOverlay.addEventListener('click', () => {
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
+
     const popup = document.getElementById('inputPopup');
     const overlay = document.getElementById('overlay');
     const foodNameInput = document.getElementById('foodName');
@@ -287,25 +308,9 @@
         dateInput.value = '';
     });
 
-    // 이벤트 배너 팝업
-    const eventPopup = document.getElementById('eventPopup');
-    const eventOverlay = document.getElementById('eventOverlay');
-    const eventCloseBtn = document.getElementById('eventCloseBtn');
 
-    setTimeout(() => {
-        eventPopup.style.display = 'block';
-        eventOverlay.style.display = 'block';
-    }, 2000);
 
-    eventCloseBtn.addEventListener('click', () => {
-        eventPopup.style.display = 'none';
-        eventOverlay.style.display = 'none';
-    });
 
-    eventOverlay.addEventListener('click', () => {
-        eventPopup.style.display = 'none';
-        eventOverlay.style.display = 'none';
-    });
 </script>
 
 </body>
