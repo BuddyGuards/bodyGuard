@@ -50,9 +50,9 @@ public class MyController {
     public String updateProfile(@SessionAttribute("user") User user, HttpSession session,
                                 @ModelAttribute ProfileUpdateRequest profileUpdateRequest) {
 
-        userService.updateUserProfile(user.getEmail(), profileUpdateRequest);
+        userService.updateUserProfile(user.getId(), profileUpdateRequest);
 
-        User updatedUser = userRepository.findByEmail(user.getEmail());
+        User updatedUser = userRepository.findById(user.getId());
 
         session.setAttribute("user", updatedUser);
 
