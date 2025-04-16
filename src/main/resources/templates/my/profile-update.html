@@ -1,79 +1,145 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <title>BodyGuard | 프로필</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>보디가드 | 프로필 수정</title>
-    <link rel="stylesheet" href="/css/style.css"/>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #fdfcfa;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrap {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 24px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .index-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        .preview-box {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 16px auto;
+            border: 2px solid #eee;
+        }
+
+        .preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #111;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 16px;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        .back-btn {
+            background-color: transparent;
+            color: #555;
+            text-decoration: underline;
+            margin-top: 8px;
+        }
+    </style>
 </head>
 <body>
-
-<div class="bottom-border-div">
-    <div class="index-header wrap">
+<div class="wrap">
+    <div class="index-header">
         <h2>마이페이지</h2>
-        <div>
-            <a th:href="@{/index}"></a>
-        </div>
-        <div>
-            <a th:href="@{/my/profile}"></a>
-        </div>
     </div>
-</div>
 
-<div class="my-main wrap">
-    <div class="content">
-        <form th:action="@{/my/profile-update}" method="post" enctype="multipart/form-data" class="profile-update-form">
-            <div class="account">
-                <ul>
-                    <li>아이디 : <span th:text="${user.id}"></span></li>
-                    <li>닉네임 : <input type="text" th:value="${user.nickname}" name="nickname"/></li>
-
-                    <li>프로필 사진 :
-                        <div style="margin-top: 8px;">
-                            <img id="previewImage"
-                                 th:src="${user.imageUrl != null && !#strings.isEmpty(user.imageUrl)} ? ${user.imageUrl} : '/images/default.png'"
-                                 alt="프로필 미리보기"
-                                 style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; border: 1px solid #ccc;"/>
-                        </div>
-                        <input type="file" name="imageFile" accept="image/*" onchange="previewImage(event)" style="margin-top: 8px;"/>
-                    </li>
-
-                    <li>성별
-                        <select name="gender" th:value="${user.gender}">
-                            <option value="남성">남성</option>
-                            <option value="여성">여성</option>
-                        </select>
-                    </li>
-                    <li>키 : <input type="number" th:step="0.1" th:value="${user.height}" name="height"/></li>
-                    <li>몸무게 : <input type="number" th:step="0.1" th:value="${user.weight}" name="weight"/></li>
-                    <li>나이 : <input type="number" th:value="${user.age}" name="age"/></li>
-                    <li>목표 : <input type="text" th:value="${user.goal}" name="goal"/></li>
-                </ul>
-            </div>
-
-            <div>
-                <button type="submit">수정하기</button>
-            </div>
-            <div class="my-main-nav">
-                <button onclick="location.href='/my/profile'" class="back-btn">뒤로가기</button>
-            </div>
-        </form>
+    <!-- 성별에 따른 프로필 이미지 -->
+    <div class="preview-box">
+        <img id="profileImage"
+             th:src="${user.gender == '여성'} ? '/images/13.png' : '/images/14.jpg'"
+             alt="프로필 이미지">
     </div>
+
+    <form th:action="@{/my/profile-update}" method="post">
+        <ul>
+            <li>아이디 : <span th:text="${user.id}"></span></li>
+            <li>닉네임 : <input type="text" th:value="${user.nickname}" name="nickname"/></li>
+            <li>성별 :
+                <select name="gender" id="genderSelect" onchange="updateProfileImage()">
+                    <option value="남성" selected>남성</option>
+                    <option value="여성">여성</option>
+                </select>
+            </li>
+            <li>키 : <input type="number" step="0.1" th:value="${user.height}" name="height"/></li>
+            <li>몸무게 : <input type="number" step="0.1" th:value="${user.weight}" name="weight"/></li>
+            <li>나이 : <input type="number" th:value="${user.age}" name="age"/></li>
+            <li>목표 : <input type="text" th:value="${user.goal}" name="goal"/></li>
+        </ul>
+        <button type="submit">수정하기</button>
+        <button type="button" onclick="location.href='/my/profile'" class="back-btn">뒤로가기</button>
+    </form>
 </div>
 
 <script>
-    function previewImage(event) {
-        const file = event.target.files[0];
-        if (!file) return;
+    function updateProfileImage() {
+        const gender = document.getElementById("genderSelect").value;
+        const img = document.getElementById("profileImage");
 
-        const reader = new FileReader();
-        reader.onload = function () {
-            const output = document.getElementById('previewImage');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(file);
+        if (gender === "남성") {
+            img.src = "/images/13.png";  // 여성 프로필 이미지
+        } else {
+            img.src = "/images/14.jpg";  // 남성 프로필 이미지
+        }
     }
-</script>
 
+    // 페이지 로드 시 자동 적용
+    document.addEventListener("DOMContentLoaded", updateProfileImage);
+</script>
 </body>
 </html>

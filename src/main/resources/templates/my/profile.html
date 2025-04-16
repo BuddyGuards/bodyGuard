@@ -8,13 +8,14 @@
         * {
             margin: 0;
             padding: 0;
-            font-family: 'Pretendard', sans-serif;
             box-sizing: border-box;
+            font-family: 'Pretendard', sans-serif;
         }
 
         body {
-            background: #fff;
-            color: #333;
+            background: linear-gradient(to bottom, #ffffff, #f6f6f6);
+            color: #222;
+            min-height: 100vh;
         }
 
         .container {
@@ -22,17 +23,18 @@
             max-width: 1200px;
             margin: 60px auto;
             gap: 40px;
+            padding: 0 20px;
         }
 
         .sidebar {
-            width: 220px;
-            border-right: 1px solid #ddd;
+            width: 240px;
             padding-right: 20px;
+            border-right: 1px solid #ddd;
         }
 
         .sidebar h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            margin-bottom: 24px;
             color: #4f46e5;
         }
 
@@ -41,7 +43,7 @@
         }
 
         .menu li {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .menu a {
@@ -56,47 +58,17 @@
         }
 
         .content {
-            flex-grow: 1;
+            flex: 1;
         }
 
-        .profile-box {
-            border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .profile-box h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .info-row {
-            margin-bottom: 10px;
-            font-size: 15px;
-            color: #666;
-        }
-
-        .btn {
-            background: #4f46e5;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn:hover {
-            background: #3730a3;
-        }
         .welcome-box {
+            background: #f4f4fe;
+            border-radius: 16px;
+            padding: 50px 30px;
             text-align: center;
-            background: #f9f9ff;
-            border: 1px solid #e0e0ff;
-            border-radius: 12px;
-            padding: 60px 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            margin-bottom: 40px;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
         }
 
         .welcome-box h2 {
@@ -114,29 +86,121 @@
         .welcome-img {
             width: 120px;
             height: auto;
-            opacity: 0.8;
+            opacity: 0.85;
         }
+
+        .profile-card {
+            display: flex;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+            align-items: center;
+        }
+
+        .profile-img {
+            flex-shrink: 0;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 30px;
+            border: 2px solid #e5e5e5;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .profile-info p {
+            margin-bottom: 6px;
+            font-size: 15px;
+            color: #555;
+        }
+
+        .edit-btn {
+            margin-top: 14px;
+            display: inline-block;
+            background: #4f46e5;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .edit-btn:hover {
+            background: #3730a3;
+        }
+
+        /* 배경 일러스트 */
+        .bg-illustration {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 220px;
+            opacity: 0.07;
+            z-index: -1;
+        }
+
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- 사이드바 -->
     <aside class="sidebar">
         <h3>마이페이지</h3>
         <ul class="menu">
-            <li><a th:href="@{/my/profile-update}">회원정보</a></li>
             <li><a th:href="@{/auth/logout}">로그아웃</a></li>
         </ul>
     </aside>
 
+    <!-- 본문 영역 -->
     <section class="content">
+
+        <!-- 환영 박스 -->
         <div class="welcome-box">
             <img src="https://cdn-icons-png.flaticon.com/512/4359/4359875.png" alt="welcome" class="welcome-img">
-            <h2><span th:text="${user.nickname}"></span>님, 마이페이지에 오신 걸 환영해요!</h2>
-            <p>왼쪽 메뉴에서 회원정보 수정을 확인할 수 있어요.</p>
+            <h2><span th:text="${user.nickname}"></span> 님, 환영해요!</h2>
+            <p>bodyGuard는 당신의 몸과 마음을 지키는 공간이에요.</p>
         </div>
+
+        <!-- 프로필 카드 -->
+        <div class="profile-card">
+            <div class="profile-img">
+                <img id="profileImage"
+                     th:src="${user.gender == '여성'} ? '/images/13.png' : '/images/14.jpg'"
+                     alt="프로필 이미지">
+            </div>
+            <div class="profile-info">
+                <h3 th:text="${user.nickname} + ' 님의 프로필'"></h3>
+                <p>아이디: <span th:text="${user.id}"></span></p>
+                <p>성별: <span th:text="${user.gender}"></span></p>
+                <p>키: <span th:text="${user.height}"></span> cm</p>
+                <p>몸무게: <span th:text="${user.weight}"></span> kg</p>
+                <p>나이: <span th:text="${user.age}"></span>세</p>
+                <p>목표: <span th:text="${user.goal}"></span></p>
+                <a th:href="@{/my/profile-update}" class="edit-btn">정보 수정하기</a>
+            </div>
+        </div>
+
     </section>
 </div>
 
+<!-- 배경 일러스트 -->
+<img src="/images/bodyguard-bg-symbol.png" alt="bg" class="bg-illustration" />
+
 </body>
-</html>
