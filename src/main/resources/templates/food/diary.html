@@ -93,7 +93,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 300px;
+            width: 700px;
             transform: translate(-50%, -50%);
             background: white;
             padding: 30px;
@@ -167,6 +167,52 @@
             z-index: 1000;
         }
 
+
+        .results-container {
+            display: flex;
+            overflow-x: auto; /* 수평 스크롤 가능 */
+            gap: 10px;
+            margin-top: 10px;
+            padding-bottom: 10px; /* 아래쪽에 스크롤 생길 때 여유 공간 */
+        }
+
+        /* 카드 스타일 */
+        .card {
+            width: 140px; /* 카드 크기 작게 */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        /* 텍스트 부분 스타일 */
+        .card h3 {
+            font-size: 14px; /* 폰트 작게 */
+            margin: 8px 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card p {
+            font-size: 12px; /* 폰트 작게 */
+            color: #666;
+            margin: 4px 0;
+        }
         @keyframes moveRabbit {
             0% {
                 left: -100px;
@@ -220,16 +266,28 @@
 </div>
 
 <div class="overlay" id="overlay"></div>
-<form class="popup" id="inputPopup">
-    <input type="hidden" name="foodId"/>
+<!-- 음식 검색 파트 -->
+<div class="popup" id="inputPopup">
+<div id="foodSearch">
+    <label>음식명 <input type="text" id="foodName" ></label>
+</div>
+    <div id="searchResults" class="results-container"></div>
+<form >
+    <input type="hidden" name="foodId" />
     <label>날짜 <input type="date" id="date" name="eatenDate"></label>
-    <label>음식명 <input type="text" id="foodName"></label>
 
-    <label>섭취량 <input type="text" id="amount" placeholder="예: 150g 또는 150ml" name="amount"></label>
-    <label>칼로리 <input type="text" id="kcal" value="0" name="kcal" readonly></label>
+    <label>섭취량
+        <input type="text" id="amount" placeholder="예: 150g 또는 150ml" name="amount">
+    </label>
+
+    <label>칼로리
+        <input type="text" id="kcal" value="0" name="kcal" readonly>
+    </label>
+
     <input type="hidden" id="type" name="mealType">
     <button id="saveBtn">저장하기</button>
 </form>
+</div>
 <div class="ant-track">
     <img src="/images/18.png" alt="토끼" class="rabbit"/>
 </div>
@@ -338,9 +396,59 @@
         dateInput.value = '';
     });
 
+    const input = document.getElementById("foodName");
+    const resultsContainer = document.getElementById("searchResults");
+    const foodIdInput = document.querySelector('input[name="foodId"]');
+    const kcalInput = document.querySelector('input[name="kcal"]');
 
+    let debounceTimer = null;
+    let searchResult = [];
 
+    input.addEventListener("input", function(evt) {
+        const keyword = evt.target.value.trim();
+        if (!keyword) {
+            resultsContainer.innerHTML = "";
+            return;
+        }
 
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            fetch(`/api/food/auto-complete?word=${encodeURIComponent(keyword)}`)
+                .then(res => res.json())
+                .then(data => {
+                    searchResult = data;
+                    displayResults(data);
+                });
+        }, 300);
+    });
+
+    // 검색 결과를 카드로 표시하는 함수
+    function displayResults(data) {
+        resultsContainer.innerHTML = data.map(food => `
+        <div class="card" data-id="${food.id}" data-kcal="${food.kcal}">
+
+            <h3>${food.name}</h3>
+            <p>${food.kcal} kcal</p>
+        </div>
+    `).join("");
+    }
+
+    // 카드 클릭 시 음식 정보 폼에 채우기
+    resultsContainer.addEventListener("click", function(evt) {
+        const card = evt.target.closest(".card");
+        if (card) {
+            const id = card.getAttribute("data-id");
+            const kcal = card.getAttribute("data-kcal");
+            const name = card.querySelector("h3").textContent;
+
+            foodIdInput.value = id;
+            kcalInput.value = kcal;
+            input.value = name; // 선택된 이름 폼에 입력
+
+            // 카드가 클릭되면 결과 영역 비우기
+            resultsContainer.innerHTML = "";
+        }
+    });
 </script>
 </body>
 </html>

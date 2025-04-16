@@ -1,12 +1,14 @@
 package org.buddyguard.bodyguard.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Setter
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FoodLog {
     private Integer id;              // PK
     private Integer userId;          // 사용자 ID (FK)
