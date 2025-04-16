@@ -293,6 +293,27 @@
         eventPopup.style.display = 'none';
         eventOverlay.style.display = 'none';
     });
+
+    document.getElementById("foodName").onkeyup=function (evt){
+        if(!evt.target.value){
+            return;
+        }
+        fetch("/api/food/auto-complete?word="+evt.target.value, {
+            method: "get"
+        }).then(function (response) {
+            return response.text();
+        }).then(function (text){
+            console.log(text);
+            const obj = JSON.parse(text);
+
+            let optionsHTML ="";
+            for(let one of obj) {
+                optionsHTML += "<option>"+one+"</option>";
+            }
+            document.getElementById("x").innerHTML = optionsHTML;
+        });
+    }
+
 </script>
 </body>
 </html>
