@@ -5,7 +5,7 @@
 <mapper namespace="org.buddyguard.bodyguard.repository.FoodRepository">
 
     <select id="searchFoodsByName" resultType="food">
-        SELECT distinct name FROM foods WHERE name LIKE #{word}
+        SELECT * FROM foods WHERE name LIKE #{word}
     </select>
 
 </mapper>
