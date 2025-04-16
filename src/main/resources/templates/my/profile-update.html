@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -6,6 +7,7 @@
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
+
 <div class="bottom-border-div">
     <div class="index-header wrap">
         <h2>마이페이지</h2>
@@ -19,15 +21,23 @@
 </div>
 
 <div class="my-main wrap">
-
-
     <div class="content">
-        <form th:action="@{/my/profile-update}" method="post" class="profile-update-form">
+        <form th:action="@{/my/profile-update}" method="post" enctype="multipart/form-data" class="profile-update-form">
             <div class="account">
                 <ul>
                     <li>아이디 : <span th:text="${user.id}"></span></li>
                     <li>닉네임 : <input type="text" th:value="${user.nickname}" name="nickname"/></li>
-                    <li>프로필 사진 : <input type="text" th:value="${user.imageUrl}" name="imageUrl"/></li>
+
+                    <li>프로필 사진 :
+                        <div style="margin-top: 8px;">
+                            <img id="previewImage"
+                                 th:src="${user.imageUrl != null && !#strings.isEmpty(user.imageUrl)} ? ${user.imageUrl} : '/images/default.png'"
+                                 alt="프로필 미리보기"
+                                 style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px; border: 1px solid #ccc;"/>
+                        </div>
+                        <input type="file" name="imageFile" accept="image/*" onchange="previewImage(event)" style="margin-top: 8px;"/>
+                    </li>
+
                     <li>성별
                         <select name="gender" th:value="${user.gender}">
                             <option value="남성">남성</option>
@@ -40,6 +50,7 @@
                     <li>목표 : <input type="text" th:value="${user.goal}" name="goal"/></li>
                 </ul>
             </div>
+
             <div>
                 <button type="submit">수정하기</button>
             </div>
@@ -49,6 +60,20 @@
         </form>
     </div>
 </div>
+
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function () {
+            const output = document.getElementById('previewImage');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+
 </body>
 </html>
-
