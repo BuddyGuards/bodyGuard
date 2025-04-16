@@ -52,30 +52,38 @@
 
 <!-- 입력 팝업 창 -->
 <div class="popup" id="inputPopup">
-    <label>날짜 : <input type="date" id="date"></label><br>
-    <label>음식명 : <input type="text" id="foodName"></label><br>
-    <label>섭취량 : <input type="text" id="amount"></label><br>
+    <label>날짜 <input type="date" id="date"></label><br>
+    <label>음식명 <input type="text" id="foodName"></label><br>
+    <label>섭취량 <input type="text" id="amount"></label><br>
     <input type="hidden" id="type">
 
     <button id="saveBtn">저장하기</button>
 </div>
 
 <script>
-    // 필드 값 변수 저장
     const popup = document.getElementById('inputPopup');
     const foodNameInput = document.getElementById('foodName');
     const amountInput = document.getElementById('amount');
     const dateInput = document.getElementById('date');
     const typeInput = document.getElementById('type');
 
+    // 입력 필드 초기화 함수
+    function clearInputs() {
+        foodNameInput.value = '';
+        amountInput.value = '';
+        dateInput.value = '';
+        typeInput.value = '';
+    }
+
     // + 버튼 클릭 시 팝업 열기
     document.querySelectorAll('.add-btn').forEach(btn => {
         btn.addEventListener('click', function (evt) {
-            evt.stopPropagation(); // 문서 클릭 전파 방지
+            evt.stopPropagation();
 
             const mealBox = this.closest('.meal-box');
-            // 식사 시간 종류
             const mealType = mealBox.getAttribute('data-type');
+
+            clearInputs(); // 이전 입력값 제거
 
             typeInput.value = mealType;
 
@@ -85,7 +93,7 @@
         });
     });
 
-    // 저장 버튼 클릭 시 서버에 데이터 전송
+    // 저장 버튼 클릭 시
     document.getElementById('saveBtn').addEventListener('click', function (evt) {
         evt.stopPropagation();
 
@@ -96,33 +104,36 @@
             type: typeInput.value
         };
 
-        // 서버에 요청 보내기
         fetch('/food/diary/add', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(requestData)
         })
-            .then(response => response.text())   // 응답 텍스트 형태
+            .then(response => response.text())
             .then(data => {
                 if (data === 'success') {
                     alert('저장이 완료 되었습니다');
-
-                    // 팝업창 닫기
                     popup.style.display = 'none';
-                    foodNameInput.value = '';
-                    amountInput.value = '';
-                    dateInput.value = '';
+                    clearInputs(); // 저장 후 입력값 비움
                 }
             });
     });
 
-    // 팝업외의 부분 클릭 시 팝업창 닫기
+    // 팝업 외부 클릭 시 닫기
     document.addEventListener("click", function (evt) {
-        if (!popup.contains(evt.target)) {
-            popup.style.display = 'none';
+        // 팝업 내부 클릭 시
+        if (popup.contains(evt.target)) {
+            evt.stopPropagation();   // 팝업창 닫기 방지
+
+        // 팝업 외부 클릭 시
+        } else {
+            popup.style.display = 'none';   // 팝업 숨기기
+            clearInputs();   // 입력 값 초기화
         }
     });
+
 </script>
+
 </body>
 </html>
 
