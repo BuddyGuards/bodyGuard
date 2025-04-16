@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Diary</title>
+  <style>
+    .meal-box { width: 100px; height: 150px; border: 1px solid black; display: inline-block; position: relative; margin: 10px; }
+    .add-btn { position: absolute; bottom: 5px; left: 5px; cursor: pointer; }
+    .popup { display: none; position: absolute; top: 50px; left: 50px; background-color: #f0f0ff; border: 1px solid blue; padding: 10px; z-index: 10; }
+  </style>
+</head>
+<body>
+<div>
+  <div class="meal-box" data-type="아침">아침
+    <button class="add-btn">+</button>
+  </div>
+  <div class="meal-box" data-type="점심">점심
+    <button class="add-btn">+</button>
+  </div>
+  <div class="meal-box" data-type="저녁">저녁
+    <button class="add-btn">+</button>
+  </div>
+  <div class="meal-box" data-type="기타">기타
+    <button class="add-btn">+</button>
+  </div>
+</div>
+
+<div class="popup" id="inputPopup">
+  <label>날짜: <input type="date" id="date"></label><br>
+  <label>음식명: <input type="text" id="foodName"></label><br>
+  <label>섭취량: <input type="text" id="amount"></label><br>
+  <input type="hidden" id="type">
+  <button id="saveBtn">저장하기</button>
+</div>
+
+<script>
+  const popup = document.getElementById('inputPopup');
+  const foodNameInput = document.getElementById('foodName');
+  const amountInput = document.getElementById('amount');
+  const dateInput = document.getElementById('date');
+  const typeInput = document.getElementById('type');
+
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const mealBox = this.closest('.meal-box');
+      const mealType = mealBox.getAttribute('data-type');
+
+      typeInput.value = mealType;
+      popup.style.display = 'block';
+      popup.style.top = mealBox.offsetTop + 30 + 'px';
+      popup.style.left = mealBox.offsetLeft + 10 + 'px';
+    });
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', function() {
+    const requestData = {
+      foodName: foodNameInput.value,
+      amount: amountInput.value,
+      date: dateInput.value,
+      type: typeInput.value
+    };
+
+    fetch('/food/diary/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestData)
+    })
+            .then(response => response.text())
+            .then(data => {
+              if (data === 'success') {
+                alert('저장 완료!');
+                popup.style.display = 'none';
+                foodNameInput.value = '';
+                amountInput.value = '';
+                dateInput.value = '';
+              }
+            });
+
+  });
+</script>
+</body>
+</html>
