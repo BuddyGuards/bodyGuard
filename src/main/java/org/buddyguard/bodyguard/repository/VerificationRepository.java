@@ -10,4 +10,5 @@ public interface VerificationRepository {
 
     public Verification findByToken(@Param("token") String token);
 
+    public int deleteByEmail(String email);
 }
