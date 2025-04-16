@@ -7,5 +7,7 @@ import org.buddyguard.bodyguard.entity.Verification;
 @Mapper
 public interface VerificationRepository {
     public int save(Verification verification);
+
     public Verification findByToken(@Param("token") String token);
+
 }

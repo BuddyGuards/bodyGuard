@@ -15,6 +15,8 @@ public interface UserRepository {
 
     public User findById (int Id);
 
+    public int deleteByEmail(String email);
+
     public User findByProviderAndProviderId(@Param("provider") String provider,
                                             @Param("providerId") String providerId);
 

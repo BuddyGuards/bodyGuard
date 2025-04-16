@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>회원 탈퇴</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+<h2>회원 탈퇴</h2>
+
+<form th:action="@{/auth/leave}" method="post">
+  <button type="submit">탈퇴하기</button>
+</form>
+
+</body>
+</html>

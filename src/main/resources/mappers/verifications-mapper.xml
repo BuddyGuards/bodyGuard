@@ -12,4 +12,9 @@
     <select id="findByToken" resultType="verification">
         select * from verifications where token=#{token}
     </select>
+
+    <!-- DB에서 회원 삭제-->
+    <delete id="deleteByEmail">
+        delete from verifications where user_email = #{email}
+    </delete>
 </mapper>

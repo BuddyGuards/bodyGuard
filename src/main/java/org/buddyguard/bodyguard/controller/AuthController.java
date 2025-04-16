@@ -53,6 +53,7 @@ public class AuthController {
     public String signupPostHandle(@ModelAttribute User user) {
 
         User found = userRepository.findByEmail(user.getEmail());
+
         if (found == null) {
             user.setProvider("LOCAL");
             user.setVerified("F");
@@ -82,10 +83,11 @@ public class AuthController {
     public String loginPostHandel(@ModelAttribute LoginRequest loginRequest,
                                   HttpSession session) {
 
-        User user =
-                userRepository.findByEmail(loginRequest.getEmail());
+        User user = userRepository.findByEmail(loginRequest.getEmail());
+
         if (user != null && user.getPassword().equals(loginRequest.getPassword())) {
             session.setAttribute("user", user);
+
             return "redirect:/index";
         }
 
@@ -97,7 +99,37 @@ public class AuthController {
     public String logoutHandle(HttpSession session) {
 
         session.invalidate();
+
         return "redirect:/auth/login";
+    }
+
+
+    // 회원 탈퇴 페이지
+    @GetMapping("/leave")
+
+    public String leaveHandle(@SessionAttribute("user") User user) {
+        if (user == null) {
+
+            return "auth/login";
+        }
+        return "auth/leave";
+    }
+
+    // 회원 탈퇴 처리
+    @PostMapping("/leave")
+    public String leavePostHandle(@SessionAttribute("user") User user, HttpSession session) {
+
+        if (user == null) {
+
+
+            return "auth/login";
+        }
+
+        verificationRepository.deleteByEmail(user.getEmail());
+        userRepository.deleteByEmail(user.getEmail());
+        session.invalidate();
+
+        return "redirect:/index";
     }
 
 
