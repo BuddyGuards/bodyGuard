@@ -42,11 +42,11 @@
     </update>
 
     <!-- 유저 프로필 수정-->
-    <update id="updateUserProfileByEmail">
+    <update id="updateUserProfileById">
         update users set nickname = #{nickname}, image_url = #{imageUrl},
         gender = #{gender}, height = #{height},
         weight = #{weight}, age = #{age}, goal = #{goal}
-        where email = #{email}
+        where id = #{id}
     </update>
 
 </mapper>

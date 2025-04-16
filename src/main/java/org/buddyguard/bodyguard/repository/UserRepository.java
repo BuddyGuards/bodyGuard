@@ -25,13 +25,13 @@ public interface UserRepository {
 
     public int updateVerifiedByEmail(@Param("email") String email);
 
-    public void updateUserProfileByEmail(@Param("nickname") String nickname,
+    public void updateUserProfileById(@Param("nickname") String nickname,
                                          @Param("imageUrl") String imageUrl,
                                          @Param("gender") String gender,
                                          @Param("height") Double height,
                                          @Param("weight") Double weight,
                                          @Param("age") Integer age,
                                          @Param("goal") String goal,
-                                         @Param("email") String email);
+                                         @Param("id") Integer id);
 
 }

@@ -3,16 +3,18 @@ package org.buddyguard.bodyguard.service;
 import lombok.RequiredArgsConstructor;
 import org.buddyguard.bodyguard.repository.UserRepository;
 import org.buddyguard.bodyguard.request.ProfileUpdateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    public void updateUserProfile(String email, ProfileUpdateRequest request) {
-        userRepository.updateUserProfileByEmail(
+    public void updateUserProfile(int id, ProfileUpdateRequest request) {
+        userRepository.updateUserProfileById(
                 request.getNickname(),
                 request.getImageUrl(),
                 request.getGender(),
@@ -20,7 +22,7 @@ public class UserService {
                 request.getWeight(),
                 request.getAge(),
                 request.getGoal(),
-                email
+                id
         );
     }
 }
