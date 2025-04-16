@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class FoodController {
 
     @GetMapping("/diary")
-    public String showDiaryPage(Model model) {
+    public String diaryHandle(Model model) {
 
         return "food/diary";  // Thymeleaf 템플릿
     }

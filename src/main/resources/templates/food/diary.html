@@ -17,14 +17,14 @@
       padding: 40px 20px;
     }
 
-    h1 {
-      text-align: center;
-      font-size: 32px;
-      margin-bottom: 40px;
-      color: #4f46e5;
-      font-weight: 600;
-      letter-spacing: -0.5px;
-    }
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #4f46e5;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
 
     .meal-container {
       display: flex;
@@ -53,12 +53,12 @@
       box-shadow: 0 15px 25px rgba(0,0,0,0.08);
     }
 
-    .meal-box::after {
-      content: attr(data-type);
-      font-size: 20px;
-      font-weight: 500;
-      color: #4f46e5;
-    }
+        .meal-box::after {
+            content: attr(data-type);
+            font-size: 20px;
+            font-weight: 500;
+            color: #4f46e5;
+        }
 
     .add-btn {
       position: absolute;
@@ -74,61 +74,62 @@
       transition: background-color 0.2s ease;
     }
 
+
     .add-btn:hover {
       background-color: #3730a3;
     }
 
-    .popup {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 300px;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-      z-index: 999;
-      animation: fadeIn 0.3s ease forwards;
-    }
+        .popup {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            z-index: 999;
+            animation: fadeIn 0.3s ease forwards;
+        }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translate(-50%, -60%); }
       to { opacity: 1; transform: translate(-50%, -50%); }
     }
 
-    .popup label {
-      display: block;
-      margin-bottom: 12px;
-      font-size: 14px;
-      color: #333;
-    }
+        .popup label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #333;
+        }
 
-    .popup input {
-      width: 100%;
-      padding: 8px 12px;
-      margin-top: 4px;
-      margin-bottom: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-    }
+        .popup input {
+            width: 100%;
+            padding: 8px 12px;
+            margin-top: 4px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
 
-    .popup button {
-      width: 100%;
-      background-color: #4f46e5;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 15px;
-      cursor: pointer;
-    }
+        .popup button {
+            width: 100%;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+        }
 
-    .popup button:hover {
-      background-color: #3730a3;
-    }
+        .popup button:hover {
+            background-color: #3730a3;
+        }
 
     /* 뒷배경 흐림 처리 */
     .overlay {
@@ -171,12 +172,12 @@
 <!-- 이벤트 팝업 -->
 <div class="overlay" id="eventOverlay"></div>
 <div class="popup" id="eventPopup" style="max-width: 1200px;">
-  <img src="/images/11.jpg" alt="이벤트 배너" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
-  <h2 style="margin-bottom: 10px;">🎉 보디가드 초특급 이벤트!</h2>
-  <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
-    이번 주 동안 3일 이상 식단을 기록하면<br><strong style="color:#4f46e5;">뽀뽀</strong>를 해드려요!
-  </p>
-  <button id="eventCloseBtn">닫기</button>
+    <img src="/images/11.jpg" alt="이벤트 배너" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
+    <h2 style="margin-bottom: 10px;">🎉 보디가드 초특급 이벤트!</h2>
+    <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+        이번 주 동안 3일 이상 식단을 기록하면<br><strong style="color:#4f46e5;">뽀뽀</strong>를 해드려요!
+    </p>
+    <button id="eventCloseBtn">닫기</button>
 </div>
 
 <div class="meal-container">
@@ -195,14 +196,16 @@
 </div>
 
 <div class="overlay" id="overlay"></div>
+<form class="popup" id="inputPopup">
+    <input type="hidden" name="foodId" />
+    <label>날짜 <input type="date" id="date" name="eatenDate"></label>
+    <label>음식명 <input type="text" id="foodName"></label>
 
-<div class="popup" id="inputPopup">
-  <label>날짜 <input type="date" id="date"></label>
-  <label>음식명 <input type="text" id="foodName"></label>
-  <label>섭취량 <input type="text" id="amount" placeholder="예: 150g 또는 150ml"></label>
-  <input type="hidden" id="type">
-  <button id="saveBtn">저장하기</button>
-</div>
+    <label>섭취량 <input type="text" id="amount" placeholder="예: 150g 또는 2개" name="amount"></label>
+    <label>칼로리 <input type="text" id="kcal" value="0" name="kcal" readonly></label>
+    <input type="hidden" id="type" name="mealType">
+    <button id="saveBtn">저장하기</button>
+</form>
 
 <script>
   // 기존 코드들 아래에 추가해줘
@@ -231,55 +234,74 @@
 </script>
 
 <script>
-  const popup = document.getElementById('inputPopup');
-  const overlay = document.getElementById('overlay');
-  const foodNameInput = document.getElementById('foodName');
-  const amountInput = document.getElementById('amount');
-  const dateInput = document.getElementById('date');
-  const typeInput = document.getElementById('type');
+    const popup = document.getElementById('inputPopup');
+    const overlay = document.getElementById('overlay');
+    const foodNameInput = document.getElementById('foodName');
+    const amountInput = document.getElementById('amount');
+    const dateInput = document.getElementById('date');
+    const typeInput = document.getElementById('type');
 
-  document.querySelectorAll('.add-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-      const mealBox = this.closest('.meal-box');
-      const mealType = mealBox.getAttribute('data-type');
+    document.querySelectorAll('.add-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const mealBox = this.closest('.meal-box');
+            const mealType = mealBox.getAttribute('data-type');
 
-      typeInput.value = mealType;
-      popup.style.display = 'block';
-      overlay.style.display = 'block';
+            typeInput.value = mealType;
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
+        });
     });
-  });
 
-  document.getElementById('saveBtn').addEventListener('click', function () {
-    const requestData = {
-      foodName: foodNameInput.value,
-      amount: amountInput.value,
-      date: dateInput.value,
-      type: typeInput.value
-    };
+    document.getElementById('saveBtn').addEventListener('click', function () {
+        const requestData = {
+            foodName: foodNameInput.value,
+            amount: amountInput.value,
+            date: dateInput.value,
+            type: typeInput.value
+        };
 
-    fetch('/food/diary/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestData)
-    })
+        fetch('/food/diary/add', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(requestData)
+        })
             .then(response => response.text())
             .then(data => {
-              if (data === 'success') {
-                alert('저장 완료!');
-                popup.style.display = 'none';
-                overlay.style.display = 'none';
-                foodNameInput.value = '';
-                amountInput.value = '';
-                dateInput.value = '';
-              }
+                if (data === 'success') {
+                    alert('저장 완료!');
+                    popup.style.display = 'none';
+                    overlay.style.display = 'none';
+                    foodNameInput.value = '';
+                    amountInput.value = '';
+                    dateInput.value = '';
+                }
             });
-  });
+    });
 
-  // 팝업 외부 클릭 시 닫기
-  overlay.addEventListener('click', () => {
-    popup.style.display = 'none';
-    overlay.style.display = 'none';
-  });
+    overlay.addEventListener('click', () => {
+        popup.style.display = 'none';
+        overlay.style.display = 'none';
+    });
+
+    // 이벤트 배너 팝업
+    const eventPopup = document.getElementById('eventPopup');
+    const eventOverlay = document.getElementById('eventOverlay');
+    const eventCloseBtn = document.getElementById('eventCloseBtn');
+
+    setTimeout(() => {
+        eventPopup.style.display = 'block';
+        eventOverlay.style.display = 'block';
+    }, 2000);
+
+    eventCloseBtn.addEventListener('click', () => {
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
+
+    eventOverlay.addEventListener('click', () => {
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
 </script>
 
 <div class="ant-track">
