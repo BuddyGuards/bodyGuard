@@ -1,82 +1,129 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Food Diary</title>
-  <style>
-    .meal-box { width: 100px; height: 150px; border: 1px solid black; display: inline-block; position: relative; margin: 10px; }
-    .add-btn { position: absolute; bottom: 5px; left: 5px; cursor: pointer; }
-    .popup { display: none; position: absolute; top: 50px; left: 50px; background-color: #f0f0ff; border: 1px solid blue; padding: 10px; z-index: 10; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Food Diary</title>
+    <style>
+        .meal-box {
+            width: 100px;
+            height: 150px;
+            border: 1px solid black;
+            display: inline-block;
+            position: relative;
+            margin: 10px;
+        }
+
+        .add-btn {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            cursor: pointer;
+        }
+
+        .popup {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            background-color: #f0f0ff;
+            border: 1px solid blue;
+            padding: 10px;
+            z-index: 10;
+        }
+    </style>
 </head>
 <body>
+
+<!-- 아침, 점심, 저녁, 기타 박스 -->
 <div>
-  <div class="meal-box" data-type="아침">아침
-    <button class="add-btn">+</button>
-  </div>
-  <div class="meal-box" data-type="점심">점심
-    <button class="add-btn">+</button>
-  </div>
-  <div class="meal-box" data-type="저녁">저녁
-    <button class="add-btn">+</button>
-  </div>
-  <div class="meal-box" data-type="기타">기타
-    <button class="add-btn">+</button>
-  </div>
+    <div class="meal-box" data-type="아침">아침
+        <button class="add-btn">+</button>
+    </div>
+    <div class="meal-box" data-type="점심">점심
+        <button class="add-btn">+</button>
+    </div>
+    <div class="meal-box" data-type="저녁">저녁
+        <button class="add-btn">+</button>
+    </div>
+    <div class="meal-box" data-type="기타">기타
+        <button class="add-btn">+</button>
+    </div>
 </div>
 
+<!-- 입력 팝업 창 -->
 <div class="popup" id="inputPopup">
-  <label>날짜: <input type="date" id="date"></label><br>
-  <label>음식명: <input type="text" id="foodName"></label><br>
-  <label>섭취량: <input type="text" id="amount"></label><br>
-  <input type="hidden" id="type">
-  <button id="saveBtn">저장하기</button>
+    <label>날짜 : <input type="date" id="date"></label><br>
+    <label>음식명 : <input type="text" id="foodName"></label><br>
+    <label>섭취량 : <input type="text" id="amount"></label><br>
+    <input type="hidden" id="type">
+
+    <button id="saveBtn">저장하기</button>
 </div>
 
 <script>
-  const popup = document.getElementById('inputPopup');
-  const foodNameInput = document.getElementById('foodName');
-  const amountInput = document.getElementById('amount');
-  const dateInput = document.getElementById('date');
-  const typeInput = document.getElementById('type');
+    // 필드 값 변수 저장
+    const popup = document.getElementById('inputPopup');
+    const foodNameInput = document.getElementById('foodName');
+    const amountInput = document.getElementById('amount');
+    const dateInput = document.getElementById('date');
+    const typeInput = document.getElementById('type');
 
-  document.querySelectorAll('.add-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const mealBox = this.closest('.meal-box');
-      const mealType = mealBox.getAttribute('data-type');
+    // + 버튼 클릭 시 팝업 열기
+    document.querySelectorAll('.add-btn').forEach(btn => {
+        btn.addEventListener('click', function (evt) {
+            evt.stopPropagation(); // 문서 클릭 전파 방지
 
-      typeInput.value = mealType;
-      popup.style.display = 'block';
-      popup.style.top = mealBox.offsetTop + 30 + 'px';
-      popup.style.left = mealBox.offsetLeft + 10 + 'px';
+            const mealBox = this.closest('.meal-box');
+            // 식사 시간 종류
+            const mealType = mealBox.getAttribute('data-type');
+
+            typeInput.value = mealType;
+
+            popup.style.display = 'block';
+            popup.style.top = mealBox.offsetTop + 30 + 'px';
+            popup.style.left = mealBox.offsetLeft + 10 + 'px';
+        });
     });
-  });
 
-  document.getElementById('saveBtn').addEventListener('click', function() {
-    const requestData = {
-      foodName: foodNameInput.value,
-      amount: amountInput.value,
-      date: dateInput.value,
-      type: typeInput.value
-    };
+    // 저장 버튼 클릭 시 서버에 데이터 전송
+    document.getElementById('saveBtn').addEventListener('click', function (evt) {
+        evt.stopPropagation();
 
-    fetch('/food/diary/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestData)
-    })
-            .then(response => response.text())
+        const requestData = {
+            foodName: foodNameInput.value,
+            amount: amountInput.value,
+            date: dateInput.value,
+            type: typeInput.value
+        };
+
+        // 서버에 요청 보내기
+        fetch('/food/diary/add', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(requestData)
+        })
+            .then(response => response.text())   // 응답 텍스트 형태
             .then(data => {
-              if (data === 'success') {
-                alert('저장 완료!');
-                popup.style.display = 'none';
-                foodNameInput.value = '';
-                amountInput.value = '';
-                dateInput.value = '';
-              }
-            });
+                if (data === 'success') {
+                    alert('저장이 완료 되었습니다');
 
-  });
+                    // 팝업창 닫기
+                    popup.style.display = 'none';
+                    foodNameInput.value = '';
+                    amountInput.value = '';
+                    dateInput.value = '';
+                }
+            });
+    });
+
+    // 팝업외의 부분 클릭 시 팝업창 닫기
+    document.addEventListener("click", function (evt) {
+        if (!popup.contains(evt.target)) {
+            popup.style.display = 'none';
+        }
+    });
 </script>
 </body>
 </html>
+
+
