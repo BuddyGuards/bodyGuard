@@ -259,6 +259,7 @@
   <div class="nav-links">
     <th:block th:if="${user != null}">
       <span th:text="${user.nickname} + '님 반가워요'"></span>
+      <a th:href="@{/food/diary}">푸드다이어리</a>
       <a th:href="@{/my/profile}">마이페이지</a>
       <a th:href="@{/auth/logout}">로그아웃</a>
     </th:block>
