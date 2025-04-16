@@ -17,7 +17,11 @@
         select * from users where email = #{email}
     </select>
 
-    <!---->
+    <!-- DB에서 회원 삭제 -->
+    <delete id="deleteByEmail">
+        delete from users where email = #{email}
+    </delete>
+
     <select id="findById" resultType="user">
         select * from users where id = #{id}
     </select>
