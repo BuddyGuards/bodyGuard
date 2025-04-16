@@ -30,56 +30,62 @@
 
         .meal-container {
             display: flex;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
+            justify-content: space-around;
             gap: 20px;
+            padding: 40px;
         }
 
         .meal-box {
-            flex: 1;
-            min-width: 0;
-            height: 500px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             position: relative;
-            transition: all 0.3s ease;
+            width: 240px; /* 더 큼직하게 */
+            height: 360px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            background-color: #fff;
         }
 
-        .meal-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.08);
+        .meal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
-        .meal-box::after {
-            content: attr(data-type);
-            font-size: 20px;
-            font-weight: 500;
+        .meal-label {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background-color: rgba(255,255,255,0.8);
             color: #4f46e5;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
         .add-btn {
             position: absolute;
-            bottom: 15px;
-            font-size: 18px;
+            bottom: 14px;
+            right: 14px;
+            z-index: 2;
+            background-color: rgba(255, 255, 255, 0.85);
             border: none;
-            background-color: #4f46e5;
-            color: white;
-            width: 32px;
-            height: 32px;
             border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
             cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
             transition: background-color 0.2s ease;
         }
-
-
         .add-btn:hover {
-            background-color: #3730a3;
+            background-color: rgba(255, 255, 255, 1);
         }
 
         .popup {
@@ -190,18 +196,25 @@
     </p>
     <button id="eventCloseBtn">닫기</button>
 </div>
-
 <div class="meal-container">
     <div class="meal-box" data-type="아침">
+        <img src="/images/21.jpg" alt="아침" class="meal-img">
+        <div class="meal-label">아침</div>
         <button class="add-btn">+</button>
     </div>
     <div class="meal-box" data-type="점심">
+        <img src="/images/22.jpg" alt="점심" class="meal-img">
+        <div class="meal-label">점심</div>
         <button class="add-btn">+</button>
     </div>
     <div class="meal-box" data-type="저녁">
+        <img src="/images/23.jpg" alt="저녁" class="meal-img">
+        <div class="meal-label">저녁</div>
         <button class="add-btn">+</button>
     </div>
     <div class="meal-box" data-type="간식/기타">
+        <img src="/images/24.jpg" alt="간식" class="meal-img">
+        <div class="meal-label">간식/기타</div>
         <button class="add-btn">+</button>
     </div>
 </div>
@@ -218,8 +231,25 @@
     <button id="saveBtn">저장하기</button>
 </form>
 <div class="ant-track">
-    <img src="/images/18.jpg" alt="토끼" class="rabbit"/>
+    <img src="/images/18.png" alt="토끼" class="rabbit"/>
 </div>
+<div class="popup" id="rabbitEventPopup">
+    <h2 style="margin-bottom: 10px;">🐰 깜짝 보너스!</h2>
+    <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+        토끼가 영양제를 발견했어요!<br>오늘 하루 <strong style="color:#4f46e5;">물 2L 마시기</strong> 미션 도전!
+    </p>
+    <button onclick="document.getElementById('rabbitEventPopup').style.display='none'">확인</button>
+</div>
+<!-- 푸터 영역 -->
+<footer style="margin-top: 80px; padding: 40px 20px; background-color: #f1f1f1; text-align: center; font-size: 14px; color: #777; border-top: 1px solid #ddd;">
+    <p style="font-weight: 500; margin-bottom: 10px;">💜 bodyGuard와 함께, 당신의 하루를 기록하세요.</p>
+    <p style="margin-bottom: 8px;">"당신의 몸과 마음을 지켜주는 따뜻한 습관,</p>
+    <p style="font-style: italic;">푸드 다이어리는 작은 기록에서 시작됩니다."</p>
+    <div style="margin-top: 20px;">
+        <a href="#" style="margin: 0 10px; color: #4f46e5; text-decoration: none;">Instagram</a> |
+        <a href="#" style="margin: 0 10px; color: #4f46e5; text-decoration: none;">Contact</a> |
+        <a href="#" style="margin: 0 10px; color: #4f46e5; text-decoration: none;">About</a>
+    </div>
 
 <script>
     // 기존 코드들 아래에 추가해줘
@@ -312,6 +342,5 @@
 
 
 </script>
-
 </body>
 </html>
