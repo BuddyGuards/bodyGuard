@@ -17,4 +17,6 @@ public interface GroupRepository {
 
     public int subtractMemberCountById (String id);
 
+    public int deleteById (String id);
+
 }
