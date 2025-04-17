@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>푸드 다이어리 | bodyGuard</title>
+    <title>푸드|다이어리 | bodyGuard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
     <style>
@@ -14,32 +14,58 @@
         }
 
         body {
-            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            background: url('/images/0.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #333;
+        }
+
+        .background-blur {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.4);
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
             padding: 40px 20px;
         }
 
-        h1 {
+        .diary-title {
+            font-family: 'Gungsuh', '궁서', serif;
+            font-size: 2.6rem;
             text-align: center;
-            font-size: 32px;
-            margin-bottom: 40px;
-            color: #4f46e5;
-            font-weight: 600;
-            letter-spacing: -0.5px;
+            color: #fff;
+            font-weight: normal;
+            letter-spacing: 0.02em;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        .diary-title::after {
+            content: '✿';
+            display: block;
+            margin-top: 0.4rem;
+            font-size: 1.4rem;
+            color: #dcdcdc;
         }
 
         .meal-container {
             display: flex;
             justify-content: space-between;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 40px auto 0;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
         .meal-box {
             flex: 1;
-            min-width: 0;
-            height: 500px;
+            min-width: 250px;
+            height: 400px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
@@ -74,17 +100,18 @@
             height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            transition: background-color 0.2s ease;
         }
-
 
         .add-btn:hover {
             background-color: #3730a3;
         }
 
-        .popup {
+        .popup, .overlay {
             display: none;
-            position: absolute;
+        }
+
+        .popup {
+            position: fixed;
             top: 50%;
             left: 50%;
             width: 700px;
@@ -98,14 +125,16 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -60%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 998;
         }
 
         .popup label {
@@ -140,39 +169,16 @@
             background-color: #3730a3;
         }
 
-        /* 뒷배경 흐림 처리 */
-        .overlay {
-            position: fixed;
-            display: none;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.3);
-            z-index: 998;
-        }
-
-        .rabbit {
-            position: fixed;
-            bottom: 20px;
-            left: -100px;
-            width: 120px;
-            animation: moveRabbit 20s linear infinite;
-            z-index: 1000;
-        }
-
-
         .results-container {
             display: flex;
-            overflow-x: auto; /* 수평 스크롤 가능 */
+            overflow-x: auto;
             gap: 10px;
             margin-top: 10px;
-            padding-bottom: 10px; /* 아래쪽에 스크롤 생길 때 여유 공간 */
+            padding-bottom: 10px;
         }
 
-        /* 카드 스타일 */
         .card {
-            width: 140px; /* 카드 크기 작게 */
+            width: 140px;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 8px;
@@ -194,111 +200,86 @@
             border-radius: 5px;
         }
 
-        /* 텍스트 부분 스타일 */
         .card h3 {
-            font-size: 14px; /* 폰트 작게 */
+            font-size: 14px;
             margin: 8px 0;
             font-weight: bold;
             color: #333;
         }
 
         .card p {
-            font-size: 12px; /* 폰트 작게 */
+            font-size: 12px;
             color: #666;
             margin: 4px 0;
         }
-        @keyframes moveRabbit {
-            0% {
-                left: -100px;
-            }
-            50% {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-            100% {
-                left: 100vw;
-            }
-        }
-
     </style>
 </head>
 <body>
+<div class="background-blur"></div>
 
-<h1>오늘의 푸드 다이어리</h1>
+<div class="content-wrapper">
+    <h1 class="diary-title">다이어리</h1>
 
-<!-- 이벤트 팝업 -->
-<div class="overlay" id="eventOverlay"></div>
-<div class="popup" id="eventPopup" style="max-width: 1200px;">
-    <img src="/images/11.jpg" alt="이벤트 배너" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
-    <h2 style="margin-bottom: 10px;">🎉 보디가드 초특급 이벤트!</h2>
-    <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
-        이번 주 동안 3일 이상 식단을 기록하면<br><strong style="color:#4f46e5;">뽀뽀</strong>를 해드려요!
-    </p>
-    <button id="eventCloseBtn">닫기</button>
-</div>
-
-<div class="meal-container">
-    <div class="meal-box" data-type="아침">
-        <button class="add-btn">+</button>
+    <!-- 이벤트 팝업 -->
+    <div class="overlay" id="eventOverlay"></div>
+    <div class="popup" id="eventPopup">
+        <img src="/images/11.jpg" alt="이벤트 배너" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
+        <h2 style="margin-bottom: 10px;">🎉 보디가드 초특급 이벤트!</h2>
+        <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+            이번 주 동안 3일 이상 식단을 기록하면<br><strong style="color:#4f46e5;">뽀뽀</strong>를 해드려요!
+        </p>
+        <button id="eventCloseBtn">닫기</button>
     </div>
-    <div class="meal-box" data-type="점심">
-        <button class="add-btn">+</button>
+
+    <!-- 식사 카드 -->
+    <div class="meal-container">
+        <div class="meal-box" data-type="아침">
+            <button class="add-btn">+</button>
+        </div>
+        <div class="meal-box" data-type="점심">
+            <button class="add-btn">+</button>
+        </div>
+        <div class="meal-box" data-type="저녁">
+            <button class="add-btn">+</button>
+        </div>
+        <div class="meal-box" data-type="간식/기타">
+            <button class="add-btn">+</button>
+        </div>
     </div>
-    <div class="meal-box" data-type="저녁">
-        <button class="add-btn">+</button>
+
+    <!-- 음식 입력 팝업 -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="inputPopup">
+        <div id="foodSearch">
+            <label>음식명 <input type="text" id="foodName"></label>
+        </div>
+        <div id="searchResults" class="results-container"></div>
+        <form>
+            <input type="hidden" name="foodId" />
+            <label>날짜 <input type="date" id="date" name="eatenDate"></label>
+            <label>섭취량 <input type="text" id="amount" placeholder="예: 150g 또는 150ml" name="amount"></label>
+            <label>칼로리 <input type="text" id="kcal" value="0" name="kcal" readonly></label>
+            <input type="hidden" id="type" name="mealType">
+            <button id="saveBtn">저장하기</button>
+        </form>
     </div>
-    <div class="meal-box" data-type="간식/기타">
-        <button class="add-btn">+</button>
-    </div>
-</div>
-
-<div class="overlay" id="overlay"></div>
-<!-- 음식 검색 파트 -->
-<div class="popup" id="inputPopup">
-<div id="foodSearch">
-    <label>음식명 <input type="text" id="foodName" ></label>
-</div>
-    <div id="searchResults" class="results-container"></div>
-<form >
-    <input type="hidden" name="foodId" />
-    <label>날짜 <input type="date" id="date" name="eatenDate"></label>
-
-    <label>섭취량
-        <input type="text" id="amount" placeholder="예: 150g 또는 150ml" name="amount">
-    </label>
-
-    <label>칼로리
-        <input type="text" id="kcal" value="0" name="kcal" readonly>
-    </label>
-
-    <input type="hidden" id="type" name="mealType">
-    <button id="saveBtn">저장하기</button>
-</form>
-</div>
-<div class="ant-track">
-    <img src="/images/18.jpg" alt="토끼" class="rabbit"/>
 </div>
 
 <script>
-    // 기존 코드들 아래에 추가해줘
-
     const eventPopup = document.getElementById('eventPopup');
     const eventOverlay = document.getElementById('eventOverlay');
     const eventCloseBtn = document.getElementById('eventCloseBtn');
 
-    // 자동 팝업 (예: 접속 2초 후 등장)
     setTimeout(() => {
         eventPopup.style.display = 'block';
         eventOverlay.style.display = 'block';
     }, 2000);
 
-    // 닫기 버튼 이벤트
     eventCloseBtn.addEventListener('click', () => {
         eventPopup.style.display = 'none';
         eventOverlay.style.display = 'none';
     });
 
-    // 오버레이 클릭 시 팝업 닫기
     eventOverlay.addEventListener('click', () => {
         eventPopup.style.display = 'none';
         eventOverlay.style.display = 'none';
@@ -341,8 +322,6 @@
                     alert('저장 완료!');
                     popup.style.display = 'none';
                     overlay.style.display = 'none';
-
-                    // 입력 필드 초기화
                     foodNameInput.value = '';
                     amountInput.value = '';
                     dateInput.value = '';
@@ -352,74 +331,11 @@
             })
             .catch(error => {
                 console.error('저장 중 오류 발생:', error);
-                alert('오류가 발생했습니다. 다시 시도해주세요.');
+                alert('오류가 발생했습니다.');
             });
-    });
 
-    overlay.addEventListener('click', () => {
-        popup.style.display = 'none';
-        overlay.style.display = 'none';
-
-        // 팝업 닫을 때 입력 필드 초기화
-        foodNameInput.value = '';
-        amountInput.value = '';
-        dateInput.value = '';
-    });
-
-    const input = document.getElementById("foodName");
-    const resultsContainer = document.getElementById("searchResults");
-    const foodIdInput = document.querySelector('input[name="foodId"]');
-    const kcalInput = document.querySelector('input[name="kcal"]');
-
-    let debounceTimer = null;
-    let searchResult = [];
-
-    input.addEventListener("input", function(evt) {
-        const keyword = evt.target.value.trim();
-        if (!keyword) {
-            resultsContainer.innerHTML = "";
-            return;
-        }
-
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            fetch(`/api/food/auto-complete?word=${encodeURIComponent(keyword)}`)
-                .then(res => res.json())
-                .then(data => {
-                    searchResult = data;
-                    displayResults(data);
-                });
-        }, 300);
-    });
-
-    // 검색 결과를 카드로 표시하는 함수
-    function displayResults(data) {
-        resultsContainer.innerHTML = data.map(food => `
-        <div class="card" data-id="${food.id}" data-kcal="${food.kcal}">
-
-            <h3>${food.name}</h3>
-            <p>${food.kcal} kcal</p>
-        </div>
-    `).join("");
-    }
-
-    // 카드 클릭 시 음식 정보 폼에 채우기
-    resultsContainer.addEventListener("click", function(evt) {
-        const card = evt.target.closest(".card");
-        if (card) {
-            const id = card.getAttribute("data-id");
-            const kcal = card.getAttribute("data-kcal");
-            const name = card.querySelector("h3").textContent;
-
-            foodIdInput.value = id;
-            kcalInput.value = kcal;
-            input.value = name; // 선택된 이름 폼에 입력
-
-            // 카드가 클릭되면 결과 영역 비우기
-            resultsContainer.innerHTML = "";
-        }
+        return false;
     });
 </script>
-
 </body>
 </html>
