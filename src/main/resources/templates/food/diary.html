@@ -272,21 +272,26 @@
     <label>음식명 <input type="text" id="foodName" ></label>
 </div>
     <div id="searchResults" class="results-container"></div>
-<form >
-    <input type="hidden" name="foodId" />
-    <label>날짜 <input type="date" id="date" name="eatenDate"></label>
 
-    <label>섭취량
-        <input type="text" id="amount" placeholder="예: 150g 또는 150ml" name="amount">
-    </label>
+    <form th:action="@{/food/diary}" method="post">
+        <input type="hidden" name="foodId" id="foodId" />
 
-    <label>칼로리
-        <input type="text" id="kcal" value="0" name="kcal" readonly>
-    </label>
+        <label>날짜
+            <input type="date" id="date" name="eatenDate">
+        </label>
 
-    <input type="hidden" id="type" name="mealType">
-    <button id="saveBtn">저장하기</button>
-</form>
+        <label>섭취량
+            <input type="number" id="amount" name="amount" placeholder="g, ml 단위로 숫자만 입력">
+        </label>
+
+        <label>칼로리
+            <input type="text" id="kcal" name="kcal" value="0" readonly>
+        </label>
+
+        <input type="hidden" id="type" name="mealType">
+        <button id="saveBtn">저장하기</button>
+    </form>
+
 </div>
 <div class="ant-track">
     <img src="/images/18.png" alt="토끼" class="rabbit"/>
@@ -347,37 +352,7 @@
     });
 
     document.getElementById('saveBtn').addEventListener('click', function () {
-        const requestData = {
-            foodName: foodNameInput.value,
-            amount: amountInput.value,
-            date: dateInput.value,
-            type: typeInput.value
-        };
 
-        fetch('/food/diary/add', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(requestData)
-        })
-            .then(response => response.text())
-            .then(data => {
-                if (data === 'success') {
-                    alert('저장 완료!');
-                    popup.style.display = 'none';
-                    overlay.style.display = 'none';
-
-                    // 입력 필드 초기화
-                    foodNameInput.value = '';
-                    amountInput.value = '';
-                    dateInput.value = '';
-                } else {
-                    alert('저장 실패!');
-                }
-            })
-            .catch(error => {
-                console.error('저장 중 오류 발생:', error);
-                alert('오류가 발생했습니다. 다시 시도해주세요.');
-            });
     });
 
     overlay.addEventListener('click', () => {
@@ -432,17 +407,54 @@
         const card = evt.target.closest(".card");
         if (card) {
             const id = card.getAttribute("data-id");
-            const kcal = card.getAttribute("data-kcal");
             const name = card.querySelector("h3").textContent;
 
             foodIdInput.value = id;
-            kcalInput.value = kcal;
             input.value = name; // 선택된 이름 폼에 입력
 
             // 카드가 클릭되면 결과 영역 비우기
             resultsContainer.innerHTML = "";
+
+            onFoodSelected(id);  // kcalPer100g에 저장해야 섭취량계산 가능해서 추가
         }
     });
+
+
+
+    // ============= kcal 계산해서 올리는 부분
+
+    let kcalPer100g = 0; // 음식 선택 시 여기 저장됨
+
+    // 음식 선택 시 실행되는 함수
+    async function onFoodSelected(foodId) {
+        document.getElementById("foodId").value = foodId;
+
+        try {
+            const response = await fetch(`/api/food/${foodId}/data`);
+            const food = await response.json();
+
+            kcalPer100g = food.kcal; // 100g 당 칼로리 저장
+            document.getElementById("kcal").value = kcalPer100g.toFixed(2); // 초기값 입력
+        } catch (e) {
+            console.error("음식 정보 가져오기 실패", e);
+        }
+    }
+
+    // 섭취량 입력 시 칼로리 재계산
+    document.getElementById("amount").addEventListener("input", function(e) {
+        const amount = parseFloat(e.target.value);
+        if (isNaN(amount)) {
+            document.getElementById("kcal").value = "0";
+            return;
+        }
+
+        const kcal = (kcalPer100g * amount) / 100;
+        document.getElementById("kcal").value = kcal.toFixed(2);
+    });
+
+    // ============= kcal 계산해서 올리는 부분 끝
+
+
 </script>
 </footer>
 </body>

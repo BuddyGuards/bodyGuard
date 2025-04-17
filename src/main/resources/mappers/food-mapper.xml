@@ -8,4 +8,9 @@
         SELECT * FROM foods WHERE name LIKE #{word}
     </select>
 
+    <select id="findById" resultType="food">
+        select * from foods where id = #{id}
+    </select>
+
+
 </mapper>

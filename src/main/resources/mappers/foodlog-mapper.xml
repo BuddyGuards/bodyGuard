@@ -5,8 +5,8 @@
 <mapper namespace="org.buddyguard.bodyguard.repository.FoodLogRepository">
 
     <insert id="save">
-        insert into food_logs (user_id, food_id, amount, eaten_date, meal_type)
-        values (#{userId}, #{foodId}, #{amount}, #{eatenDate}, #{mealType})
+        insert into food_logs (user_id, food_id, amount, kcal, eaten_date, meal_type)
+        values (#{userId}, #{foodId}, #{amount}, #{kcal}, #{eatenDate}, #{mealType})
     </insert>
 
 </mapper>
