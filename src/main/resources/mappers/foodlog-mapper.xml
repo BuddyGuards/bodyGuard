@@ -49,7 +49,7 @@
         where eaten_date = #{eatenDate}
     </select>
 
-    <select id="findWithFoodNameByUserIdAndEatenDate" resultType="foodLogWithFood">
+    <select id="findEatenFoodsByUserIdAndEatenDate" resultType="foodLogWithFood">
         SELECT
         food_logs.id,
         food_logs.user_id,

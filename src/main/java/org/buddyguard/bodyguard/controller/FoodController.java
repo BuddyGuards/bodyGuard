@@ -35,7 +35,7 @@ public class FoodController {
 
         // ① 날짜별 전체 리스트
         List<FoodLogWithFood> dailyDiet =
-                foodLogRepository.findWithFoodNameByUserIdAndEatenDate(eatenDate, user.getId());
+                foodLogRepository.findEatenFoodsByUserIdAndEatenDate(eatenDate, user.getId());
 
         // ② 식사 타입별로 그룹핑
         Map<String, List<FoodLogWithFood>> meals = dailyDiet.stream()
@@ -92,7 +92,7 @@ public class FoodController {
 
         // 2. 일일 식단 불러오기
         List<FoodLogWithFood> dailyDiet =
-                foodLogRepository.findWithFoodNameByUserIdAndEatenDate(date, user.getId());
+                foodLogRepository.findEatenFoodsByUserIdAndEatenDate(date, user.getId());
 
         // 3. 실제 섭취량 합산
         Map<String, Double> actual = new LinkedHashMap<>();
