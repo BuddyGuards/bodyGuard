@@ -14,6 +14,7 @@
         }
 
         body {
+
             margin: 0;
             padding: 0;
             color: #1e1e1e;
@@ -44,56 +45,103 @@
             color: black;
         }
 
-
         .meal-container {
             display: flex;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 40px auto 0;
-            gap: 20px;
+            justify-content: center; /* 중앙 정렬 */
             flex-wrap: wrap;
+            gap: 24px; /* 박스 간 간격 */
+            padding: 32px 16px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .meal-box {
-            flex: 1;
-            width: 240px;
-            height: 500px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        .meal-list {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            width: 400px; /* 더 큼직하게 */
-            height: 600px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-            background-color: #fff;
-        }
-
-        .meal-img {
+            align-items: flex-start;
+            gap: 8px;
+            margin-top: 12px;
+            list-style: none;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
         }
 
+
+        .meal-box {
+            width: 240px;
+            height: 360px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            font-family: 'Pretendard', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+
+        .meal-total {
+            margin-top: auto; /* ✅ 아래쪽으로 밀기 */
+            font-weight: 500;
+            text-align: center;
+            color: #111;
+        }
         .meal-label {
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            background-color: rgba(255,255,255,0.8);
-            color: #4f46e5;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 16px;
+            background-color: #f6f6ff;
             padding: 6px 12px;
+            border-radius: 16px;
+            color: #4f46e5;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+            display: block;            /* ✅ 인라인 요소를 블록처럼 만들어야 가운데 정렬 가능 */
+            text-align: center;        /* ✅ 가운데 정렬 */
+            margin-left: auto;         /* ✅ 수평 가운데 정렬을 위한 설정 */
+            margin-right: auto;
+        }
+        .meal-list li {
+            background: #f8f8f8;
             border-radius: 12px;
-            font-weight: 600;
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #333;
+            width: 100%;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .meal-list li:hover {
+            transform: scale(1.02);
+            background: #eaf4ff;
+            color: #2d4d73;
+        }
+
+        .meal-list li {
+            width: 100%;
+            font-family: 'Pretendard', sans-serif;
             font-size: 15px;
-            z-index: 2;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 10px 14px;
+            background: #f8f8f8;
+            border-radius: 12px;
+            color: #333;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .add-btn {
@@ -330,9 +378,80 @@
             font-size: 1rem;
             color: #888;
         }
+        .menu-toggle {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            font-size: 26px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            color: black; /* 배경에 따라 조정 */
+        }
+        .overlay-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/images/0.jpg') no-repeat center center;
+            background-size: cover;
+            backdrop-filter: brightness(0.6);
+            z-index: 1000;
+        }
+
+        .menu-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 6rem 2.5rem 2.5rem 2.5rem;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.4rem;
+            color: black;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            color: black;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.3rem;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item:hover {
+            text-decoration: underline;
+        }
+
+        .menu-item:first-child {
+            margin-top: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: black;
+            cursor: pointer;
+        }
+
+
+
     </style>
 </head>
 <body>
+<button class="menu-toggle">☰</button>
+
+<div class="overlay-menu" id="overlayMenu" >
+    <div class="menu-content">
+        <a href="/index" class="menu-item">홈</a>
+        <a href="/my/profile" class="menu-item">마이페이지</a>
+        <a href="/food/diary" class="menu-item">뒤로가기</a>
+    </div>
+</div>
+
 <div class="background-blur"></div>
 
 <div class="darkmode-toggle">
@@ -635,10 +754,26 @@
         body.classList.toggle('dark-mode');
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleBtn = document.querySelector(".menu-toggle");
+        const overlay = document.getElementById("overlayMenu");
+        const closeBtn = document.querySelector(".close-btn");
+
+        toggleBtn.addEventListener("click", () => {
+            overlay.style.display = "block";
+        });
+
+        closeBtn.addEventListener("click", () => {
+            overlay.style.display = "none";
+        });
+    });
+
+</script>
+
 
 <footer>
     © 2025 bodyGuard | 몸과 마음을 지켜주는 감성 다이어리
-
 </footer>
 </body>
 </html>
