@@ -8,5 +8,85 @@
         insert into food_logs (user_id, food_id, amount, kcal, eaten_date, meal_type)
         values (#{userId}, #{foodId}, #{amount}, #{kcal}, #{eatenDate}, #{mealType})
     </insert>
+    <select id="findWithFoodNameByEatenDate" resultType="foodLogWithFood">
+        SELECT
+        food_logs.id,
+        food_logs.user_id,
+        food_logs.food_id,
+        food_logs.amount,
+        food_logs.kcal,
+        food_logs.eaten_date,
+        food_logs.meal_type,
 
+        foods.name,
+        foods.food_group,
+        foods.representative_food,
+        foods.nutrient_reference_amount,
+        foods.protein_g,
+        foods.fat_g,
+        foods.carbohydrate_g,
+        foods.sugar_g,
+        foods.fiber_g,
+        foods.calcium_mg,
+        foods.iron_mg,
+        foods.phosphorus_mg,
+        foods.potassium_mg,
+        foods.sodium_mg,
+        foods.vitamin_a_rae,
+        foods.retinol_ug,
+        foods.beta_carotene_ug,
+        foods.thiamin_mg,
+        foods.riboflavin_mg,
+        foods.niacin_mg,
+        foods.vitamin_c_mg,
+        foods.vitamin_d_ug,
+        foods.cholesterol_mg,
+        foods.saturated_fat_g,
+        foods.trans_fat_g
+        FROM bodyguard.food_logs
+        JOIN bodyguard.foods
+        ON food_logs.food_id = foods.id
+        where eaten_date = #{eatenDate}
+    </select>
+
+    <select id="findWithFoodNameByUserIdAndEatenDate" resultType="foodLogWithFood">
+        SELECT
+        food_logs.id,
+        food_logs.user_id,
+        food_logs.food_id,
+        food_logs.amount,
+        food_logs.kcal,
+        food_logs.eaten_date,
+        food_logs.meal_type,
+
+        foods.name,
+        foods.food_group,
+        foods.representative_food,
+        foods.nutrient_reference_amount,
+        foods.protein_g,
+        foods.fat_g,
+        foods.carbohydrate_g,
+        foods.sugar_g,
+        foods.fiber_g,
+        foods.calcium_mg,
+        foods.iron_mg,
+        foods.phosphorus_mg,
+        foods.potassium_mg,
+        foods.sodium_mg,
+        foods.vitamin_a_rae,
+        foods.retinol_ug,
+        foods.beta_carotene_ug,
+        foods.thiamin_mg,
+        foods.riboflavin_mg,
+        foods.niacin_mg,
+        foods.vitamin_c_mg,
+        foods.vitamin_d_ug,
+        foods.cholesterol_mg,
+        foods.saturated_fat_g,
+        foods.trans_fat_g
+        FROM bodyguard.food_logs
+        JOIN bodyguard.foods
+        ON food_logs.food_id = foods.id
+        where eaten_date = #{eatenDate}  and user_id = #{userId}
+    </select>
 </mapper>
