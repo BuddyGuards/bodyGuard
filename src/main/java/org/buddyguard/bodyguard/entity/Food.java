@@ -12,6 +12,7 @@ public class Food {
     private String representativeFood;  // 대표식품명
     private String nutrientReferenceAmount;  // 영양성분함량기준량
 
+
     private Double kcal;  // 에너지(kcal)
     private Double proteinG;  // 단백질(g)
     private Double fatG;  // 지방(g)
