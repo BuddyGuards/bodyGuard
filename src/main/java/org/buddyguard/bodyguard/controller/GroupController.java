@@ -2,23 +2,16 @@ package org.buddyguard.bodyguard.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.buddyguard.bodyguard.entity.Group;
-import org.buddyguard.bodyguard.entity.GroupMember;
-import org.buddyguard.bodyguard.entity.Post;
-import org.buddyguard.bodyguard.entity.User;
-import org.buddyguard.bodyguard.repository.GroupMemberRepository;
-import org.buddyguard.bodyguard.repository.GroupRepository;
-import org.buddyguard.bodyguard.repository.PostRepository;
-import org.buddyguard.bodyguard.repository.UserRepository;
+import org.buddyguard.bodyguard.entity.*;
+import org.buddyguard.bodyguard.repository.*;
+import org.buddyguard.bodyguard.vo.CommentWithWriter;
 import org.buddyguard.bodyguard.vo.GroupWithCreator;
 import org.buddyguard.bodyguard.vo.PostWithWriter;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -32,76 +25,86 @@ public class GroupController {
     private GroupMemberRepository groupMemberRepository;
     private UserRepository userRepository;
     private PostRepository postRepository;
+    private CommentRepository commentRepository;
 
+    // 그룹 생성 페이지
     @GetMapping("/create")
     public String createHandle(Model model) {
-
-        // html에서 세팅해야하는 정보가 뭐에요?
 
         return "group/create";
     }
 
-
+    // 그룹 생성 및 검증 처리
     @Transactional
     @PostMapping("/create/verify")
     public String createVerifyHandle(@ModelAttribute Group group,
                                      @SessionAttribute("user") User user) {
 
+        // 그룹 ID 랜덤 생성
         String randomId = UUID.randomUUID().toString().substring(24);
 
         group.setId(randomId);
         group.setCreatorId(user.getId());
+
         groupRepository.create(group);
 
         GroupMember groupMember = new GroupMember();
         groupMember.setUserId(user.getId());
         groupMember.setGroupId(group.getId());
-        groupMember.setRole("리더");
-        groupMemberRepository.createApproved(groupMember);
+        groupMember.setRole("리더");   // 역할 리더로 설정
 
-        groupRepository.addMemberCountById(group.getId());
+        groupMemberRepository.createApproved(groupMember);   // 승인
+        groupRepository.addMemberCountById(group.getId());   // 멤버 수 증가
 
         return "redirect:/group/" + randomId;
     }
 
+    // 그룹 검색 처리
     @GetMapping("/search")
     public String searchHandle(@RequestParam("word") Optional<String> word, Model model) {
+
+        // 검색어가 없으면
         if (word.isEmpty()) {
             return "redirect:/";
         }
+
         String wordValue = word.get();
+
         List<Group> result = groupRepository.findByNameLikeOrGoalLike("%" + wordValue + "%");
         List<GroupWithCreator> convertedResult = new ArrayList<>();
 
         for (Group one : result) {
             User found = userRepository.findById(one.getCreatorId());
-
-
             GroupWithCreator c = GroupWithCreator.builder().group(one).creator(found).build();
             convertedResult.add(c);
         }
 
-
         System.out.println("search count : " + result.size());
+
         model.addAttribute("count", convertedResult.size());
         model.addAttribute("result", convertedResult);
-
 
         return "group/search";
     }
 
-    // 모임 상세보기 핸들러
+    // 모임 상세보기
     @GetMapping("/{id}")
     public String viewHandle(@PathVariable("id") String id, Model model, @SessionAttribute("user") User user) {
 
+        // 해당 ID로 그룹 정보 조회
         Group group = groupRepository.findById(id);
+
+        // 그룹이 존재하지 않으면
         if (group == null) {
             return "redirect:/";
         }
+
+        // 그룹 멤버 정보 조회
         Map<String, Object> map = new HashMap<>();
         map.put("groupId", id);
         map.put("userId", user.getId());
         GroupMember status = groupMemberRepository.findByUserIdAndGroupId(map);
+
         if (status == null) {
             // 아직 참여한적이 없다
             model.addAttribute("status", "NOT_JOINED");
@@ -118,29 +121,27 @@ public class GroupController {
 
         model.addAttribute("group", group);
 
-
+        // 그룹 생성자 정보 조회
         User creator = userRepository.findById(group.getCreatorId());
 
         GroupWithCreator GC = GroupWithCreator.builder().group(group).creator(creator).build();
         model.addAttribute("groupWithCreator", GC);
 
-
-
-
+        // 그룹의 게시물 조회
         List<Post> posts = postRepository.findByGroupId(id);
         List<PostWithWriter> postWithWriters = new ArrayList<>();
 
-        for (Post post : posts){
+        // 게시물, 작성자, 댓글 정보를 리스트에 추가
+        for (Post post : posts) {
             PostWithWriter pw = new PostWithWriter();
             pw.setPost(post);
 
             User writer = userRepository.findById(post.getWriterId());
             pw.setWriter(writer);
+            pw.setComments(commentRepository.findByCommentWithWriter(post.getId()));
 
             postWithWriters.add(pw);
         }
-
-
 
         model.addAttribute("posts", posts);
         model.addAttribute("postWithWriters", postWithWriters);
@@ -148,13 +149,13 @@ public class GroupController {
         return "group/view";
     }
 
-    //모임 가입 처리
+    // 모임 가입 처리
     @Transactional
     @GetMapping("/{id}/join")
     public String joinHandle(@PathVariable("id") String id, @SessionAttribute("user") User user) {
 
-
         boolean exist = false;
+
         List<GroupMember> list = groupMemberRepository.findByUserId(user.getId());
         for (GroupMember one : list) {
             if (one.getGroupId().equals(id)) {
@@ -166,7 +167,9 @@ public class GroupController {
         if (!exist) {
             GroupMember member = GroupMember.builder().
                     userId(user.getId()).groupId(id).role("멤버").build();
+
             Group group = groupRepository.findById(id);
+
             if (group.getType().equals("공개")) {
                 groupMemberRepository.createApproved(member);
                 groupRepository.addMemberCountById(id);
@@ -186,8 +189,8 @@ public class GroupController {
 
         GroupMember found = groupMemberRepository.findByUserIdAndGroupId(map);
         groupMemberRepository.deleteById(found.getId());
-
         groupRepository.subtractMemberCountById(groupId);
+
         return "redirect:/";
     }
 
@@ -206,7 +209,7 @@ public class GroupController {
         return "redirect:/group/" + groupId;
     }
 
-    //모임 해산
+    // 모임 해산
     @Transactional
     @GetMapping("/{groupId}/remove")
     public String removeHandle(@PathVariable("groupId") String groupId, @SessionAttribute("user") User user) {
@@ -215,14 +218,15 @@ public class GroupController {
         if (group != null && group.getCreatorId() == user.getId()) {
             groupMemberRepository.deleteByGroupId(groupId);
             groupRepository.deleteById(groupId);
+
             return "redirect:/";
+
         } else {
             return "redirect:/group/" + groupId;
         }
     }
 
     //모임 가입 승인
-    //이것도 연결을 만들어야함.
     @GetMapping("/{groupId}/approve")
     public String approveHandle(@PathVariable("groupId") String groupId,
                                 @RequestParam("targetUserId") String targetUserId,
@@ -230,8 +234,7 @@ public class GroupController {
 
         Group group = groupRepository.findById(groupId);
 
-
-        if (group != null && group.getCreatorId() == user.getId() ) {
+        if (group != null && group.getCreatorId() == user.getId()) {
             GroupMember found = groupMemberRepository.findByUserIdAndGroupId(
                     Map.of("userId", targetUserId, "groupId", groupId)
             );
@@ -245,27 +248,71 @@ public class GroupController {
         return "redirect:/group/" + groupId;
     }
 
-    // 그룹내 새글 등록
+    // 그룹 내 새 글 등록
     @PostMapping("/{groupId}/post")
-    public String postHandle(@PathVariable("groupId") String id,
+    public String postHandle(@PathVariable("groupId") String groupId,
                              @ModelAttribute Post post,
                              @SessionAttribute("user") User user) {
-        /*
-         모델 attribute 로 파라미터는 받았을텐데, 빠진 정보들이 있을거임. 이걸 추가로 set  .
-         postRepository를 이용해서 create 메서드 작성
-         */
-        post.setWriterId(user.getId());
-        post.setWroteAt(LocalDateTime.now());
 
+        // 현재 로그인한 사용자의 ID로 작성자 설정
+        post.setWriterId(user.getId());
+        // 글 작성 시간을 현재 시각으로 설정
+        post.setWroteAt(LocalDateTime.now());
+        // 게시글 DB에 저장
         postRepository.create(post);
 
-        return "redirect:/group/" + id;
+        return "redirect:/group/" + groupId;
+    }
+
+    // 그룹 내 게시글 조회
+    @GetMapping("/{groupId}/post/{postId}")
+    public String viewPost(@PathVariable("groupId") String groupId,
+                           @PathVariable("postId") int postId,
+                           Model model) {
+
+        // 게시글 ID로 게시글 정보 조회
+        Post post = postRepository.findById(postId);
+
+        // 게시글이 존재하지 않으면
+        if (post == null) {
+            return "redirect:/group/" + groupId;
+        }
+
+        // 게시글 작성자 조회
+        User writer = userRepository.findById(post.getWriterId());
+
+        // 댓글 목록 조회
+        List<CommentWithWriter> comments = commentRepository.findByCommentWithWriter(postId);
+
+        PostWithWriter postWithWriter = new PostWithWriter();
+        postWithWriter.setPost(post);
+        postWithWriter.setWriter(writer);
+        postWithWriter.setComments(comments);
+
+        model.addAttribute("postWithWriter", postWithWriter);
+        model.addAttribute("comments", comments);
+
+        return "group/view";
     }
 
 
+    // 댓글 등록 처리
+    @PostMapping("/{groupId}/post/{postId}/comment")
+    public String commentHandle(@PathVariable("groupId") String groupId,
+                                @PathVariable("postId") int postId,
+                                @ModelAttribute Comment comment,
+                                @SessionAttribute("user") User user) {
 
+        // 현재 로그인한 사용자를 댓글 작성자로 설정
+        comment.setWriterId(user.getId());
+        // 어떤 게시글에 쓴 댓글인지
+        comment.setPostId(postId);
+        // 댓글 작성 시각 설정
+        comment.setWroteAt(LocalDateTime.now());
+        // 댓글 DB에 저장
+        commentRepository.create(comment);
 
-
-
-
+        return "redirect:/group/" + groupId;
+    }
 }
+
