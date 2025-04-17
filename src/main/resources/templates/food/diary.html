@@ -534,7 +534,7 @@
                 th:each="entry : ${meals['아침']}">
 
                 <li>
-                    <span th:text="|${entry.name} (${entry.kcal} kcal)|"></span>
+                    <span th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></span>
                     <button class="delete-btn" onclick="removeMeal(this)">🗑️</button>
                 </li>
 
@@ -557,7 +557,7 @@
                 th:each="entry : ${meals['점심']}">
 
                 <li>
-                    <span th:text="|${entry.name} (${entry.kcal} kcal)|"></span>
+                    <span th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></span>
                     <button class="delete-btn" onclick="removeMeal(this)">🗑️</button>
                 </li>
 
@@ -579,7 +579,7 @@
                 th:each="entry : ${meals['저녘']}">
 
                 <li>
-                    <span th:text="|${entry.name} (${entry.kcal} kcal)|"></span>
+                    <span th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></span>
                     <button class="delete-btn" onclick="removeMeal(this)">🗑️</button>
                 </li>
 
@@ -601,7 +601,7 @@
                 th:each="entry : ${meals['간식']}">
 
                 <li>
-                    <span th:text="|${entry.name} (${entry.kcal} kcal)|"></span>
+                    <span th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></span>
                     <button class="delete-btn" onclick="removeMeal(this)">🗑️</button>
                 </li>
 
@@ -827,7 +827,6 @@
         li.remove(); // 프론트에서만 지움
     }
 </script>
-
 
 
 

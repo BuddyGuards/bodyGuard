@@ -89,7 +89,12 @@ public class GroupController {
 
     // 모임 상세보기
     @GetMapping("/{id}")
-    public String viewHandle(@PathVariable("id") String id, Model model, @SessionAttribute("user") User user) {
+    public String viewHandle(@PathVariable("id") String id, Model model,
+                             @SessionAttribute(value = "user", required = false) User user) {
+
+        if(user == null){
+            return "auth/login";
+        }
 
         // 해당 ID로 그룹 정보 조회
         Group group = groupRepository.findById(id);

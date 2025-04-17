@@ -53,7 +53,8 @@ public class AuthController {
 
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signupPostHandle(@ModelAttribute User user) {
+    public String signupPostHandle(@ModelAttribute User user,
+                                   HttpSession session) {
 
         User found = userRepository.findByEmail(user.getEmail());
 
@@ -62,10 +63,13 @@ public class AuthController {
             user.setVerified("F");
 
             userRepository.save(user);
-            mailService.sendWelcomeHtmlMessage(user);   // 환영 메일 발송
+            mailService.sendWelcomeHtmlMessage(user); // 환영 메일 발송
+
+            session.setAttribute("user", user);
+
 
         }
-        return "index";
+        return "/auth/index";
     }
 
     // 로그인 페이지
