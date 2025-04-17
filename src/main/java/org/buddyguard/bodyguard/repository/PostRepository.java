@@ -11,4 +11,6 @@ public interface PostRepository {
     public int create (Post post);
 
     public List<Post> findByGroupId (String groupId);
+
+    public Post findById(int postId);
 }

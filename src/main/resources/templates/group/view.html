@@ -1,303 +1,346 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title th:text="${group.name} + ' | 보디가드'"></title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard&family=Nanum+Myeongjo&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${group.name} + ' | 보디가드'"></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard&family=Nanum+Myeongjo&display=swap"
+          rel="stylesheet">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      font-family: 'Pretendard', sans-serif;
-      background-color: #F5F6F8;
-      color: #333;
-    }
+        body {
+            margin: 0;
+            font-family: 'Pretendard', sans-serif;
+            background-color: #F5F6F8;
+            color: #333;
+        }
 
-    .wrap {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
+        .wrap {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-    .bottom-border-div {
-      border-bottom: 1px solid #ddd;
-      background-color: white;
-    }
+        .bottom-border-div {
+            border-bottom: 1px solid #ddd;
+            background-color: white;
+        }
 
-    .index-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-    }
+        .index-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
 
-    .search-bar input {
-      border-radius: 20px;
-      padding: 8px 16px;
-      width: 280px;
-      background-color: #dcdcdc;
-      color: #333;
-      border: none;
-      font-size: 0.95em;
-    }
+        .search-bar input {
+            border-radius: 20px;
+            padding: 8px 16px;
+            width: 280px;
+            background-color: #dcdcdc;
+            color: #333;
+            border: none;
+            font-size: 0.95em;
+        }
 
-    .group-main {
-      padding: 30px 0;
-    }
+        .group-main {
+            padding: 30px 0;
+        }
 
-    .sidebar {
-      width: 220px;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
+        .sidebar {
+            width: 220px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
 
-    .sidebar h2 {
-      font-family: 'Nanum Myeongjo', serif;
-      font-size: 1.4em;
-      margin-bottom: 8px;
-    }
+        .sidebar h2 {
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
 
-    .sidebar div {
-      margin-bottom: 6px;
-      font-size: 0.9em;
-    }
+        .sidebar div {
+            margin-bottom: 6px;
+            font-size: 0.9em;
+        }
 
-    .sidebar button {
-      width: 100%;
-      padding: 8px;
-      border: none;
-      border-radius: 12px;
-      background-color: #7C7A77;
-      color: white;
-      font-size: 0.95em;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+        .sidebar button {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 12px;
+            background-color: #7C7A77;
+            color: white;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    .sidebar button:hover {
-      background-color: #5e5c59;
-    }
+        .sidebar button:hover {
+            background-color: #5e5c59;
+        }
 
-    .info-note {
-      font-size: 0.75em;
-      color: #555;
-      margin-top: 12px;
-      line-height: 1.4;
-    }
+        .info-note {
+            font-size: 0.75em;
+            color: #555;
+            margin-top: 12px;
+            line-height: 1.4;
+        }
 
-    .content-area {
-      flex: 1;
-    }
+        .content-area {
+            flex: 1;
+        }
 
-    .post-form textarea {
-      width: 100%;
-      height: 100px;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
-      resize: none;
-      font-size: 0.95em;
-      font-family: 'Pretendard';
-    }
+        .post-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            resize: none;
+            font-size: 0.95em;
+            font-family: 'Pretendard';
+        }
 
-    .post-form button {
-      padding: 8px 16px;
-      border-radius: 10px;
-      border: none;
-      background-color: #8d8c88;
-      color: white;
-      font-size: 0.9em;
-      margin-top: 8px;
-      float: right;
-    }
+        .post-form button {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            background-color: #8d8c88;
+            color: white;
+            font-size: 0.9em;
+            margin-top: 8px;
+            float: right;
+        }
 
-    .post-form button:hover {
-      background-color: #6e6d6a;
-    }
+        .post-form button:hover {
+            background-color: #6e6d6a;
+        }
 
-    .post-card {
-      background-color: white;
-      padding: 16px;
-      border-radius: 14px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
-      margin-bottom: 20px;
-    }
+        .post-card {
+            background-color: white;
+            padding: 16px;
+            border-radius: 14px;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+            margin-bottom: 20px;
+        }
 
-    .post-meta {
-      font-size: 0.85em;
-      color: #777;
-      margin-bottom: 6px;
-    }
+        .post-meta {
+            font-size: 0.85em;
+            color: #777;
+            margin-bottom: 6px;
+        }
 
-    .post-content {
-      margin-top: 6px;
-      font-size: 0.95em;
-      line-height: 1.5;
-    }
+        .post-content {
+            margin-top: 6px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-    @media (max-width: 768px) {
-      .index-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+        @media (max-width: 768px) {
+            .index-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-      .search-bar input {
-        width: 100%;
-        margin-top: 10px;
-      }
+            .search-bar input {
+                width: 100%;
+                margin-top: 10px;
+            }
 
-      .group-main > .wrap {
-        flex-direction: column;
-      }
+            .group-main > .wrap {
+                flex-direction: column;
+            }
 
-      .sidebar {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-    }
+            .sidebar {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
 
-  </style>
+    </style>
 </head>
 <body>
 
 <!-- Header -->
 <div class="bottom-border-div">
-  <div class="index-header wrap">
-    <div style="display:flex; gap:15px; align-items: center">
-      <a th:href="@{/index}">
-        <img th:src="@{/images/10.png}" style="height: 35px"/>
-      </a>
-      <form th:action="@{/group/search}" class="search-bar">
-        <input type="text" name="word" placeholder="모임 검색" th:value="${param.word}">
-      </form>
+    <div class="index-header wrap">
+        <div style="display:flex; gap:15px; align-items: center">
+            <a th:href="@{/index}">
+                <img th:src="@{/images/10.png}" style="height: 35px"/>
+            </a>
+            <form th:action="@{/group/search}" class="search-bar">
+                <input type="text" name="word" placeholder="모임 검색" th:value="${param.word}">
+            </form>
+        </div>
+        <div>
+            <a th:href="@{/my/profile}">
+                <img th:src="@{/images/10.png}" style="height: 35px"/>
+            </a>
+        </div>
     </div>
-    <div>
-      <a th:href="@{/my/profile}">
-        <img th:src="@{/images/10.png}" style="height: 35px"/>
-      </a>
-    </div>
-  </div>
 </div>
 
 <div style="padding : 20px 0px;background-color: #F5F6F8;">
-  <div class="group-main wrap">
-    <div style="display: flex; gap:20px">
-      <div style="width: 200px; background-color: white ; padding : 12px">
-        <h2 th:text="${group.name}"></h2>
-        <div style="font-size : 0.8em">
-          멤버 <span th:text="${group.memberCount}"></span> •
-          리더 <span th:text="${groupWithCreator.creator.nickname}"></span>
-        </div>
-        <div style="font-size : 0.8em">
-          개설일 <span th:text="${#strings.replace(group.createdAt.toString(), 'T', '  ')}"></span>
-        </div>
+    <div class="group-main wrap">
+        <div style="display: flex; gap:20px">
+            <div style="width: 200px; background-color: white ; padding : 12px">
+                <h2 th:text="${group.name}"></h2>
+                <div style="font-size : 0.8em">
+                    멤버 <span th:text="${group.memberCount}"></span> •
+                    리더 <span th:text="${groupWithCreator.creator.nickname}"></span>
+                </div>
+                <div style="font-size : 0.8em">
+                    개설일 <span th:text="${#strings.replace(group.createdAt.toString(), 'T', '  ')}"></span>
+                </div>
 
 
+                <div th:if="${status == 'NOT_JOINED'}">
+                    <p>
+                        <a th:href="@{/group/{id}/join(id=${group.id})}">
+                            <button style="width: 100%; padding: 5px; font-size:1em;">모임 가입하기</button>
+                        </a>
+                    </p>
+                </div>
+                <div th:if="${status == 'PENDING'}">
+                    <p>
+                        <button style="width: 100%; padding: 5px; font-size:1em;" disabled>승인 대기중</button>
+                    </p>
+                </div>
+                <div th:if="${status == 'MEMBER'}">
+                    <p>
+                        <a th:href="@{/group/{groupId}/leave(groupId=${group.id})}">
+                            <button style="width: 100%; padding: 5px; font-size:1em;">모임 탈퇴하기</button>
+                        </a>
+                    </p>
+                </div>
+                <div th:if="${status != 'NOT_JOINED' and status != 'PENDING' and status != 'MEMBER'}">
+                    <p>
+                        <a th:href="@{/group/{groupId}/remove(groupId=${group.id})}">
+                            <button style="width: 100%; padding: 5px; font-size:1em;">모임 해산하기</button>
+                        </a>
+                    </p>
+                </div>
 
-
-        <div th:if="${status == 'NOT_JOINED'}">
-          <p>
-            <a th:href="@{/group/{id}/join(id=${group.id})}">
-              <button style="width: 100%; padding: 5px; font-size:1em;">모임 가입하기</button>
-            </a>
-          </p>
-        </div>
-        <div th:if="${status == 'PENDING'}">
-          <p>
-            <button style="width: 100%; padding: 5px; font-size:1em;" disabled>승인 대기중</button>
-          </p>
-        </div>
-        <div th:if="${status == 'MEMBER'}">
-          <p>
-            <a th:href="@{/group/{groupId}/leave(groupId=${group.id})}">
-            <button style="width: 100%; padding: 5px; font-size:1em;" >모임 탈퇴하기</button>
-            </a>
-          </p>
-        </div>
-        <div th:if="${status != 'NOT_JOINED' and status != 'PENDING' and status != 'MEMBER'}">
-          <p>
-            <a th:href="@{/group/{groupId}/remove(groupId=${group.id})}">
-            <button style="width: 100%; padding: 5px; font-size:1em;" >모임 해산하기</button>
-            </a>
-          </p>
-        </div>
-
-        <div style="font-size: 0.75em" th:if="${group.type == '공개'}">
-          누구나 모임을 검색해 찾을 수 있고, <b>가입할 수 있습니다</b>.
-        </div>
-        <div style="font-size: 0.75em" th:unless="${group.type == '공개'}">
-          누구나 모임을 검색해 찾을 수 있지만, <b>가입에는 승인이 필요합니다</b>.
-        </div>
-      </div>
-
-      <div style="flex:1">
-        <h3 style="border-bottom: 1px solid rgba(0, 0, 0, .3); padding-bottom : 10px">게시글</h3>
-
-        <form th:action="@{/group/{groupId}/post(groupId=${group.id})}" method="post">
-          <input type="hidden" name="groupId" th:value="${group.id}"/>
-          <textarea style="width: 100%; height:100px; resize: none; padding : 4px"
-                    name="content" id="content"></textarea>
-          <p style="text-align: right">
-            <button type="submit" style="padding : 4px 12px;">게시</button>
-          </p>
-        </form>
-
-        <div th:each="post : ${postWithWriters}">
-          <div style="margin-bottom: 16px; padding: 12px; background-color: white;">
-            <div style="font-size: 0.9em; color: #666;">
-              <span><strong>작성자 ID:</strong> <span th:text="${post.getWriter().nickname}">1</span></span>
-              <span style="margin-left: 12px;"><strong>작성일:</strong> <span th:text="${#temporals.format(post.getPost().wroteAt, 'yyyy-MM-dd HH:mm')}">날짜</span></span>
+                <div style="font-size: 0.75em" th:if="${group.type == '공개'}">
+                    누구나 모임을 검색해 찾을 수 있고, <b>가입할 수 있습니다</b>.
+                </div>
+                <div style="font-size: 0.75em" th:unless="${group.type == '공개'}">
+                    누구나 모임을 검색해 찾을 수 있지만, <b>가입에는 승인이 필요합니다</b>.
+                </div>
             </div>
-            <p style="margin-top: 8px;" th:text="${post.getPost().content}">게시글 내용</p>
-          </div>
-        </div>
+
+            <div style="flex:1">
+                <h3 style="border-bottom: 1px solid rgba(0, 0, 0, .3); padding-bottom : 10px">게시글</h3>
+
+                <form th:action="@{/group/{groupId}/post(groupId=${group.id})}" method="post">
+                    <input type="hidden" name="groupId" th:value="${group.id}"/>
+                    <textarea style="width: 100%; height:100px; resize: none; padding : 4px"
+                              name="content" id="content"></textarea>
+                    <p style="text-align: right">
+                        <button type="submit" style="padding : 4px 12px;">게시</button>
+                    </p>
+                </form>
+
+                <div th:each="postWithWriter : ${postWithWriters}">
+                    <!-- 게시글 내용 -->
+                    <div style="margin-bottom: 16px; padding: 12px; background-color: white;">
+                        <div style="font-size: 0.9em; color: #666;">
+                            <!-- 작성자 정보 및 작성일 표시 -->
+                            <span><strong>작성자 ID:</strong> <span
+                                    th:text="${postWithWriter.getWriter().getNickname()}">1</span></span>
+                            <span style="margin-left: 12px;"><strong>작성일:</strong> <span
+                                    th:text="${#temporals.format(postWithWriter.getPost().getWroteAt(), 'yyyy-MM-dd HH:mm')}">날짜</span></span>
+                        </div>
+                        <p style="margin-top: 8px;" th:text="${postWithWriter.getPost().getContent()}">게시글 내용</p>
+
+                        <!-- 답글쓰기 버튼 -->
+                        <button type="button" onclick="toggleCommentForm(this)">답글쓰기</button>
+
+                        <!-- 댓글 입력폼 -->
+                        <div class="comment-form" style="display: none; margin-top: 10px;">
+                            <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.getPost().getId()} + '/comment'}"
+                                  method="post">
+                                <input type="hidden" name="postId" th:value="${postWithWriter.getPost().getId()}"/>
+                                <textarea name="content" rows="3" cols="50" placeholder="댓글을 입력하세요"></textarea><br>
+                                <button type="submit">등록</button>
+                            </form>
+                        </div>
+
+                        <!-- 댓글 목록 표시-->
+                        <div th:each="comment : ${postWithWriter.comments}">
+                            <div style="margin-top: 10px; padding: 8px; background-color: #f8f8f8;">
+                                <span th:text="${comment.nickname}">작성자</span>:
+                                <span th:text="${comment.content}">댓글 내용</span>
+                                <span style="float: right;"
+                                      th:text="${#temporals.format(comment.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                            </div>
+                        </div>
 
 
-        <!--/*
-        <div th:each="one : ${postMetas}" style="margin: 6px 0px; background-color: white; padding: 16px;">
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <img th:src="@{${one.writerAvatar}}" style="width: 48px;"/>
-            <div>
-              <b th:text="${one.writerName}"></b>
-              <div style="font-size: small" th:text="${one.time}"></div>
+                        <!--/*
+                        <div th:each="one : ${postMetas}" style="margin: 6px 0px; background-color: white; padding: 16px;">
+                          <div style="display: flex; gap: 10px; align-items: center;">
+                            <img th:src="@{${one.writerAvatar}}" style="width: 48px;"/>
+                            <div>
+                              <b th:text="${one.writerName}"></b>
+                              <div style="font-size: small" th:text="${one.time}"></div>
+                            </div>
+                          </div>
+                          <p style="font-size: small; white-space: pre-wrap" th:text="${one.content}"></p>
+                          <div>
+                                        <span th:each="t : ${one.reactions}">
+                                            <span th:switch="${t.feeling}">
+                                                <span th:case="'happy'">😍</span>
+                                                <span th:case="'excited'">😆</span>
+                                                <span th:case="'sad'">😥</span>
+                                                <span th:case="'angry'">😡</span>
+                                                <span th:case="*">😐</span>
+                                            </span>
+                                            <span style="font-size: small" th:text="${t.count}"></span>
+                                        </span>
+                          </div>
+                        </div>
+                        */-->
+                    </div>
+                </div>
             </div>
-          </div>
-          <p style="font-size: small; white-space: pre-wrap" th:text="${one.content}"></p>
-          <div>
-                        <span th:each="t : ${one.reactions}">
-                            <span th:switch="${t.feeling}">
-                                <span th:case="'happy'">😍</span>
-                                <span th:case="'excited'">😆</span>
-                                <span th:case="'sad'">😥</span>
-                                <span th:case="'angry'">😡</span>
-                                <span th:case="*">😐</span>
-                            </span>
-                            <span style="font-size: small" th:text="${t.count}"></span>
-                        </span>
-          </div>
         </div>
-        */-->
-
-      </div>
     </div>
-  </div>
 </div>
 
 <script>
+    function toggleCommentForm(button) {
+        const commentForm = button.nextElementSibling;
 
+        // 모든 댓글 폼을 숨김
+        document.querySelectorAll('.comment-form').forEach(form => {
+            if (form !== commentForm) {
+                form.style.display = 'none';
+            }
+        });
+
+        // 클릭한 버튼의 댓글 폼만 토글
+        if (commentForm.style.display === "none") {
+            commentForm.style.display = "block";
+        } else {
+            commentForm.style.display = "none";
+        }
+    }
 </script>
+
 </body>
+
 </html>

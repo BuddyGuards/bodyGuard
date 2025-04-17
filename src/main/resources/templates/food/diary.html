@@ -364,7 +364,7 @@
       align-items: center; padding: 20px; gap: 20px;">
 
 
-            <input type="date" name="eatenDate" th:value="${today}" id="eatenDate"
+            <input type="date" name="eatenDate" th:value="${eatenDate}" id="eatenDate"
                    style="padding: 10px 12px; font-size: 18px; font-weight: 300; text-align: center; border: 1px solid #ccc; border-radius: 6px;">
 
 
@@ -379,18 +379,75 @@
     <div class="meal-container">
         <div class="meal-box" data-type="아침">
             <div class="meal-label">🥗 아침</div>
+
+            <ul class="meal-list"
+                th:if="${meals['아침']}"
+                th:each="entry : ${meals['아침']}">
+                <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
+                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+            </ul>
+
+            <!-- ③ 식사별 총 칼로리 -->
+            <p class="meal-total"
+               th:if="${totalCalories['아침'] != null}"
+               th:text="|총 ${totalCalories['아침']} kcal|">
+            </p>
+
             <button class="add-btn">+</button>
+
         </div>
         <div class="meal-box" data-type="점심">
             <div class="meal-label">🍱점심</div>
+
+            <ul class="meal-list"
+                th:if="${meals['점심']}"
+                th:each="entry : ${meals['점심']}">
+                <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
+                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+            </ul>
+
+            <!-- ③ 식사별 총 칼로리 -->
+            <p class="meal-total"
+               th:if="${totalCalories['점심'] != null}"
+               th:text="|총 ${totalCalories['점심']} kcal|">
+            </p>
+
             <button class="add-btn">+</button>
         </div>
         <div class="meal-box" data-type="저녁">
             <div class="meal-label">🌙 저녁</div>
+
+            <ul class="meal-list"
+                th:if="${meals['저녁']}"
+                th:each="entry : ${meals['저녁']}">
+                <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
+                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+            </ul>
+
+            <!-- ③ 식사별 총 칼로리 -->
+            <p class="meal-total"
+               th:if="${totalCalories['저녁'] != null}"
+               th:text="|총 ${totalCalories['저녁']} kcal|">
+            </p>
+
             <button class="add-btn">+</button>
         </div>
         <div class="meal-box" data-type="간식">
             <div class="meal-label">🍩간식/기타</div>
+
+            <ul class="meal-list"
+                th:if="${meals['간식']}"
+                th:each="entry : ${meals['간식']}">
+                <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
+                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+            </ul>
+
+            <!-- ③ 식사별 총 칼로리 -->
+            <p class="meal-total"
+               th:if="${totalCalories['간식'] != null}"
+               th:text="|총 ${totalCalories['간식']} kcal|">
+            </p>
+
             <button class="add-btn">+</button>
         </div>
     </div>
