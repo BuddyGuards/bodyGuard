@@ -503,7 +503,7 @@
                 th:if="${meals['아침']}"
                 th:each="entry : ${meals['아침']}">
                 <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
-                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+                <li th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></li>
             </ul>
 
             <!-- ③ 식사별 총 칼로리 -->
@@ -522,7 +522,7 @@
                 th:if="${meals['점심']}"
                 th:each="entry : ${meals['점심']}">
                 <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
-                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+                <li th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></li>
             </ul>
 
             <!-- ③ 식사별 총 칼로리 -->
@@ -540,7 +540,7 @@
                 th:if="${meals['저녁']}"
                 th:each="entry : ${meals['저녁']}">
                 <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
-                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+                <li th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></li>
             </ul>
 
             <!-- ③ 식사별 총 칼로리 -->
@@ -558,7 +558,7 @@
                 th:if="${meals['간식']}"
                 th:each="entry : ${meals['간식']}">
                 <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
-                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+                <li th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></li>
             </ul>
 
             <!-- ③ 식사별 총 칼로리 -->
