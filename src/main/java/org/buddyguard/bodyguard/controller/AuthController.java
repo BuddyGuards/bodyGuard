@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buddyguard.bodyguard.entity.User;
 import org.buddyguard.bodyguard.entity.Verification;
-import org.buddyguard.bodyguard.repository.CommentRepository;
 import org.buddyguard.bodyguard.repository.UserRepository;
 import org.buddyguard.bodyguard.repository.VerificationRepository;
 import org.buddyguard.bodyguard.request.FindPasswordRequest;
@@ -42,7 +41,6 @@ public class AuthController {
     private VerificationRepository verificationRepository;
 
 
-
     // 회원가입 페이지
     @GetMapping("/signup")
     public String signupGetHandle(Model model) {
@@ -53,7 +51,7 @@ public class AuthController {
 
     // 회원가입 처리
     @PostMapping("/signup")
-    public String signupPostHandle(@ModelAttribute User user) {
+    public String signupPostHandle(@ModelAttribute User user, HttpSession session) {
 
         User found = userRepository.findByEmail(user.getEmail());
 
@@ -62,10 +60,11 @@ public class AuthController {
             user.setVerified("F");
 
             userRepository.save(user);
-            mailService.sendWelcomeHtmlMessage(user);   // 환영 메일 발송
-
+            mailService.sendWelcomeHtmlMessage(user);
+            session.setAttribute("user", user);
         }
-        return "index";
+
+        return "/auth/index";
     }
 
     // 로그인 페이지
@@ -151,8 +150,7 @@ public class AuthController {
     // 카카오 소셜 로그인 처리
     @GetMapping("/kakao/callback")
     public String kakaoCallbackHandle(@RequestParam("code") String code,
-                                      HttpSession session)
-            throws JsonProcessingException {
+                                      HttpSession session) throws JsonProcessingException {
 
         KakaoTokenResponse response = kakaoApiService.exchangeToken(code);
 
