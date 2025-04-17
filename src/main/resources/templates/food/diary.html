@@ -76,38 +76,55 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: all 0.3s ease;
+            width: 240px; /* 더 큼직하게 */
+            height: 360px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            background-color: #fff;
         }
 
-        .meal-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.08);
+        .meal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
-        .meal-box::after {
-            content: attr(data-type);
-            font-size: 20px;
-            font-weight: 500;
+        .meal-label {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background-color: rgba(255,255,255,0.8);
             color: #4f46e5;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            z-index: 2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
         .add-btn {
             position: absolute;
-            bottom: 15px;
-            font-size: 18px;
+            bottom: 14px;
+            right: 14px;
+            z-index: 2;
+            background-color: rgba(255, 255, 255, 0.85);
             border: none;
-            background-color: #4f46e5;
-            color: white;
-            width: 32px;
-            height: 32px;
             border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
             cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
             transition: background-color 0.2s ease;
         }
-
-
         .add-btn:hover {
-            background-color: #3730a3;
+            background-color: rgba(255, 255, 255, 1);
         }
 
         .popup, .overlay {
@@ -437,5 +454,6 @@
 
         // ============= kcal 계산해서 올리는 부분 끝
     </script>
+
 </body>
 </html>
