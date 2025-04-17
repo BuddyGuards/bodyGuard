@@ -9,9 +9,9 @@ import java.time.LocalDate;
 @Getter
 public class FoodLogWithFood {
     // ---------------- food_logs 컬럼 ----------------
-    private Long   id;
-    private Long   userId;
-    private Long   foodId;
+    private long   id;
+    private long   userId;
+    private long   foodId;
     private Double amount;
     private Double kcal;           // food_logs 쪽 kcal
     private LocalDate eatenDate;
