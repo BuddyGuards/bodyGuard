@@ -28,8 +28,10 @@ public class FoodController {
         FoodLog fl = FoodLog.builder().userId(user.getId())
                 .foodId(foodLog.getFoodId())
                 .amount(foodLog.getAmount())
+                .kcal(foodLog.getKcal())
                 .eatenDate(foodLog.getEatenDate())
                 .mealType(foodLog.getMealType()).build();
+
 
         foodLogRepository.save(fl);
 

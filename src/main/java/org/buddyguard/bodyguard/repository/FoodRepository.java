@@ -10,4 +10,6 @@ import java.util.List;
 public interface FoodRepository {
 
     public List<Food> searchFoodsByName (@Param("word") String word);
+
+    public Food findById (@Param("id") int id);
 }
