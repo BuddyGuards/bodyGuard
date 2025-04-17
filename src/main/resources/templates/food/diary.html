@@ -16,9 +16,7 @@
         body {
             margin: 0;
             padding: 0;
-            background: url('/images/0.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #333;
+            color: #1e1e1e;
         }
 
         .background-blur {
@@ -27,9 +25,9 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.4);
             z-index: 0;
         }
+
 
         .content-wrapper {
             position: relative;
@@ -38,22 +36,14 @@
         }
 
         .diary-title {
-            font-family: 'Gungsuh', '궁서', serif;
-            font-size: 2.6rem;
             text-align: center;
-            color: #fff;
-            font-weight: normal;
-            letter-spacing: 0.02em;
-            text-shadow: 1px 1px 3px #000;
+            padding: 60px 20px 40px;
+            font-size: 2rem;
+            font-weight: 600;
+            border-bottom: 1px solid #eee;
+            color: black;
         }
 
-        .diary-title::after {
-            content: '✿';
-            display: block;
-            margin-top: 0.4rem;
-            font-size: 1.4rem;
-            color: #dcdcdc;
-        }
 
         .meal-container {
             display: flex;
@@ -76,8 +66,8 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            width: 240px; /* 더 큼직하게 */
-            height: 360px;
+            width: 400px; /* 더 큼직하게 */
+            height: 600px;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -186,7 +176,7 @@
         .popup button {
             width: 100%;
             background-color: #4f46e5;
-            color: white;
+            color: #1e1e1e;
             border: none;
             padding: 10px;
             border-radius: 8px;
@@ -242,21 +232,128 @@
             color: #666;
             margin: 4px 0;
         }
+        .darkmode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 60px;
+            height: 30px;
+            background: #ccc;
+            border-radius: 50px;
+            padding: 3px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .toggle-label .moon,
+        .toggle-label .sun {
+            font-size: 14px;
+            z-index: 2;
+        }
+
+        .toggle-ball {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        #darkmode-checkbox {
+            display: none;
+        }
+
+        #darkmode-checkbox:checked + .toggle-label {
+            background: #555;
+        }
+
+        #darkmode-checkbox:checked + .toggle-label .toggle-ball {
+            transform: translateX(30px);
+        }
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .container,
+        body.dark-mode .background-blur {
+            background-color: rgba(30, 30, 30, 0.8);
+            color: #f0f0f0;
+            backdrop-filter: blur(8px);
+        }
+
+        body.dark-mode input,
+        body.dark-mode textarea,
+        body.dark-mode select {
+            background-color: #333;
+            color: #f0f0f0;
+            border: 1px solid #555;
+        }
+
+        body.dark-mode .food-card {
+            background-color: #2a2a2a;
+            color: #f0f0f0;
+            border: 1px solid #444;
+        }
+
+        body.dark-mode .popup,
+        body.dark-mode .form-section {
+            background-color: #2e2e2e;
+            color: #eee;
+            border: 1px solid #555;
+        }
+
+        body.dark-mode .search-results {
+            background-color: #2e2e2e;
+            border-color: #444;
+        }
+
+        body.dark-mode .search-results li:hover {
+            background-color: #3a3a3a;
+        }
+        footer {
+            margin-top: 60px;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 1rem;
+            color: #888;
+        }
     </style>
 </head>
 <body>
 <div class="background-blur"></div>
 
+<div class="darkmode-toggle">
+    <input type="checkbox" id="darkmode-checkbox" />
+    <label for="darkmode-checkbox" class="toggle-label">
+        <span class="moon">🌙</span>
+        <span class="sun">☀️</span>
+        <div class="toggle-ball"></div>
+    </label>
+</div>
+
 <div class="content-wrapper">
-    <h1 class="diary-title">다이어리</h1>
+    <h1 class="diary-title">오늘의 식단도, 감성 있게 🌿</h1>
 
     <!-- 이벤트 팝업 -->
     <div class="overlay" id="eventOverlay"></div>
     <div class="popup" id="eventPopup" style="max-width: 1200px;">
         <img src="/images/11.jpg" alt="이벤트 배너" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
-        <h2 style="margin-bottom: 10px;">🎉 보디가드 초특급 이벤트!</h2>
-        <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
-            이번 주 동안 3일 이상 식단을 기록하면<br><strong style="color:#4f46e5;">뽀뽀</strong>를 해드려요!
+        <h2 style="margin-bottom: 10px; color: #1e1e1e">🎉 보디가드 초특급 이벤트!</h2>
+        <p style="font-size: 15px; line-height: 1.6; margin-bottom: 20px; color: #1e1e1e">
+            이번 주 동안 3일 이상 식단을 기록하면<br><strong style="color:#4f46e5; font-weight: bold">뽀뽀</strong>를 해드려요!
         </p>
         <button id="eventCloseBtn">닫기</button>
     </div>
@@ -281,7 +378,7 @@
 
     <div class="meal-container">
         <div class="meal-box" data-type="아침">
-            <div class="meal-label">아침</div>
+            <div class="meal-label">🥗 아침</div>
 
             <ul class="meal-list"
                 th:if="${meals['아침']}"
@@ -300,7 +397,7 @@
 
         </div>
         <div class="meal-box" data-type="점심">
-            <div class="meal-label">점심</div>
+            <div class="meal-label">🍱점심</div>
 
             <ul class="meal-list"
                 th:if="${meals['점심']}"
@@ -318,7 +415,7 @@
             <button class="add-btn">+</button>
         </div>
         <div class="meal-box" data-type="저녁">
-            <div class="meal-label">저녁</div>
+            <div class="meal-label">🌙 저녁</div>
 
             <ul class="meal-list"
                 th:if="${meals['저녁']}"
@@ -336,7 +433,7 @@
             <button class="add-btn">+</button>
         </div>
         <div class="meal-box" data-type="간식">
-            <div class="meal-label">간식/기타</div>
+            <div class="meal-label">🍩간식/기타</div>
 
             <ul class="meal-list"
                 th:if="${meals['간식']}"
@@ -385,151 +482,163 @@
     </div>
 </div> <!-- ★ 여기에 추가: content-wrapper 닫기 -->
 
-    <script>
-        // 기존 코드들 아래에 추가해줘
+<script>
+    // 기존 코드들 아래에 추가해줘
 
-        const eventPopup = document.getElementById('eventPopup');
-        const eventOverlay = document.getElementById('eventOverlay');
-        const eventCloseBtn = document.getElementById('eventCloseBtn');
+    const eventPopup = document.getElementById('eventPopup');
+    const eventOverlay = document.getElementById('eventOverlay');
+    const eventCloseBtn = document.getElementById('eventCloseBtn');
 
-        // 자동 팝업 (예: 접속 2초 후 등장)
-        setTimeout(() => {
-            eventPopup.style.display = 'block';
-            eventOverlay.style.display = 'block';
-        }, 2000);
+    // 자동 팝업 (예: 접속 2초 후 등장)
+    setTimeout(() => {
+        eventPopup.style.display = 'block';
+        eventOverlay.style.display = 'block';
+    }, 2000);
 
-        // 닫기 버튼 이벤트
-        eventCloseBtn.addEventListener('click', () => {
-            eventPopup.style.display = 'none';
-            eventOverlay.style.display = 'none';
+    // 닫기 버튼 이벤트
+    eventCloseBtn.addEventListener('click', () => {
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
+
+    // 오버레이 클릭 시 팝업 닫기
+    eventOverlay.addEventListener('click', () => {
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
+
+    const popup = document.getElementById('inputPopup');
+    const overlay = document.getElementById('overlay');
+    const foodNameInput = document.getElementById('foodName');
+    const amountInput = document.getElementById('amount');
+    const dateInput = document.getElementById('date');
+    const typeInput = document.getElementById('type');
+
+    document.querySelectorAll('.add-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const mealBox = this.closest('.meal-box');
+            const mealType = mealBox.getAttribute('data-type');
+
+            typeInput.value = mealType;
+            popup.style.display = 'block';
+            overlay.style.display = 'block';
         });
+    });
 
-        // 오버레이 클릭 시 팝업 닫기
-        eventOverlay.addEventListener('click', () => {
-            eventPopup.style.display = 'none';
-            eventOverlay.style.display = 'none';
-        });
+    document.getElementById('saveBtn').addEventListener('click', function () {
 
-        const popup = document.getElementById('inputPopup');
-        const overlay = document.getElementById('overlay');
-        const foodNameInput = document.getElementById('foodName');
-        const amountInput = document.getElementById('amount');
-        const dateInput = document.getElementById('date');
-        const typeInput = document.getElementById('type');
+    });
 
-        document.querySelectorAll('.add-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const mealBox = this.closest('.meal-box');
-                const mealType = mealBox.getAttribute('data-type');
+    overlay.addEventListener('click', () => {
+        popup.style.display = 'none';
+        overlay.style.display = 'none';
 
-                typeInput.value = mealType;
-                popup.style.display = 'block';
-                overlay.style.display = 'block';
-            });
-        });
+        // 팝업 닫을 때 입력 필드 초기화
+        foodNameInput.value = '';
+        amountInput.value = '';
+        dateInput.value = '';
+    });
 
-        document.getElementById('saveBtn').addEventListener('click', function () {
+    const input = document.getElementById("foodName");
+    const resultsContainer = document.getElementById("searchResults");
+    const foodIdInput = document.querySelector('input[name="foodId"]');
+    const kcalInput = document.querySelector('input[name="kcal"]');
 
-        });
+    let debounceTimer = null;
+    let searchResult = [];
 
-        overlay.addEventListener('click', () => {
-            popup.style.display = 'none';
-            overlay.style.display = 'none';
+    input.addEventListener("input", function (evt) {
+        const keyword = evt.target.value.trim();
+        if (!keyword) {
+            resultsContainer.innerHTML = "";
+            return;
+        }
 
-            // 팝업 닫을 때 입력 필드 초기화
-            foodNameInput.value = '';
-            amountInput.value = '';
-            dateInput.value = '';
-        });
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            fetch(`/api/food/auto-complete?word=${encodeURIComponent(keyword)}`)
+                .then(res => res.json())
+                .then(data => {
+                    searchResult = data;
+                    displayResults(data);
+                });
+        }, 300);
+    });
 
-        const input = document.getElementById("foodName");
-        const resultsContainer = document.getElementById("searchResults");
-        const foodIdInput = document.querySelector('input[name="foodId"]');
-        const kcalInput = document.querySelector('input[name="kcal"]');
-
-        let debounceTimer = null;
-        let searchResult = [];
-
-        input.addEventListener("input", function (evt) {
-            const keyword = evt.target.value.trim();
-            if (!keyword) {
-                resultsContainer.innerHTML = "";
-                return;
-            }
-
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                fetch(`/api/food/auto-complete?word=${encodeURIComponent(keyword)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        searchResult = data;
-                        displayResults(data);
-                    });
-            }, 300);
-        });
-
-        // 검색 결과를 카드로 표시하는 함수
-        function displayResults(data) {
-            resultsContainer.innerHTML = data.map(food => `
+    // 검색 결과를 카드로 표시하는 함수
+    function displayResults(data) {
+        resultsContainer.innerHTML = data.map(food => `
         <div class="card" data-id="${food.id}" data-kcal="${food.kcal}">
 
             <h3>${food.name}</h3>
             <p>${food.kcal} kcal</p>
         </div>
     `).join("");
+    }
+
+    // 카드 클릭 시 음식 정보 폼에 채우기
+    resultsContainer.addEventListener("click", function (evt) {
+        const card = evt.target.closest(".card");
+        if (card) {
+            const id = card.getAttribute("data-id");
+            const name = card.querySelector("h3").textContent;
+
+            foodIdInput.value = id;
+            input.value = name; // 선택된 이름 폼에 입력
+
+            // 카드가 클릭되면 결과 영역 비우기
+            resultsContainer.innerHTML = "";
+
+            onFoodSelected(id);  // kcalPer100g에 저장해야 섭취량계산 가능해서 추가
+        }
+    });
+
+
+    // ============= kcal 계산해서 올리는 부분
+
+    let kcalPer100g = 0; // 음식 선택 시 여기 저장됨
+
+    // 음식 선택 시 실행되는 함수
+    async function onFoodSelected(foodId) {
+        document.getElementById("foodId").value = foodId;
+
+        try {
+            const response = await fetch(`/api/food/${foodId}/data`);
+            const food = await response.json();
+
+            kcalPer100g = food.kcal; // 100g 당 칼로리 저장
+            document.getElementById("kcal").value = kcalPer100g.toFixed(2); // 초기값 입력
+        } catch (e) {
+            console.error("음식 정보 가져오기 실패", e);
+        }
+    }
+
+    // 섭취량 입력 시 칼로리 재계산
+    document.getElementById("amount").addEventListener("input", function (e) {
+        const amount = parseFloat(e.target.value);
+        if (isNaN(amount)) {
+            document.getElementById("kcal").value = "0";
+            return;
         }
 
-        // 카드 클릭 시 음식 정보 폼에 채우기
-        resultsContainer.addEventListener("click", function (evt) {
-            const card = evt.target.closest(".card");
-            if (card) {
-                const id = card.getAttribute("data-id");
-                const name = card.querySelector("h3").textContent;
+        const kcal = (kcalPer100g * amount) / 100;
+        document.getElementById("kcal").value = kcal.toFixed(2);
+    });
 
-                foodIdInput.value = id;
-                input.value = name; // 선택된 이름 폼에 입력
+    // ============= kcal 계산해서 올리는 부분 끝
+</script>
+<script>
+    const checkbox = document.getElementById('darkmode-checkbox');
+    const body = document.body;
 
-                // 카드가 클릭되면 결과 영역 비우기
-                resultsContainer.innerHTML = "";
+    checkbox.addEventListener('change', () => {
+        body.classList.toggle('dark-mode');
+    });
+</script>
 
-                onFoodSelected(id);  // kcalPer100g에 저장해야 섭취량계산 가능해서 추가
-            }
-        });
+<footer>
+    © 2025 bodyGuard | 몸과 마음을 지켜주는 감성 다이어리
 
-
-        // ============= kcal 계산해서 올리는 부분
-
-        let kcalPer100g = 0; // 음식 선택 시 여기 저장됨
-
-        // 음식 선택 시 실행되는 함수
-        async function onFoodSelected(foodId) {
-            document.getElementById("foodId").value = foodId;
-
-            try {
-                const response = await fetch(`/api/food/${foodId}/data`);
-                const food = await response.json();
-
-                kcalPer100g = food.kcal; // 100g 당 칼로리 저장
-                document.getElementById("kcal").value = kcalPer100g.toFixed(2); // 초기값 입력
-            } catch (e) {
-                console.error("음식 정보 가져오기 실패", e);
-            }
-        }
-
-        // 섭취량 입력 시 칼로리 재계산
-        document.getElementById("amount").addEventListener("input", function (e) {
-            const amount = parseFloat(e.target.value);
-            if (isNaN(amount)) {
-                document.getElementById("kcal").value = "0";
-                return;
-            }
-
-            const kcal = (kcalPer100g * amount) / 100;
-            document.getElementById("kcal").value = kcal.toFixed(2);
-        });
-
-        // ============= kcal 계산해서 올리는 부분 끝
-    </script>
-
+</footer>
 </body>
 </html>
