@@ -28,6 +28,7 @@ public class FoodApiController {
         List<Food> list =foodRepository.searchFoodsByName("%"+word+"%");
 
 
+
         return objectMapper.writeValueAsString(list);
     }
 

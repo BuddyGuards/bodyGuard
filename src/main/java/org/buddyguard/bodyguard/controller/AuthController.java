@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buddyguard.bodyguard.entity.User;
 import org.buddyguard.bodyguard.entity.Verification;
+import org.buddyguard.bodyguard.repository.CommentRepository;
 import org.buddyguard.bodyguard.repository.UserRepository;
 import org.buddyguard.bodyguard.repository.VerificationRepository;
 import org.buddyguard.bodyguard.request.FindPasswordRequest;
@@ -39,6 +40,8 @@ public class AuthController {
     private UserRepository userRepository;
     private MailService mailService;
     private VerificationRepository verificationRepository;
+
+
 
     // 회원가입 페이지
     @GetMapping("/signup")

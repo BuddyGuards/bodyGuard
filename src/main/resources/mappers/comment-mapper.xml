@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.buddyguard.bodyguard.repository.CommentRepository">
+
+    <insert id="create" parameterType="comment">
+        insert into comments ( post_id, writer_id, content, wrote_at )
+        values ( #{postId}, #{writerId}, #{content}, now() );
+    </insert>
+
+    <select id="findByPostId" resultType="comment">
+        select * from comments where post_id = #{postId}
+        order by wrote_at asc
+    </select>
+
+    <select id="findByCommentWithWriter" resultType="commentWithWriter">
+        select c.id, c.post_id, c.writer_id, c.content, c.wrote_at, u.nickname
+        from comments c
+        join users u on c.writer_id = u.id
+        where c.post_id = #{postId}
+        order by c.wrote_at asc
+    </select>
+
+</mapper>
