@@ -14,6 +14,6 @@ public interface FoodLogRepository {
     public int save (FoodLog foodLog);
 
     public List<FoodLogWithFood> findWithFoodNameByEatenDate (LocalDate eatenDate);
-    public List<FoodLogWithFood> findWithFoodNameByUserIdAndEatenDate (@Param("eatenDate") LocalDate eatenDate,
+    public List<FoodLogWithFood> findEatenFoodsByUserIdAndEatenDate (@Param("eatenDate") LocalDate eatenDate,
                                                                        @Param("userId") int userId);
 }
