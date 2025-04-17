@@ -182,12 +182,11 @@
         <div class="profile-card">
             <div class="profile-img">
                 <img id="profileImage"
-                     th:src="${user.gender == '여성'} ? '/images/13.png' : '/images/14.jpg'"
+                     th:src="${user.gender == '여성'} ? '/images/14.jpg' : '/images/13.png'"
                      alt="프로필 이미지">
             </div>
             <div class="profile-info">
                 <h3 th:text="${user.nickname} + ' 님의 프로필'"></h3>
-                <p>아이디: <span th:text="${user.id}"></span></p>
                 <p>성별: <span th:text="${user.gender}"></span></p>
                 <p>키: <span th:text="${user.height}"></span> cm</p>
                 <p>몸무게: <span th:text="${user.weight}"></span> kg</p>

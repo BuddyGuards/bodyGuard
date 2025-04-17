@@ -108,7 +108,6 @@
 
     <form th:action="@{/my/profile-update}" method="post">
         <ul>
-            <li>아이디 : <span th:text="${user.id}"></span></li>
             <li>닉네임 : <input type="text" th:value="${user.nickname}" name="nickname"/></li>
             <li>성별 :
                 <select name="gender" id="genderSelect" onchange="updateProfileImage()">

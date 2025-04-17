@@ -18,6 +18,7 @@
             margin: 0;
             padding: 0;
             color: #1e1e1e;
+            background-image: url("/images/31.jpg");
         }
 
         .background-blur {
@@ -67,7 +68,7 @@
 
         .meal-box {
             width: 240px;
-            height: 360px;
+            /* height: 360px; → 이 줄은 삭제 또는 주석 처리 */
             background: white;
             border-radius: 24px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
@@ -78,8 +79,9 @@
             position: relative;
             font-family: 'Pretendard', sans-serif;
             transition: all 0.3s ease;
-        }
 
+            /* 새로 추가하거나 유지할 것 없음! height 제한 X */
+        }
 
         .meal-total {
             margin-top: auto; /* ✅ 아래쪽으로 밀기 */
@@ -436,7 +438,35 @@
             color: black;
             cursor: pointer;
         }
+        .delete-btn {
+            background: none;
+            border: none;
+            font-size: 14px;
+            margin-left: 8px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
 
+        .delete-btn:hover {
+            color: #ff5c5c;
+        }
+        .bottom-report-btn {
+            display: inline-block;
+            background-color: #44525f;
+            color: #fff;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.3s ease;
+        }
+
+        .bottom-report-btn:hover {
+            background-color: #5a6a7a;
+        }
 
 
     </style>
@@ -502,8 +532,12 @@
             <ul class="meal-list"
                 th:if="${meals['아침']}"
                 th:each="entry : ${meals['아침']}">
-                <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
-                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+
+                <li>
+                    <span th:text="|${entry.name} (${entry.kcal} kcal)|"></span>
+                    <button class="delete-btn" onclick="removeMeal(this)">🗑️</button>
+                </li>
+
             </ul>
 
             <!-- ③ 식사별 총 칼로리 -->
@@ -521,8 +555,12 @@
             <ul class="meal-list"
                 th:if="${meals['점심']}"
                 th:each="entry : ${meals['점심']}">
-                <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
-                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+
+                <li>
+                    <span th:text="|${entry.name} (${entry.kcal} kcal)|"></span>
+                    <button class="delete-btn" onclick="removeMeal(this)">🗑️</button>
+                </li>
+
             </ul>
 
             <!-- ③ 식사별 총 칼로리 -->
@@ -537,10 +575,14 @@
             <div class="meal-label">🌙 저녁</div>
 
             <ul class="meal-list"
-                th:if="${meals['저녁']}"
-                th:each="entry : ${meals['저녁']}">
-                <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
-                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+                th:if="${meals['저녘']}"
+                th:each="entry : ${meals['저녘']}">
+
+                <li>
+                    <span th:text="|${entry.name} (${entry.kcal} kcal)|"></span>
+                    <button class="delete-btn" onclick="removeMeal(this)">🗑️</button>
+                </li>
+
             </ul>
 
             <!-- ③ 식사별 총 칼로리 -->
@@ -557,8 +599,12 @@
             <ul class="meal-list"
                 th:if="${meals['간식']}"
                 th:each="entry : ${meals['간식']}">
-                <!-- ② 각 entry.name 과 entry.kcal 를 출력 -->
-                <li th:text="|${entry.name} (${entry.kcal} kcal)|"></li>
+
+                <li>
+                    <span th:text="|${entry.name} (${entry.kcal} kcal)|"></span>
+                    <button class="delete-btn" onclick="removeMeal(this)">🗑️</button>
+                </li>
+
             </ul>
 
             <!-- ③ 식사별 총 칼로리 -->
@@ -569,6 +615,9 @@
 
             <button class="add-btn">+</button>
         </div>
+    </div>
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="#" id="reportBtn" class="bottom-report-btn">🍃 오늘의 리포트 보기</a>
     </div>
 
     <div class="overlay" id="overlay"></div>
@@ -596,10 +645,12 @@
 
             <input type="hidden" id="type" name="mealType">
             <button id="saveBtn">저장하기</button>
+
         </form>
 
     </div>
 </div> <!-- ★ 여기에 추가: content-wrapper 닫기 -->
+
 
 <script>
     // 기존 코드들 아래에 추가해줘
@@ -770,6 +821,15 @@
     });
 
 </script>
+<script>
+    function removeMeal(button) {
+        const li = button.closest("li");
+        li.remove(); // 프론트에서만 지움
+    }
+</script>
+
+
+
 
 
 <footer>
