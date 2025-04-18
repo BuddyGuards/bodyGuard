@@ -875,24 +875,6 @@
     }
     ////////////////////////////////////////////////
 </script>
-<script>
-    // 페이지가 열릴 때 localStorage에 저장된 다크모드 상태 확인
-    window.onload = function () {
-        const darkMode = localStorage.getItem("darkMode");
-        if (darkMode === "true") {
-            document.body.classList.add("dark-mode");
-        }
-    };
-
-    // 다크모드 토글 함수
-    function toggleDarkMode() {
-        const isDark = document.body.classList.toggle("dark-mode");
-        localStorage.setItem("darkMode", isDark); // 상태 저장
-    }
-</script>
-
-
-
 
 <footer>
     © 2025 bodyGuard | 몸과 마음을 지켜주는 감성 다이어리

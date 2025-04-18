@@ -8,224 +8,375 @@
     <link href="https://fonts.googleapis.com/css2?family=Pretendard&family=Nanum+Myeongjo&display=swap"
           rel="stylesheet">
 
+
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=SUIT:wght@300;400;500;700&display=swap');
 
-        * {
-            box-sizing: border-box;
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                font-family: 'Pretendard', sans-serif;
+                background-color: #F5F6F8;
+                color: #333;
+            }
+
+            .wrap {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+
+            .bottom-border-div {
+                border-bottom: 1px solid #ddd;
+                background-color: white;
+            }
+
+            .index-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 0;
+            }
+
+            .search-bar input {
+                border-radius: 20px;
+                padding: 8px 16px;
+                width: 280px;
+                background-color: #dcdcdc;
+                color: #333;
+                border: none;
+                font-size: 0.95em;
+            }
+
+            .group-main {
+                padding: 30px 0;
+            }
+
+            .sidebar {
+                width: 220px;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 16px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar h2 {
+                font-family: 'Nanum Myeongjo', serif;
+                font-size: 1.4em;
+                margin-bottom: 8px;
+            }
+
+            .sidebar div {
+                margin-bottom: 6px;
+                font-size: 0.9em;
+            }
+
+            .sidebar button {
+                width: 100%;
+                padding: 8px;
+                border: none;
+                border-radius: 12px;
+                background-color: #7C7A77;
+                color: white;
+                font-size: 0.95em;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .sidebar button:hover {
+                background-color: #5e5c59;
+            }
+
+            .info-note {
+                font-size: 0.75em;
+                color: #555;
+                margin-top: 12px;
+                line-height: 1.4;
+            }
+
+            .content-area {
+                flex: 1;
+            }
+
+            .post-form textarea {
+                width: 100%;
+                height: 100px;
+                padding: 12px;
+                border-radius: 12px;
+                border: 1px solid #ccc;
+                resize: none;
+                font-size: 0.95em;
+                font-family: 'Pretendard';
+            }
+
+            .post-form button {
+                padding: 8px 16px;
+                border-radius: 10px;
+                border: none;
+                background-color: #8d8c88;
+                color: white;
+                font-size: 0.9em;
+                margin-top: 8px;
+                float: right;
+            }
+
+            .post-form button:hover {
+                background-color: #6e6d6a;
+            }
+
+            .post-card {
+                background-color: white;
+                padding: 16px;
+                border-radius: 14px;
+                box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+                margin-bottom: 20px;
+                font-size: 0.8em;
+
+            }
+
+            .post-meta {
+                font-size: 0.85em;
+                color: #777;
+                margin-bottom: 6px;
+            }
+
+            .post-content {
+                margin-top: 6px;
+                font-size: 0.95em;
+                line-height: 1.5;
+            }
+
+            a {
+                text-decoration: none;
+                color: inherit;
+            }
+
+            @media (max-width: 768px) {
+                .index-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .search-bar input {
+                    width: 100%;
+                    margin-top: 10px;
+                }
+
+                .group-main > .wrap {
+                    flex-direction: column;
+                }
+
+                .sidebar {
+                    width: 100%;
+                    margin-bottom: 20px;
+                }
+
+            }
+
+            .emoji-popup {
+                position: absolute;
+                padding: 10px;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                font-size: 1em;
+                display: none; /* 기본적으로 숨김 */
+                z-index: 1000; /* 팝업이 위에 오도록 설정 */
+            }
+
+            /* 배경 일러스트 */
+
+            .bg-illustration {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                width: 220px;
+                opacity: 0.07;
+                z-index: -1;
+            }
+
+            .menu-toggle {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                font-size: 24px;
+                background: none;
+                border: none;
+                z-index: 1001;
+                cursor: pointer;
+            }
+
+            .side-menu {
+                position: fixed;
+                top: 0;
+                left: -250px; /* 숨김 */
+                width: 220px;
+                height: 100vh;
+                background-color: rgba(255, 255, 255, 0.96);
+                box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+                padding-top: 80px;
+                transition: left 0.3s ease;
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                padding-left: 30px;
+            }
+
+            .side-menu.active {
+                left: 0; /* 보여줌 */
+            }
+
+            .menu-item {
+                text-decoration: none;
+                color: #333;
+                font-weight: 500;
+                font-size: 16px;
+            }
+
+            .menu-item:hover {
+                color: #00a591; /* 포인트 컬러 */
+            }
+
+            .search-input {
+                text-align: center;
+            }
+            .search-input {
+                width: 380px;          /* ← 너무 넓으면 줄여주세요 */
+                height: 48px;          /* ← 세로 높이 조정 */
+                font-size: 1em;        /* ← 텍스트 크기 */
+                padding: 0 20px;       /* ← 좌우 여백 */
+                border-radius: 24px;   /* ← pill 형태 유지 */
+                background-color: #dcdcdc;
+                color: #333;
+                border: none;
+                text-align: center;    /* ← 텍스트 중앙 정렬 */
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* 부드러운 그림자 */
+                transition: all 0.3s ease;
+            }
+        .search-input {
+            margin-left: 12px; /* ← 여백 조정 */
         }
-
-        body {
-            margin: 0;
-            font-family: 'Pretendard', sans-serif;
-            background-color: #F5F6F8;
-            color: #333;
-        }
-
-        .wrap {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .bottom-border-div {
-            border-bottom: 1px solid #ddd;
-            background-color: white;
-        }
-
         .index-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
+            padding: 20px 40px;
+            gap: 20px;
         }
 
-        .search-bar input {
-            border-radius: 20px;
-            padding: 8px 16px;
-            width: 280px;
-            background-color: #dcdcdc;
-            color: #333;
-            border: none;
-            font-size: 0.95em;
+        .logo-container,
+        .user-area {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
         }
 
-        .group-main {
-            padding: 30px 0;
+        .search-area {
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 0 40px;
         }
 
-        .sidebar {
-            width: 220px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .sidebar h2 {
-            font-family: 'Nanum Myeongjo', serif;
-            font-size: 1.4em;
-            margin-bottom: 8px;
-        }
-
-        .sidebar div {
-            margin-bottom: 6px;
-            font-size: 0.9em;
-        }
-
-        .sidebar button {
+        .search-input {
             width: 100%;
-            padding: 8px;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 50px;
             border: none;
-            border-radius: 12px;
-            background-color: #7C7A77;
-            color: white;
-            font-size: 0.95em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            background-color: #e8e8e8;
+            text-align: center;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            overflow-x: hidden;
         }
 
-        .sidebar button:hover {
-            background-color: #5e5c59;
+        .bg-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            z-index: 0; /* 일단 뒤에만 가리게 */
+            pointer-events: none;
+        }
+        .bg-side {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 15vw;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: left bottom;
+            z-index: 0;
+            pointer-events: none; /* 마우스 이벤트 안 받도록 */
         }
 
-        .info-note {
-            font-size: 0.75em;
-            color: #555;
-            margin-top: 12px;
-            line-height: 1.4;
+        .bg-side.right {
+            right: 0;
+            background-image: url('/images/11.jpg');
+            background-position: right bottom;
+            transform: none;
         }
 
-        .content-area {
-            flex: 1;
+        .bg-side.left {
+            left: 0;
+            background-image: url('/images/11.jpg');
+            background-position: left bottom;
         }
 
-        .post-form textarea {
-            width: 100%;
-            height: 100px;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #ccc;
-            resize: none;
-            font-size: 0.95em;
-            font-family: 'Pretendard';
-        }
 
-        .post-form button {
-            padding: 8px 16px;
-            border-radius: 10px;
-            border: none;
-            background-color: #8d8c88;
-            color: white;
-            font-size: 0.9em;
-            margin-top: 8px;
-            float: right;
-        }
 
-        .post-form button:hover {
-            background-color: #6e6d6a;
-        }
 
-        .post-card {
-            background-color: white;
-            padding: 16px;
-            border-radius: 14px;
-            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
-            font-size : 0.8em;
-
-        }
-
-        .post-meta {
-            font-size: 0.85em;
-            color: #777;
-            margin-bottom: 6px;
-        }
-
-        .post-content {
-            margin-top: 6px;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        @media (max-width: 768px) {
-            .index-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .search-bar input {
-                width: 100%;
-                margin-top: 10px;
-            }
-
-            .group-main > .wrap {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-        }
-
-        .emoji-popup {
-            position: absolute;
-            padding: 10px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            font-size: 1em;
-            display: none; /* 기본적으로 숨김 */
-            z-index: 1000; /* 팝업이 위에 오도록 설정 */
-        }
-        body.dark-mode {
-            background-color: #121212;
-            color: #f5f5f5;
-        }
-
-        /* 필요 시 메뉴, 카드 등도 다크 스타일 추가 */
-        .dark-mode .profile-card {
-            background-color: #1e1e1e;
-            border-color: #333;
-        }
-
-        .dark-mode a {
-            color: #cfcfcf;
-        }
-
-        .dark-mode .welcome-box {
-            background-color: #2c2c2c;
-            color: #ddd;
-        }
     </style>
 </head>
 <body>
-<button onclick="toggleDarkMode()">🌙 다크모드</button>
+
+<div class="bg-wrapper">
+    <div class="bg-side left"></div>
+    <div class="bg-side right"></div>
+</div>
+
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+<div id="sideMenu" class="side-menu">
+    <a href="/index" class="menu-item">🏠 홈</a>
+    <a href="/food/diary" class="menu-item">🍽 다이어리</a>
+    <a href="javascript:history.back()" class="menu-item">← 뒤로가기</a>
+</div>
 <!-- Header -->
 <div class="bottom-border-div">
     <div class="index-header wrap">
         <div style="display:flex; gap:15px; align-items: center">
             <a th:href="@{/index}">
-                <img th:src="@{/images/10.png}" style="height: 35px"/>
+                <img th:src="@{/images/10.png}" style="height: 70px;"/>
             </a>
-            <form th:action="@{/group/search}" class="search-bar">
-                <input type="text" name="word" placeholder="모임 검색" th:value="${param.word}">
+        </div>
+        <div class="search-area">
+            <form th:action="@{/group/search}" method="get" >
+                <input type="text" name="word" class="search-input" placeholder="모임 검색" th:value="${param.word}">
             </form>
         </div>
-        <div>
+        <div class="user-area">
             <a th:href="@{/my/profile}">
-                <img th:src="@{/images/10.png}" style="height: 35px"/>
+                <img th:src="@{/images/10.png}" style="height: 70px"/>
             </a>
         </div>
     </div>
 </div>
 
 <div style="padding : 20px 0px;background-color: #F5F6F8;">
+
     <div class="group-main wrap">
         <div style="display: flex; gap:20px">
             <div style="width: 200px; background-color: white ; padding : 12px">
@@ -270,6 +421,7 @@
                     누구나 모임을 검색해 찾을 수 있지만, <b>가입에는 승인이 필요합니다</b>.
                 </div>
             </div>
+
 
             <div style="flex:1">
                 <h3 style="border-bottom: 1px solid rgba(0, 0, 0, .3); padding-bottom : 10px">게시글</h3>
@@ -423,18 +575,9 @@
     }
 </script>
 <script>
-    // 페이지가 열릴 때 localStorage에 저장된 다크모드 상태 확인
-    window.onload = function () {
-        const darkMode = localStorage.getItem("darkMode");
-        if (darkMode === "true") {
-            document.body.classList.add("dark-mode");
-        }
-    };
-
-    // 다크모드 토글 함수
-    function toggleDarkMode() {
-        const isDark = document.body.classList.toggle("dark-mode");
-        localStorage.setItem("darkMode", isDark); // 상태 저장
+    function toggleMenu() {
+        const menu = document.getElementById("sideMenu");
+        menu.classList.toggle("active");
     }
 </script>
 </body>
