@@ -94,7 +94,7 @@ public class GroupController {
     public String viewHandle(@PathVariable("id") String id, Model model,
                              @SessionAttribute(value = "user", required = false) User user) {
 
-        if(user == null){
+        if (user == null) {
             return "auth/login";
         }
 
@@ -159,7 +159,9 @@ public class GroupController {
             }
 
             pw.setReactions(reactions);
-
+            pw.setAlreadyReacted(postReactionRepository.findByWriterIdAndPostId(
+                    Map.of("writerId", user.getId(), "postId", post.getId())
+            ) != null );
             postWithWriters.add(pw);
         }
 
@@ -321,7 +323,6 @@ public class GroupController {
 
         return "group/view";
     }
-
 
 
     // 댓글 등록 처리
