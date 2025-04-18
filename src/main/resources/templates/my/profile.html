@@ -154,10 +154,80 @@
             opacity: 0.07;
             z-index: -1;
         }
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            z-index: 1001;
+            cursor: pointer;
+        }
 
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -250px; /* 숨김 */
+            width: 220px;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.96);
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            padding-top: 80px;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-left: 30px;
+        }
+
+        .side-menu.active {
+            left: 0; /* 보여줌 */
+        }
+
+        .menu-item {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .menu-item:hover {
+            color: #00a591; /* 포인트 컬러 */
+        }
+        body.dark-mode {
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+
+        /* 필요 시 메뉴, 카드 등도 다크 스타일 추가 */
+        .dark-mode .profile-card {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+
+        .dark-mode a {
+            color: #cfcfcf;
+        }
+
+        .dark-mode .welcome-box {
+            background-color: #2c2c2c;
+            color: #ddd;
+        }
     </style>
 </head>
+<button onclick="toggleDarkMode()">🌙 다크모드</button>
 <body>
+<!-- 메뉴 토글 버튼 -->
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+<!-- 왼쪽 사이드 메뉴 -->
+<div id="sideMenu" class="side-menu">
+    <a href="/index" class="menu-item">🏠 홈</a>
+    <a href="/food/diary" class="menu-item">🍽 다이어리</a>
+    <a href="javascript:history.back()" class="menu-item">← 뒤로가기</a>
+</div>
 
 <div class="container">
     <!-- 사이드바 -->
@@ -203,5 +273,27 @@
 
 <!-- 배경 일러스트 -->
 <img src="/images/bodyguard-bg-symbol.png" alt="bg" class="bg-illustration" />
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById("sideMenu");
+        menu.classList.toggle("active");
+    }
+</script>
+<script>
+    // 페이지가 열릴 때 localStorage에 저장된 다크모드 상태 확인
+    window.onload = function () {
+        const darkMode = localStorage.getItem("darkMode");
+        if (darkMode === "true") {
+            document.body.classList.add("dark-mode");
+        }
+    };
+
+    // 다크모드 토글 함수
+    function toggleDarkMode() {
+        const isDark = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", isDark); // 상태 저장
+    }
+</script>
 
 </body>
