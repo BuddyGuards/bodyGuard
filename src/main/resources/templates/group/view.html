@@ -253,11 +253,18 @@
                 <h3 style="border-bottom: 1px solid rgba(0, 0, 0, .3); padding-bottom : 10px">게시글</h3>
 
                 <!-- 게시글 작성 폼 -->
-                <form th:action="@{/group/{groupId}/post(groupId=${group.id})}" method="post"
+                <form th:action="@{/group/{groupId}/post(groupId=${group.id})}"
+                      method="post" enctype="multipart/form-data"
                       style="margin-bottom: 24px;">
                     <input type="hidden" name="groupId" th:value="${group.id}"/>
+
                     <textarea style="width: 100%; height:100px; resize: none; padding: 12px; border-radius: 8px;"
                               name="content" id="content" placeholder="내용을 입력하세요"></textarea>
+
+                    <!-- 🔹 사진 업로드 필드 -->
+                    <input type="file" name="image" accept="image/*"
+                           style="margin-top: 8px; font-size: 0.9em;">
+
                     <p style="text-align: right; margin-top: 8px;">
                         <button type="submit" style="padding: 6px 16px;">게시</button>
                     </p>
