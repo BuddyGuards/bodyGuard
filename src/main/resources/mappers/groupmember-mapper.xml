@@ -29,8 +29,14 @@
     <delete id="deleteById" parameterType="int">
         delete from group_members where id = #{id}
     </delete>
+
     <delete id="deleteByGroupId" parameterType="string">
         delete from group_members where group_id = #{groupId}
     </delete>
 
+
+    <select id="findPendingMembers" resultType="groupmember">
+        select * from group_members
+        where group_id = #{groupId} and joined_at is null
+    </select>
 </mapper>

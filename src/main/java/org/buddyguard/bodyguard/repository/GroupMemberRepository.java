@@ -23,4 +23,6 @@ public interface GroupMemberRepository {
 
     public int updateJoinedAtById (int id);
 
+    public List<GroupMember> findPendingMembers(String groupId);
+
 }
