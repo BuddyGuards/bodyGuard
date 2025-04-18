@@ -27,4 +27,14 @@
         select count(*) from comments where post_id = #{postId}
     </select>
 
+    <select id="findById" resultType="comment">
+        select * from comments where id = #{id}
+    </select>
+
+    <!--댓글 삭제-->
+    <delete id="deleteById">
+        delete from comments where id = #{id}
+    </delete>
+
+
 </mapper>

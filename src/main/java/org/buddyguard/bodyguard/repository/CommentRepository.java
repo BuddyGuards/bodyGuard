@@ -17,5 +17,9 @@ public interface CommentRepository {
 
     public int countByPostId(int postId);
 
+    public Comment findById(int id);
+
+    public void deleteById(int id);
+
 
 }
