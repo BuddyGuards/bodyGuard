@@ -245,41 +245,81 @@
             <div style="flex:1">
                 <h3 style="border-bottom: 1px solid rgba(0, 0, 0, .3); padding-bottom : 10px">게시글</h3>
 
-                <form th:action="@{/group/{groupId}/post(groupId=${group.id})}" method="post">
+                <!-- 게시글 작성 폼 -->
+                <form th:action="@{/group/{groupId}/post(groupId=${group.id})}" method="post"
+                      style="margin-bottom: 24px;">
                     <input type="hidden" name="groupId" th:value="${group.id}"/>
-                    <textarea style="width: 100%; height:100px; resize: none; padding : 4px"
-                              name="content" id="content"></textarea>
-                    <p style="text-align: right">
-                        <button type="submit" style="padding : 4px 12px;">게시</button>
+                    <textarea style="width: 100%; height:100px; resize: none; padding: 12px; border-radius: 8px;"
+                              name="content" id="content" placeholder="내용을 입력하세요"></textarea>
+                    <p style="text-align: right; margin-top: 8px;">
+                        <button type="submit" style="padding: 6px 16px;">게시</button>
                     </p>
                 </form>
 
+                <!-- 게시글 목록 반복 -->
                 <div th:each="postWithWriter : ${postWithWriters}">
-                    <!-- 게시글 내용 -->
-                    <div style="margin-bottom: 16px; padding: 12px; background-color: white;">
-                        <div style="font-size: 0.9em; color: #666;">
-                            <!-- 작성자 정보 및 작성일 표시 -->
-                            <span><strong>작성자 ID:</strong> <span
-                                    th:text="${postWithWriter.getWriter().getNickname()}">1</span></span>
-                            <span style="margin-left: 12px;"><strong>작성일:</strong> <span
-                                    th:text="${#temporals.format(postWithWriter.getPost().getWroteAt(), 'yyyy-MM-dd HH:mm')}">날짜</span></span>
+                    <div class="post-card">
+                        <!-- 작성자 및 날짜 -->
+                        <div class="post-meta">
+                            <span th:text="${postWithWriter.writer.nickname}">작성자</span> •
+                            <span th:text="${#temporals.format(postWithWriter.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
                         </div>
-                        <p style="margin-top: 8px;" th:text="${postWithWriter.getPost().getContent()}">게시글 내용</p>
 
-                        <!-- 답글쓰기 버튼 -->
-                        <button type="button" onclick="toggleCommentForm(this)">답글쓰기</button>
+                        <!-- 게시글 내용 -->
+                        <div class="post-content" th:text="${postWithWriter.post.content}">내용</div>
 
-                        <!-- 댓글 입력폼 -->
+                        <!-- 댓글 토글 및 감정 버튼 영역 -->
+                        <div style="margin-top: 10px; display: flex; align-items: center; gap: 16px;">
+                            <!-- 답글쓰기 (텍스트 링크 스타일) -->
+                            <span onclick="toggleCommentForm(this)"
+                                  style="color: #555; font-size: 0.9em; cursor: pointer; text-decoration: underline;">답글쓰기</span>
+
+
+                            <!-- 감정 이모지 통계 -->
+                            <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/reaction'}"
+                                  method="post" style="display: flex; gap: 8px; flex-wrap: wrap; margin: 0;">
+                                <input type="hidden" name="postId" th:value="${postWithWriter.post.id}"/>
+
+                                <!-- 감정이 있는 경우 -->
+                                <span th:each="t : ${postWithWriter.reactions}">
+                        <button type="submit" name="feeling" th:value="${t.key}"
+                                style="background: none; border: none; cursor: pointer; font-size: 1em;"
+                                th:title="'감정: ' + ${t.key} + ' (누르면 취소됨)'"><span th:switch="${t.key}">
+                            <span th:case="'happy'">😍</span>
+                            <span th:case="'excited'">😆</span>
+                            <span th:case="'sad'">😥</span>
+                            <span th:case="'angry'">😡</span>
+                            <span th:case="*">😐</span>
+                        </span>
+                            <span th:text="${t.value}" style="font-size: 0.8em; margin-left: 2px;"></span>
+                        </button>
+                    </span>
+
+                                <!-- 감정이 없는 경우 기본 이모지 출력 -->
+                                <span th:if="${#maps.isEmpty(postWithWriter.reactions)}">
+                        <button type="submit" name="feeling" value="happy"
+                                style="background: none; border: none; font-size: 1em;">😍</button>
+                        <button type="submit" name="feeling" value="excited"
+                                style="background: none; border: none; font-size: 1em;">😆</button>
+                        <button type="submit" name="feeling" value="sad"
+                                style="background: none; border: none; font-size: 1em;">😥</button>
+                        <button type="submit" name="feeling" value="angry"
+                                style="background: none; border: none; font-size: 1em;">😡</button>
+                    </span>
+                            </form>
+                        </div>
+
+                        <!-- 댓글 입력 폼 (토글) -->
                         <div class="comment-form" style="display: none; margin-top: 10px;">
-                            <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.getPost().getId()} + '/comment'}"
+                            <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/comment'}"
                                   method="post">
-                                <input type="hidden" name="postId" th:value="${postWithWriter.getPost().getId()}"/>
-                                <textarea name="content" rows="3" cols="50" placeholder="댓글을 입력하세요"></textarea><br>
+                    <textarea name="content" rows="3" cols="50" placeholder="댓글을 입력하세요"
+                              style="margin-top: 6px;"></textarea><br>
                                 <button type="submit">등록</button>
                             </form>
                         </div>
 
-                        <!-- 댓글 목록 표시-->
+                        <!-- 댓글 리스트 -->
                         <div th:each="comment : ${postWithWriter.comments}">
                             <div style="margin-top: 10px; padding: 8px; background-color: #f8f8f8;">
                                 <span th:text="${comment.nickname}">작성자</span>:
@@ -288,59 +328,21 @@
                                       th:text="${#temporals.format(comment.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
                             </div>
                         </div>
-
-
-                        <!--/*
-                        <div th:each="one : ${postMetas}" style="margin: 6px 0px; background-color: white; padding: 16px;">
-                          <div style="display: flex; gap: 10px; align-items: center;">
-                            <img th:src="@{${one.writerAvatar}}" style="width: 48px;"/>
-                            <div>
-                              <b th:text="${one.writerName}"></b>
-                              <div style="font-size: small" th:text="${one.time}"></div>
-                            </div>
-                          </div>
-                          <p style="font-size: small; white-space: pre-wrap" th:text="${one.content}"></p>
-                          <div>
-                                        <span th:each="t : ${one.reactions}">
-                                            <span th:switch="${t.feeling}">
-                                                <span th:case="'happy'">😍</span>
-                                                <span th:case="'excited'">😆</span>
-                                                <span th:case="'sad'">😥</span>
-                                                <span th:case="'angry'">😡</span>
-                                                <span th:case="*">😐</span>
-                                            </span>
-                                            <span style="font-size: small" th:text="${t.count}"></span>
-                                        </span>
-                          </div>
-                        </div>
-                        */-->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <script>
-    function toggleCommentForm(button) {
-        const commentForm = button.nextElementSibling;
-
-        // 모든 댓글 폼을 숨김
-        document.querySelectorAll('.comment-form').forEach(form => {
-            if (form !== commentForm) {
-                form.style.display = 'none';
-            }
+    function toggleCommentForm(trigger) {
+        const commentForm = trigger.parentElement.nextElementSibling;
+        const allForms = document.querySelectorAll('.comment-form');
+        allForms.forEach(f => {
+            if (f !== commentForm) f.style.display = 'none';
         });
-
-        // 클릭한 버튼의 댓글 폼만 토글
-        if (commentForm.style.display === "none") {
-            commentForm.style.display = "block";
-        } else {
-            commentForm.style.display = "none";
-        }
+        commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
     }
 </script>
-
 </body>
-
 </html>
