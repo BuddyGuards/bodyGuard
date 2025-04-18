@@ -3,6 +3,7 @@ package org.buddyguard.bodyguard.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buddyguard.bodyguard.entity.*;
+import org.buddyguard.bodyguard.query.FeelingStats;
 import org.buddyguard.bodyguard.repository.*;
 import org.buddyguard.bodyguard.vo.CommentWithWriter;
 import org.buddyguard.bodyguard.vo.GroupWithCreator;
@@ -26,6 +27,7 @@ public class GroupController {
     private UserRepository userRepository;
     private PostRepository postRepository;
     private CommentRepository commentRepository;
+    private PostReactionRepository postReactionRepository;
 
     // 그룹 생성 페이지
     @GetMapping("/create")
@@ -89,7 +91,12 @@ public class GroupController {
 
     // 모임 상세보기
     @GetMapping("/{id}")
-    public String viewHandle(@PathVariable("id") String id, Model model, @SessionAttribute("user") User user) {
+    public String viewHandle(@PathVariable("id") String id, Model model,
+                             @SessionAttribute(value = "user", required = false) User user) {
+
+        if(user == null){
+            return "auth/login";
+        }
 
         // 해당 ID로 그룹 정보 조회
         Group group = groupRepository.findById(id);
@@ -131,20 +138,33 @@ public class GroupController {
         List<Post> posts = postRepository.findByGroupId(id);
         List<PostWithWriter> postWithWriters = new ArrayList<>();
 
-        // 게시물, 작성자, 댓글 정보를 리스트에 추가
         for (Post post : posts) {
             PostWithWriter pw = new PostWithWriter();
+
+            // 게시글 본문
             pw.setPost(post);
 
+            // 작성자 정보
             User writer = userRepository.findById(post.getWriterId());
             pw.setWriter(writer);
+
+            // 댓글 목록
             pw.setComments(commentRepository.findByCommentWithWriter(post.getId()));
+
+            // 감정 통계 조회 (List<FeelingStats> → Map<String, Integer>)
+            List<FeelingStats> statsList = postReactionRepository.countFeelingByPostId(post.getId());
+            Map<String, Integer> reactions = new HashMap<>();
+            for (FeelingStats stat : statsList) {
+                reactions.put(stat.getFeeling(), stat.getCount());
+            }
+
+            pw.setReactions(reactions);
 
             postWithWriters.add(pw);
         }
 
-        model.addAttribute("posts", posts);
         model.addAttribute("postWithWriters", postWithWriters);
+        model.addAttribute("posts", posts);
 
         return "group/view";
     }
@@ -273,7 +293,6 @@ public class GroupController {
         // 게시글 ID로 게시글 정보 조회
         Post post = postRepository.findById(postId);
 
-        // 게시글이 존재하지 않으면
         if (post == null) {
             return "redirect:/group/" + groupId;
         }
@@ -284,16 +303,25 @@ public class GroupController {
         // 댓글 목록 조회
         List<CommentWithWriter> comments = commentRepository.findByCommentWithWriter(postId);
 
+        // 감정 통계 조회 및 변환
+        List<FeelingStats> statsList = postReactionRepository.countFeelingByPostId(postId);
+        Map<String, Integer> reactions = new HashMap<>();
+        for (FeelingStats stat : statsList) {
+            reactions.put(stat.getFeeling(), stat.getCount());
+        }
+
         PostWithWriter postWithWriter = new PostWithWriter();
         postWithWriter.setPost(post);
         postWithWriter.setWriter(writer);
         postWithWriter.setComments(comments);
+        postWithWriter.setReactions(reactions);
 
         model.addAttribute("postWithWriter", postWithWriter);
         model.addAttribute("comments", comments);
 
         return "group/view";
     }
+
 
 
     // 댓글 등록 처리
@@ -314,5 +342,33 @@ public class GroupController {
 
         return "redirect:/group/" + groupId;
     }
+
+
+    // 게시글에 감정 남기기 요청 처리
+    @PostMapping("/{groupId}/post/{postId}/reaction")
+    public String postReactionHandle(@PathVariable("groupId") String groupId,
+                                     @PathVariable("postId") int postId,
+                                     @ModelAttribute PostReaction postReaction,
+                                     @SessionAttribute("user") User user) {
+
+        // 이미 감정을 남긴 이력이 있는지 조회
+        PostReaction found = postReactionRepository.findByWriterIdAndPostId(
+                Map.of("writerId", user.getId(), "postId", postId)
+        );
+
+        if (found != null) {
+            postReactionRepository.deleteById(found.getId());  // 한 번 더 누르면 삭제
+
+        } else {
+            postReaction.setWriterId(user.getId());
+            postReaction.setPostId(postId);
+            postReaction.setGroupId(groupId);
+            postReactionRepository.create(postReaction);
+        }
+
+        return "redirect:/group/" + groupId;
+    }
+
+
 }
 

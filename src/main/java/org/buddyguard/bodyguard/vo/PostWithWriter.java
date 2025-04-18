@@ -6,6 +6,7 @@ import org.buddyguard.bodyguard.entity.Post;
 import org.buddyguard.bodyguard.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 @Setter
 @Getter
@@ -16,5 +17,7 @@ public class PostWithWriter {
     private Post post;
     private User writer;
     private List<CommentWithWriter> comments;
+
+    private Map<String, Integer> reactions;
 
 }
