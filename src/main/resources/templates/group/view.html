@@ -326,7 +326,9 @@
                         </div>
 
                         <!-- 게시글 내용 -->
-                        <div class="post-content" th:text="${postWithWriter.post.content}">내용</div>
+                        <div class="post-content"
+                             th:text="${postWithWriter.post.content}"
+                             style="white-space: pre-wrap;">내용</div>
                         <!-- 게시글 이미지 출력 -->
                         <div th:if="${postWithWriter.post.imageUrl != null}"
                              style="background: #ffffff;
