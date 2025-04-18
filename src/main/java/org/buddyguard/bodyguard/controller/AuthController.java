@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buddyguard.bodyguard.entity.User;
 import org.buddyguard.bodyguard.entity.Verification;
-import org.buddyguard.bodyguard.repository.CommentRepository;
 import org.buddyguard.bodyguard.repository.UserRepository;
 import org.buddyguard.bodyguard.repository.VerificationRepository;
 import org.buddyguard.bodyguard.request.FindPasswordRequest;
@@ -151,6 +150,14 @@ public class AuthController {
 
         return "group/create";
     }
+
+    @GetMapping("/soon")
+    public String comingsoon(Model model) {
+
+        return "auth/soon";
+    }
+
+
 
     // 카카오 소셜 로그인 처리
     @GetMapping("/kakao/callback")
