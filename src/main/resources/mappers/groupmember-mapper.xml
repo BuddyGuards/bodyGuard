@@ -33,6 +33,4 @@
         delete from group_members where group_id = #{groupId}
     </delete>
 
-
-
 </mapper>
