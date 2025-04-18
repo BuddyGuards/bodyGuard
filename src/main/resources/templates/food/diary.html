@@ -514,6 +514,7 @@
 
 
             <input type="date" name="eatenDate" th:value="${eatenDate}" id="eatenDate"
+                   onchange="this.parentElement.submit();"
                    style="padding: 10px 12px; font-size: 18px; font-weight: 300; text-align: center; border: 1px solid #ccc; border-radius: 6px;">
 
 
@@ -575,8 +576,8 @@
             <div class="meal-label">🌙 저녁</div>
 
             <ul class="meal-list"
-                th:if="${meals['저녘']}"
-                th:each="entry : ${meals['저녘']}">
+                th:if="${meals['저녁']}"
+                th:each="entry : ${meals['저녁']}">
 
                 <li>
                     <span th:text="|${entry.name.replace('_', ' ')} (${entry.kcal} kcal)|"></span>
@@ -632,7 +633,7 @@
             <input type="hidden" name="foodId" id="foodId"/>
 
             <label>날짜
-                <input type="date" id="date" name="eatenDate">
+                <input type="date" id="date" name="eatenDate" th:value="${eatenDate}">
             </label>
 
             <label>섭취량
@@ -823,8 +824,9 @@
 </script>
 <script>
     function removeMeal(button) {
-        const li = button.closest("li");
+        const li = button.closest("ul");
         li.remove(); // 프론트에서만 지움
+
     }
 </script>
 
