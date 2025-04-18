@@ -15,4 +15,7 @@ public interface CommentRepository {
 
     public List<CommentWithWriter> findByCommentWithWriter(int postId);
 
+    public int countByPostId(int postId);
+
+
 }

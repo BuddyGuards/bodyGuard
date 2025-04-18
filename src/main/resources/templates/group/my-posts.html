@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>내가 쓴 글 목록</title>
+</head>
+<body>
+<h1>작성글 목록</h1>
+
+<div th:each="item : ${postWithGroups}">
+    <div style="border-bottom: 1px solid #ccc; padding: 10px;">
+        <p>
+            <strong><span th:text="${item.post.content}"></span></strong>
+            <span th:text="'[' + ${item.commentCount} + ']'" style="color: #888;"></span>
+        <p>
+        <p>
+            <a th:href="@{/group/{id}(id=${item.group.id})}"><span th:text="${item.group.name}"></span></a>
+            <span th:text="' | '" style="color: #888;"></span>
+            <span th:text="${#temporals.format(item.post.wroteAt, 'yyyy-MM-dd HH:mm')}"></span>
+        </p>
+    </div>
+</div>
+</body>
+</html>
