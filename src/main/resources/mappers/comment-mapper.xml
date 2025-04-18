@@ -22,4 +22,9 @@
         order by c.wrote_at asc
     </select>
 
+    <!--댓글 수 조회-->
+    <select id="countByPostId" resultType="int">
+        select count(*) from comments where post_id = #{postId}
+    </select>
+
 </mapper>

@@ -132,11 +132,66 @@
       font-size: 14px;
       color: #666;
     }
+    .search-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem 1rem 1rem;
+      padding: 0;
+      flex-wrap: wrap; /* 작아질 때 줄바꿈 */
+    }
+
+    .search-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #222;
+    }
+
+    /* 버튼 */
+    .create-group-btn {
+      background-color: #ffffff;
+      border: 2px solid #c5b2f0;
+      color: #7b3fe4;
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 12px 26px;
+      border-radius: 28px;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(123, 63, 228, 0.15);
+      transition: all 0.25s ease-in-out;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    .create-group-btn:hover {
+      background-color: #f2ebff;
+      color: #5c2ebc;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(123, 63, 228, 0.25);
+    }
+    body.dark-mode {
+      background-color: #121212;
+      color: #f5f5f5;
+    }
+
+    /* 필요 시 메뉴, 카드 등도 다크 스타일 추가 */
+    .dark-mode .profile-card {
+      background-color: #1e1e1e;
+      border-color: #333;
+    }
+
+    .dark-mode a {
+      color: #cfcfcf;
+    }
+
+    .dark-mode .welcome-box {
+      background-color: #2c2c2c;
+      color: #ddd;
+    }
   </style>
 </head>
 <body>
 
-
+<button onclick="toggleDarkMode()">🌙 다크모드</button>
 <img th:src="@{/images/bg_diet_left.jpg}" class="bg-deco left" alt="left background">
 <img th:src="@{/images/bg_diet_right.jpg}" class="bg-deco right" alt="right background">
 
@@ -145,7 +200,7 @@
   <div class="index-header">
     <div class="logo-area">
       <a th:href="@{/index}">
-        <img th:src="@{/images/10.png}" style="height: 35px"/>
+        <img th:src="@{/images/10.png}" style="height: 70px"/>
       </a>
     </div>
     <div class="search-area">
@@ -155,7 +210,7 @@
     </div>
     <div class="user-area">
       <a th:href="@{/my/profile}">
-        <img th:src="@{/images/10.png}" style="height: 35px"/>
+        <img th:src="@{/images/10.png}" style="height: 70px"/>
       </a>
     </div>
   </div>
@@ -166,8 +221,12 @@
 
 
 <div class="group-main wrap">
-  <div th:text="'검색결과 ' + ${count}" style="font-size:1.5em; margin-bottom:30px;"></div>
 
+
+  <div class="search-header">
+    <div th:text="'검색결과 ' + ${count}" style="font-size:1.5em; margin-bottom:30px;"></div>
+    <a href="/group/create" class="create-group-btn">모임 만들기</a>
+  </div>
   <div th:each="one : ${result}" class="group-card">
     <h3>
       <a th:href="@{/group/{id}(id=${one.group.id})}" th:text="${one.group.name}">모임명</a>
@@ -188,6 +247,21 @@
   ];
   document.getElementById("moodMessage").innerText =
           moodList[Math.floor(Math.random() * moodList.length)];
+</script>
+<script>
+  // 페이지가 열릴 때 localStorage에 저장된 다크모드 상태 확인
+  window.onload = function () {
+    const darkMode = localStorage.getItem("darkMode");
+    if (darkMode === "true") {
+      document.body.classList.add("dark-mode");
+    }
+  };
+
+  // 다크모드 토글 함수
+  function toggleDarkMode() {
+    const isDark = document.body.classList.toggle("dark-mode");
+    localStorage.setItem("darkMode", isDark); // 상태 저장
+  }
 </script>
 
 </body>

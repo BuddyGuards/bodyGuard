@@ -7,6 +7,7 @@ import org.buddyguard.bodyguard.query.FeelingStats;
 import org.buddyguard.bodyguard.repository.*;
 import org.buddyguard.bodyguard.vo.CommentWithWriter;
 import org.buddyguard.bodyguard.vo.GroupWithCreator;
+import org.buddyguard.bodyguard.vo.PostWithGroup;
 import org.buddyguard.bodyguard.vo.PostWithWriter;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,7 +167,7 @@ public class GroupController {
             pw.setReactions(reactions);
             pw.setAlreadyReacted(postReactionRepository.findByWriterIdAndPostId(
                     Map.of("writerId", user.getId(), "postId", post.getId())
-            ) != null );
+            ) != null);
             postWithWriters.add(pw);
         }
 
@@ -398,6 +399,30 @@ public class GroupController {
     }
 
 
+  
+    // 내 글 목록 보기
+    @GetMapping("/my-posts")
+    public String myPostHandle(@SessionAttribute("user") User user, Model model) {
 
+        List<Post> posts = postRepository.findByWriterId(user.getId());
+        List<PostWithGroup> postWithGroups = new ArrayList<>();
+
+        for (Post post : posts) {
+            Group group = groupRepository.findById(post.getGroupId());
+
+            int commentCount = commentRepository.countByPostId(post.getId());
+
+            PostWithGroup pwg = new PostWithGroup();
+            pwg.setPost(post);
+            pwg.setGroup(group);
+            pwg.setCommentCount(commentCount);  // 댓글 수 저장
+            postWithGroups.add(pwg);
+        }
+
+        model.addAttribute("postWithGroups", postWithGroups);
+
+        return "group/my-posts";
+    }
+  
 }
 
