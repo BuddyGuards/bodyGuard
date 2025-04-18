@@ -401,13 +401,13 @@
                             </form>
                         </div>
 
-                        <!-- 댓글 입력 폼 -->
+                        <!-- 댓글 입력 폼 (한 줄 입력용으로 수정) -->
                         <div class="comment-form" style="display: none; margin: 10px 0px;">
                             <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/comment'}"
                                   method="post">
-                                <textarea name="content" rows="3" cols="50" placeholder="댓글을 입력하세요"
-                                          style="margin-top: 6px;"></textarea><br>
-                                <button type="submit">등록</button>
+                                <input type="text" name="content" placeholder="댓글을 입력하세요"
+                                       style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-top: 6px;"><br>
+                                <button type="submit" style="margin-top: 8px;">등록</button>
                             </form>
                         </div>
 

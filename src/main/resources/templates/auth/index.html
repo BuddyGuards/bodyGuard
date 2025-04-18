@@ -318,6 +318,14 @@
   <p class="slogan-text">“작은 습관이 쌓여, 당신의 하루가 바뀝니다.”</p>
 </section>
 
+<div id="welcomeModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h2>환영합니다! 🎉</h2>
+    <p>bodyGuard와 함께<br>당신의 건강한 루틴을 시작해보세요 💙</p>
+    <button id="closeModal">들어가기</button>
+    <button id="dontShowTodayBtn">오늘 하루 보지 않기</button>
+  </div>
+</div>
 
 
 <footer>
@@ -329,12 +337,30 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // ✅ 한국 시간 기준으로 오늘 날짜 생성
+    const koreaNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+    const year = koreaNow.getFullYear();
+    const month = String(koreaNow.getMonth() + 1).padStart(2, '0');
+    const day = String(koreaNow.getDate()).padStart(2, '0');
+    const todayKey = `welcomeModalHidden_${year}-${month}-${day}`; // ✅ "welcomeModalHidden_2025-04-18" 형식
+
     const modal = document.getElementById("welcomeModal");
     const closeBtn = document.getElementById("closeModal");
+    const dontShowBtn = document.getElementById("dontShowTodayBtn");
 
-    modal.style.display = "flex";
+    // ✅ 오늘 하루 보지 않기 안 눌렀다면 모달 보여주기
+    if (!localStorage.getItem(todayKey)) {
+      modal.style.display = "flex";
+    }
 
+    // ✅ '들어가기' 버튼: 단순히 닫기만
     closeBtn.addEventListener("click", function () {
+      modal.style.display = "none";
+    });
+
+    // ✅ '오늘 하루 보지 않기' 버튼: localStorage에 저장 후 닫기
+    dontShowBtn.addEventListener("click", function () {
+      localStorage.setItem(todayKey, "true");
       modal.style.display = "none";
     });
   });
@@ -354,14 +380,5 @@
     localStorage.setItem("darkMode", isDark); // 상태 저장
   }
 </script>
-
-
 </body>
-<div id="welcomeModal" class="modal">
-  <div class="modal-content">
-    <h2>환영합니다! 🎉</h2>
-    <p>bodyGuard와 함께<br>당신의 건강한 루틴을 시작해보세요 💙</p>
-    <button id="closeModal">들어가기</button>
-  </div>
-</div>
 </html>
