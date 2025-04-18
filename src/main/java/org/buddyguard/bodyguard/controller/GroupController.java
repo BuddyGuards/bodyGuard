@@ -309,6 +309,7 @@ public class GroupController {
             }
         }
 
+
         postRepository.create(post);
 
         return "redirect:/group/" + groupId;
