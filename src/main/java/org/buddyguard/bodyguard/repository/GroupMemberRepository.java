@@ -22,4 +22,5 @@ public interface GroupMemberRepository {
     public int deleteByGroupId (String groupId);
 
     public int updateJoinedAtById (int id);
+
 }
