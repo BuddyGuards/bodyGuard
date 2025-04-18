@@ -134,9 +134,12 @@ public class GroupController {
         // 그룹 생성자 정보 조회
         User creator = userRepository.findById(group.getCreatorId());
         GroupWithCreator GC = GroupWithCreator.builder().group(group).creator(creator).build();
-        model.addAttribute("groupWithCreator", GC);
 
-        // ✅ 승인 대기 중인 멤버 목록 (리더일 때만 조회)
+        model.addAttribute("groupWithCreator", GC);
+        model.addAttribute("sessionUserId", user.getId());
+
+
+        // 승인 대기 중인 멤버 목록 (리더일 때만 조회)
         if ("LEADER".equals(roleStatus)) {
             List<GroupMember> pendingMembers = groupMemberRepository.findPendingMembers(group.getId()); // joined_at IS NULL
             List<User> pendingUsers = new ArrayList<>();
@@ -262,7 +265,7 @@ public class GroupController {
         }
     }
 
-    //모임 가입 승인
+    // 모임 가입 승인
     @GetMapping("/{groupId}/approve")
     public String approveHandle(@PathVariable("groupId") String groupId,
                                 @RequestParam("targetUserId") String targetUserId,
@@ -382,6 +385,24 @@ public class GroupController {
     }
 
 
+    // 댓글 삭제 처리
+    @PostMapping("/{groupId}/post/{postId}/comment/{commentId}/delete")
+    public String deleteCommentHandle(@PathVariable("groupId") String groupId,
+                                      @PathVariable("postId") int postId,
+                                      @PathVariable("commentId") int commentId,
+                                      @SessionAttribute("user") User user) {
+
+        Comment comment = commentRepository.findById(commentId);
+
+        // 본인이 작성한 댓글만 삭제
+        if (comment != null && comment.getWriterId() == user.getId()) {
+            commentRepository.deleteById(commentId);
+        }
+
+        return "redirect:/group/" + groupId;
+    }
+
+
     // 게시글에 감정 남기기 요청 처리
     @PostMapping("/{groupId}/post/{postId}/reaction")
     public String postReactionHandle(@PathVariable("groupId") String groupId,
@@ -408,7 +429,6 @@ public class GroupController {
     }
 
 
-  
     // 내 글 목록 보기
     @GetMapping("/my-posts")
     public String myPostHandle(@SessionAttribute("user") User user, Model model) {
@@ -432,6 +452,6 @@ public class GroupController {
 
         return "group/my-posts";
     }
-  
+
 }
 
