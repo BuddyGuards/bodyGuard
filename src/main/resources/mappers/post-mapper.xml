@@ -5,8 +5,8 @@
 <mapper namespace="org.buddyguard.bodyguard.repository.PostRepository">
 
     <insert id="create" parameterType="post">
-        insert into posts (group_id, writer_id, content, wrote_at)
-        values ( #{groupId}, #{writerId}, #{content}, #{wroteAt} )
+        insert into posts (group_id, writer_id, content, wrote_at, image_url)
+        values ( #{groupId}, #{writerId}, #{content}, #{wroteAt}, #{imageUrl} )
     </insert>
     <select id="findByGroupId" resultType="post" parameterType="string">
         select * from posts where group_id = #{groupId} order by wrote_at desc

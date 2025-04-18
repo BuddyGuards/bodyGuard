@@ -13,7 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -275,13 +280,35 @@ public class GroupController {
     @PostMapping("/{groupId}/post")
     public String postHandle(@PathVariable("groupId") String groupId,
                              @ModelAttribute Post post,
-                             @SessionAttribute("user") User user) {
+                             @SessionAttribute("user") User user,
+                             @RequestParam("image") MultipartFile image) {
 
         // 현재 로그인한 사용자의 ID로 작성자 설정
         post.setWriterId(user.getId());
         // 글 작성 시간을 현재 시각으로 설정
         post.setWroteAt(LocalDateTime.now());
         // 게시글 DB에 저장
+
+        // 🔥 이미지가 업로드된 경우 처리
+        if (!image.isEmpty()) {
+            String originalName = image.getOriginalFilename();
+
+            // 🔸 확장자만 추출 (예: .jpg)
+            String extension = originalName.substring(originalName.lastIndexOf("."));
+
+            // 🔸 UUID.확장자 형식으로 저장
+            String filename = UUID.randomUUID() + extension;
+
+            Path path = Paths.get("C:/uploads/" + filename); //
+
+            try {
+                Files.copy(image.getInputStream(), path);
+                post.setImageUrl("/uploads/" + filename); // 웹 접근 경로
+            } catch (IOException e) {
+                e.printStackTrace(); // 나중에 logger로 변경 권장
+            }
+        }
+
         postRepository.create(post);
 
         return "redirect:/group/" + groupId;
@@ -372,6 +399,7 @@ public class GroupController {
     }
 
 
+  
     // 내 글 목록 보기
     @GetMapping("/my-posts")
     public String myPostHandle(@SessionAttribute("user") User user, Model model) {
@@ -395,5 +423,6 @@ public class GroupController {
 
         return "group/my-posts";
     }
+  
 }
 
