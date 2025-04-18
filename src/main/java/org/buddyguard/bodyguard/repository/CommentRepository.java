@@ -21,5 +21,7 @@ public interface CommentRepository {
 
     public void deleteById(int id);
 
+    public void deleteByPostId(int postId);
+
 
 }

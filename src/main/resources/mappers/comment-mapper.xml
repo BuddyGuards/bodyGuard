@@ -36,5 +36,8 @@
         delete from comments where id = #{id}
     </delete>
 
+    <delete id="deleteByPostId" parameterType="int">
+        delete from comments where post_id = #{postId}
+    </delete>
 
 </mapper>

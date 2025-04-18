@@ -22,5 +22,7 @@
         order by wrote_at desc
     </select>
 
-
+    <delete id="deleteById">
+        delete from posts where id = #{id}
+    </delete>
 </mapper>
