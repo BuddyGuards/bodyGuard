@@ -19,4 +19,7 @@ public interface PostRepository {
 
     List<Post> findByWriterIdAndGroupId(int writerId, String groupId);
 
+    // 게시글 삭제
+    public void deleteById(int id);
+
 }

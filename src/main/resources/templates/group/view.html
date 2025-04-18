@@ -320,16 +320,35 @@
                 <div th:each="postWithWriter : ${postWithWriters}">
                     <div class="post-card">
 
-                        <!-- 작성자 및 날짜 -->
-                        <div class="post-meta">
-                            <span th:text="${postWithWriter.writer.nickname}">작성자</span> •
-                            <span th:text="${#temporals.format(postWithWriter.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                        <!-- 작성자 및 날짜 + 삭제 버튼 한 줄 정렬 -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; color: #444; margin-bottom: 8px;">
+
+                            <!-- 왼쪽: 작성자 + 날짜 -->
+                            <span>
+        <span th:text="${postWithWriter.writer.nickname}">작성자</span> •
+        <span th:text="${#temporals.format(postWithWriter.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+    </span>
+
+                            <!-- 오른쪽: 삭제 버튼 (본인 글일 때만) -->
+                            <form th:if="${postWithWriter.post.writerId == sessionUserId}"
+                                  th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/delete'}"
+                                  method="post"
+                                  onsubmit="return confirm('이 게시글을 삭제하시겠습니까?')"
+                                  style="margin: 0;">
+                                <button type="submit"
+                                        style="all: unset; font-size: 0.8em; color: #999; cursor: pointer;"
+                                        title="삭제">
+                                    ×
+                                </button>
+                            </form>
                         </div>
+
 
                         <!-- 게시글 내용 -->
                         <div class="post-content"
                              th:text="${postWithWriter.post.content}"
-                             style="white-space: pre-wrap;">내용</div>
+                             style="white-space: pre-wrap;">내용
+                        </div>
                         <!-- 게시글 이미지 출력 -->
                         <div th:if="${postWithWriter.post.imageUrl != null}"
                              style="background: #ffffff;
@@ -449,40 +468,42 @@
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        function toggleCommentForm(trigger) {
-            const commentForm = trigger.parentElement.nextElementSibling;
-            const allForms = document.querySelectorAll('.comment-form');
-            allForms.forEach(f => {
-                if (f !== commentForm) f.style.display = 'none';
-            });
-            commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
-        }
 
-        function toggleEmojiPopup(trigger) {
-            const popup = trigger.parentElement.querySelector('.emoji-popup');
-            const allPopups = document.querySelectorAll('.emoji-popup');
-            allPopups.forEach(p => {
-                if (p !== popup) p.style.display = 'none'; // 다른 팝업은 닫기
-            });
-            popup.style.display = popup.style.display === 'none' ? 'block' : 'none'; // 클릭한 팝업만 열고 닫기
-        }
-    </script>
-    <script>
-        // 페이지가 열릴 때 localStorage에 저장된 다크모드 상태 확인
-        window.onload = function () {
-            const darkMode = localStorage.getItem("darkMode");
-            if (darkMode === "true") {
-                document.body.classList.add("dark-mode");
-            }
-        };
+<script>
+    function toggleCommentForm(trigger) {
+        const commentForm = trigger.parentElement.nextElementSibling;
+        const allForms = document.querySelectorAll('.comment-form');
+        allForms.forEach(f => {
+            if (f !== commentForm) f.style.display = 'none';
+        });
+        commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+    }
 
-        // 다크모드 토글 함수
-        function toggleDarkMode() {
-            const isDark = document.body.classList.toggle("dark-mode");
-            localStorage.setItem("darkMode", isDark); // 상태 저장
+    function toggleEmojiPopup(trigger) {
+        const popup = trigger.parentElement.querySelector('.emoji-popup');
+        const allPopups = document.querySelectorAll('.emoji-popup');
+        allPopups.forEach(p => {
+            if (p !== popup) p.style.display = 'none'; // 다른 팝업은 닫기
+        });
+        popup.style.display = popup.style.display === 'none' ? 'block' : 'none'; // 클릭한 팝업만 열고 닫기
+    }
+</script>
+<script>
+    // 페이지가 열릴 때 localStorage에 저장된 다크모드 상태 확인
+    window.onload = function () {
+        const darkMode = localStorage.getItem("darkMode");
+        if (darkMode === "true") {
+            document.body.classList.add("dark-mode");
         }
-    </script>
+    };
+
+    // 다크모드 토글 함수
+    function toggleDarkMode() {
+        const isDark = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", isDark); // 상태 저장
+    }
+</script>
 </body>
 </html>

@@ -287,7 +287,7 @@ public class GroupController {
         return "redirect:/group/" + groupId;
     }
 
-    // 그룹 내 새 글 등록
+    // 그룹 내 새 게시글 등록
     @PostMapping("/{groupId}/post")
     public String postHandle(@PathVariable("groupId") String groupId,
                              @ModelAttribute Post post,
@@ -300,14 +300,14 @@ public class GroupController {
         post.setWroteAt(LocalDateTime.now());
         // 게시글 DB에 저장
 
-        // 🔥 이미지가 업로드된 경우 처리
+        // 이미지가 업로드된 경우 처리
         if (!image.isEmpty()) {
             String originalName = image.getOriginalFilename();
 
-            // 🔸 확장자만 추출 (예: .jpg)
+            // 확장자만 추출 (예: .jpg)
             String extension = originalName.substring(originalName.lastIndexOf("."));
 
-            // 🔸 UUID.확장자 형식으로 저장
+            // UUID.확장자 형식으로 저장
             String filename = UUID.randomUUID() + extension;
 
             Path path = Paths.get("C:/resources/uploads/" + filename); //
@@ -320,11 +320,35 @@ public class GroupController {
             }
         }
 
-
         postRepository.create(post);
 
         return "redirect:/group/" + groupId;
     }
+
+
+    // 그룹 내 게시글 삭제
+    @PostMapping("/{groupId}/post/{postId}/delete")
+    @Transactional
+    public String deletePostHandle(@PathVariable("groupId") String groupId,
+                                   @PathVariable("postId") int postId,
+                                   @SessionAttribute("user") User user) {
+
+        Post post = postRepository.findById(postId);
+
+        // 본인이 작성한 글인지 확인
+        if (post != null && post.getWriterId() == user.getId()) {
+
+            // 댓글 삭제
+            commentRepository.deleteByPostId(postId);
+
+            // 게시글 삭제
+            postRepository.deleteById(postId);
+        }
+
+        return "redirect:/group/" + groupId;
+    }
+
+
 
     // 그룹 내 게시글 조회
     @GetMapping("/{groupId}/post/{postId}")
