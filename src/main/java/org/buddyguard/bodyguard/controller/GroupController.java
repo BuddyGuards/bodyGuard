@@ -298,7 +298,7 @@ public class GroupController {
             // 🔸 UUID.확장자 형식으로 저장
             String filename = UUID.randomUUID() + extension;
 
-            Path path = Paths.get("C:/uploads/" + filename); //
+            Path path = Paths.get("C:/resources/uploads/" + filename); //
 
             try {
                 Files.copy(image.getInputStream(), path);
