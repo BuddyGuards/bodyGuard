@@ -9,6 +9,7 @@
           rel="stylesheet">
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -128,8 +129,10 @@
             background-color: white;
             padding: 16px;
             border-radius: 14px;
-            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
             margin-bottom: 20px;
+            font-size : 0.8em;
+
         }
 
         .post-meta {
@@ -282,8 +285,28 @@
 
                         <!-- 게시글 내용 -->
                         <div class="post-content" th:text="${postWithWriter.post.content}">내용</div>
+                        <!-- 게시글 이미지 출력 -->
+                        <div th:if="${postWithWriter.post.imageUrl != null}"
+                             style="background: #ffffff;
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            max-width: 320px;
+            margin: 24px auto;
+            transition: transform 0.2s ease-in-out;
+            ">
+                            <img th:src="@{${postWithWriter.post.imageUrl}}"
+                                 alt="첨부 이미지"
+                                 style="display: block;
+                margin: 0 auto;
+                max-width: 100%;
+                height: auto;
+                border-radius: 12px;">
+                        </div>
+
+
                         <!-- 댓글 토글 및 감정 버튼 영역 -->
-                        <div style="margin-top: 10px; display: flex; align-items: center; gap: 16px;">
+                        <div style="margin: 10px 0px; display: flex; align-items: center; gap: 16px;">
                             <!-- 답글쓰기 (텍스트 링크 스타일) -->
                             <span onclick="toggleCommentForm(this)"
                                   style="color: #555; font-size: 0.9em; cursor: pointer; text-decoration: underline;">답글쓰기</span>
@@ -311,21 +334,31 @@
                                 <!-- 감정이 없는 경우 기본 이모지 출력 -->
                                 <div th:if="${! postWithWriter.alreadyReacted}">
                                     <!-- 표정짓기 클릭 시 팝업 열기 -->
-                                    <span onclick="toggleEmojiPopup(this)" style="cursor: pointer; color: #555; font-size: 1em; text-decoration: underline;">감정 남기기</span>
+                                    <span onclick="toggleEmojiPopup(this)"
+                                          style="cursor: pointer; color: #555; font-size: 1em; text-decoration: underline;">감정 남기기</span>
 
                                     <!-- 이모지 선택 팝업 -->
-                                    <div class="emoji-popup" style="display: none; position: absolute; padding: 10px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; font-size: 1em;">
-                                        <button type="submit" name="feeling" value="happy" style="background: none; border: none; font-size: 1em;">😍</button>
-                                        <button type="submit" name="feeling" value="excited" style="background: none; border: none; font-size: 1em;">😆</button>
-                                        <button type="submit" name="feeling" value="sad" style="background: none; border: none; font-size: 1em;">😥</button>
-                                        <button type="submit" name="feeling" value="angry" style="background: none; border: none; font-size: 1em;">😡</button>
+                                    <div class="emoji-popup"
+                                         style="display: none; position: absolute; padding: 10px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; font-size: 1em;">
+                                        <button type="submit" name="feeling" value="happy"
+                                                style="background: none; border: none; font-size: 1em;">😍
+                                        </button>
+                                        <button type="submit" name="feeling" value="excited"
+                                                style="background: none; border: none; font-size: 1em;">😆
+                                        </button>
+                                        <button type="submit" name="feeling" value="sad"
+                                                style="background: none; border: none; font-size: 1em;">😥
+                                        </button>
+                                        <button type="submit" name="feeling" value="angry"
+                                                style="background: none; border: none; font-size: 1em;">😡
+                                        </button>
                                     </div>
                                 </div>
                             </form>
                         </div>
 
                         <!-- 댓글 입력 폼 -->
-                        <div class="comment-form" style="display: none; margin-top: 10px;">
+                        <div class="comment-form" style="display: none; margin: 10px 0px;">
                             <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/comment'}"
                                   method="post">
                                 <textarea name="content" rows="3" cols="50" placeholder="댓글을 입력하세요"
@@ -336,8 +369,8 @@
                         </div>
 
                         <!-- 댓글 리스트 -->
-                        <div th:each="comment : ${postWithWriter.comments}">
-                            <div style="margin-top: 10px; padding: 8px; background-color: #f8f8f8;">
+                        <div th:each="comment : ${postWithWriter.comments}" >
+                            <div style="margin-top: 0px; padding: 2px; background-color: #f8f8f8; font-size: 0.7em">
                                 <span th:text="${comment.nickname}">작성자</span>:
                                 <span th:text="${comment.content}">댓글 내용</span>
                                 <span style="float: right;"
@@ -360,6 +393,7 @@
         });
         commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
     }
+
     function toggleEmojiPopup(trigger) {
         const popup = trigger.parentElement.querySelector('.emoji-popup');
         const allPopups = document.querySelectorAll('.emoji-popup');
