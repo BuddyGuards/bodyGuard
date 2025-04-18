@@ -9,6 +9,7 @@ import org.buddyguard.bodyguard.vo.CommentWithWriter;
 import org.buddyguard.bodyguard.vo.GroupWithCreator;
 import org.buddyguard.bodyguard.vo.PostWithGroup;
 import org.buddyguard.bodyguard.vo.PostWithWriter;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -37,8 +38,12 @@ public class GroupController {
 
     // 그룹 생성 페이지
     @GetMapping("/create")
-    public String createHandle(Model model) {
+    public String createHandle(Model model,
+                               @SessionAttribute("user") @Nullable User user) {
 
+        if(user == null){
+            return "auth/login";
+        }
         return "group/create";
     }
 

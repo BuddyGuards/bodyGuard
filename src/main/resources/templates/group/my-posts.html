@@ -106,6 +106,15 @@
             <span th:text="${item.post.content}">포스트 내용</span>
             <span class="comment-count" th:text="${item.commentCount}">0</span>
         </p>
+
+        <!-- 🔽 이미지가 있을 경우 출력 -->
+        <div th:if="${item.post.imageUrl != null}" style="margin: 12px 0;">
+            <img th:src="@{${item.post.imageUrl}}" alt="첨부 이미지"
+                 style="width: 400px; height: 300px; object-fit: cover;
+            display: block; margin: 0 auto;
+            border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        </div>
+
         <p class="post-meta">
             <a th:href="@{/group/{id}(id=${item.group.id})}">
                 <span th:text="${item.group.name}">그룹명</span>
