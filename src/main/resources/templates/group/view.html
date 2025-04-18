@@ -113,20 +113,18 @@
                 font-family: 'Pretendard';
             }
 
-            .post-form button {
+            .post-form button:hover {
                 padding: 8px 16px;
                 border-radius: 10px;
                 border: none;
-                background-color: #8d8c88;
+                background-color: #6e6d6a;
                 color: white;
                 font-size: 0.9em;
                 margin-top: 8px;
                 float: right;
             }
 
-            .post-form button:hover {
-                background-color: #6e6d6a;
-            }
+           
 
             .post-card {
                 background-color: white;
@@ -276,10 +274,12 @@
             align-items: center;
         }
 
+
         .search-area {
             flex-grow: 1;
             max-width: 500px;
             margin: 0 40px;
+
         }
 
         .search-input {
@@ -380,6 +380,7 @@
     <div class="group-main wrap">
         <div style="display: flex; gap:20px">
             <div style="width: 200px; background-color: white ; padding : 12px">
+
                 <h2 th:text="${group.name}"></h2>
                 <div style="font-size : 0.8em">
                     멤버 <span th:text="${group.memberCount}"></span> •
@@ -414,11 +415,33 @@
                         </a>
                     </p>
                 </div>
+
                 <div style="font-size: 0.75em" th:if="${group.type == '공개'}">
                     누구나 모임을 검색해 찾을 수 있고, <b>가입할 수 있습니다</b>.
                 </div>
                 <div style="font-size: 0.75em" th:unless="${group.type == '공개'}">
-                    누구나 모임을 검색해 찾을 수 있지만, <b>가입에는 승인이 필요합니다</b>.
+                    누구나 모임을 검색해 찾을 수 있지만, <b>가입에는 승인이 필요합니다.</b>
+                </div>
+
+
+                <!-- 가입 승인 대기 버튼 (리더만 보이게) -->
+                <div th:if="${status == 'LEADER'}" style="margin-top: 20px;">
+                    <br>
+                    <hr style="border: none; border-top: 1px solid #ccc; margin: 16px 0;">
+                    <h4 style="font-size: 0.9em; margin-bottom: 8px;">가입 승인 대기</h4>
+
+                    <div th:if="${#lists.isEmpty(pendingUsers)}">
+                        <span style="font-size: 0.8em; color: #888;">현재 없음</span>
+                    </div>
+
+                    <div th:each="user : ${pendingUsers}">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8em;">
+                            <span th:text="${user.nickname}">닉네임</span>
+                            <a th:href="@{/group/{groupId}/approve(groupId=${group.id}, targetUserId=${user.id})}">
+                                <button style="font-size: 0.75em; padding: 2px 6px;">승인</button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -448,14 +471,35 @@
                 <div th:each="postWithWriter : ${postWithWriters}">
                     <div class="post-card">
 
-                        <!-- 작성자 및 날짜 -->
-                        <div class="post-meta">
-                            <span th:text="${postWithWriter.writer.nickname}">작성자</span> •
-                            <span th:text="${#temporals.format(postWithWriter.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                        <!-- 작성자 및 날짜 + 삭제 버튼 한 줄 정렬 -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; color: #444; margin-bottom: 8px;">
+
+                            <!-- 왼쪽: 작성자 + 날짜 -->
+                            <span>
+        <span th:text="${postWithWriter.writer.nickname}">작성자</span> •
+        <span th:text="${#temporals.format(postWithWriter.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+    </span>
+
+                            <!-- 오른쪽: 삭제 버튼 (본인 글일 때만) -->
+                            <form th:if="${postWithWriter.post.writerId == sessionUserId}"
+                                  th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/delete'}"
+                                  method="post"
+                                  onsubmit="return confirm('이 게시글을 삭제하시겠습니까?')"
+                                  style="margin: 0;">
+                                <button type="submit"
+                                        style="all: unset; font-size: 0.8em; color: #999; cursor: pointer;"
+                                        title="삭제">
+                                    ×
+                                </button>
+                            </form>
                         </div>
 
+
                         <!-- 게시글 내용 -->
-                        <div class="post-content" th:text="${postWithWriter.post.content}">내용</div>
+                        <div class="post-content"
+                             th:text="${postWithWriter.post.content}"
+                             style="white-space: pre-wrap;">내용
+                        </div>
                         <!-- 게시글 이미지 출력 -->
                         <div th:if="${postWithWriter.post.imageUrl != null}"
                              style="background: #ffffff;
@@ -531,21 +575,43 @@
                         <!-- 댓글 입력 폼 -->
                         <div class="comment-form" style="display: none; margin: 10px 0px;">
                             <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/comment'}"
-                                  method="post">
-                                <textarea name="content" rows="3" cols="50" placeholder="댓글을 입력하세요"
-                                          style="margin-top: 6px;">
-                                </textarea><br>
-                                <button type="submit">등록</button>
+                                  method="post"
+                                  style="background-color: #f9f9f9; padding: 10px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+
+        <textarea name="content" rows="3" placeholder="댓글을 입력하세요"
+                  style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; font-size: 0.9em; resize: vertical; box-sizing: border-box;"></textarea>
+
+                                <div style="text-align: right; margin-top: 8px;">
+                                    <button type="submit">등록</button>
+                                </div>
                             </form>
                         </div>
 
                         <!-- 댓글 리스트 -->
-                        <div th:each="comment : ${postWithWriter.comments}" >
-                            <div style="margin-top: 0px; padding: 2px; background-color: #f8f8f8; font-size: 0.7em">
-                                <span th:text="${comment.nickname}">작성자</span>:
-                                <span th:text="${comment.content}">댓글 내용</span>
-                                <span style="float: right;"
-                                      th:text="${#temporals.format(comment.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                        <div th:each="comment : ${postWithWriter.comments}">
+                            <div style="margin-top: 0px; padding: 2px; background-color: #f8f8f8; font-size: 0.7em; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <span th:text="${comment.nickname}">작성자</span>:
+                                    <span th:text="${comment.content}">댓글 내용</span>
+                                </div>
+
+                                <div style="display: flex; align-items: center;">
+                                    <span th:text="${#temporals.format(comment.wroteAt, 'yyyy-MM-dd HH:mm')}"
+                                          style="color: #999; margin-right: 6px;">작성일</span>
+
+                                    <!-- 본인 댓글일 때만 작은 삭제 버튼 표시 -->
+                                    <form th:if="${comment.writerId == sessionUserId}"
+                                          th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/comment/' + ${comment.id} + '/delete'}"
+                                          method="post"
+                                          onsubmit="return confirm('댓글을 삭제하시겠습니까?')"
+                                          style="margin: 0; padding: 0;">
+
+                                        <button type="submit" title="삭제"
+                                                style="all: unset; cursor: pointer; font-size: 0.8em; color: #999;">
+                                            ×
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -554,6 +620,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
     function toggleCommentForm(trigger) {

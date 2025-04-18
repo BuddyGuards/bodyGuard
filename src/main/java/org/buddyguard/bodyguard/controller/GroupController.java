@@ -107,7 +107,6 @@ public class GroupController {
         // 해당 ID로 그룹 정보 조회
         Group group = groupRepository.findById(id);
 
-        // 그룹이 존재하지 않으면
         if (group == null) {
             return "redirect:/";
         }
@@ -118,36 +117,47 @@ public class GroupController {
         map.put("userId", user.getId());
         GroupMember status = groupMemberRepository.findByUserIdAndGroupId(map);
 
+        String roleStatus;
         if (status == null) {
-            // 아직 참여한적이 없다
-            model.addAttribute("status", "NOT_JOINED");
+            roleStatus = "NOT_JOINED";
         } else if (status.getJoinedAt() == null) {
-            // 승인대기중
-            model.addAttribute("status", "PENDING");
-        } else if (status.getRole().equals("멤버")) {
-            // 멤버이다
-            model.addAttribute("status", "MEMBER");
+            roleStatus = "PENDING";
+        } else if ("멤버".equals(status.getRole())) {
+            roleStatus = "MEMBER";
         } else {
-            // 리더이다.
-            model.addAttribute("status", "LEADER");
+            roleStatus = "LEADER";
         }
 
+        model.addAttribute("status", roleStatus);
         model.addAttribute("group", group);
 
         // 그룹 생성자 정보 조회
         User creator = userRepository.findById(group.getCreatorId());
-
         GroupWithCreator GC = GroupWithCreator.builder().group(group).creator(creator).build();
-        model.addAttribute("groupWithCreator", GC);
 
-        // 그룹의 게시물 조회
+        model.addAttribute("groupWithCreator", GC);
+        model.addAttribute("sessionUserId", user.getId());
+
+
+        // 승인 대기 중인 멤버 목록 (리더일 때만 조회)
+        if ("LEADER".equals(roleStatus)) {
+            List<GroupMember> pendingMembers = groupMemberRepository.findPendingMembers(group.getId()); // joined_at IS NULL
+            List<User> pendingUsers = new ArrayList<>();
+
+            for (GroupMember gm : pendingMembers) {
+                User u = userRepository.findById(gm.getUserId());
+                if (u != null) pendingUsers.add(u);
+            }
+
+            model.addAttribute("pendingUsers", pendingUsers);
+        }
+
+        // 그룹 게시글 리스트 구성
         List<Post> posts = postRepository.findByGroupId(id);
         List<PostWithWriter> postWithWriters = new ArrayList<>();
 
         for (Post post : posts) {
             PostWithWriter pw = new PostWithWriter();
-
-            // 게시글 본문
             pw.setPost(post);
 
             // 작성자 정보
@@ -157,7 +167,7 @@ public class GroupController {
             // 댓글 목록
             pw.setComments(commentRepository.findByCommentWithWriter(post.getId()));
 
-            // 감정 통계 조회 (List<FeelingStats> → Map<String, Integer>)
+            // 감정 통계
             List<FeelingStats> statsList = postReactionRepository.countFeelingByPostId(post.getId());
             Map<String, Integer> reactions = new HashMap<>();
             for (FeelingStats stat : statsList) {
@@ -168,6 +178,7 @@ public class GroupController {
             pw.setAlreadyReacted(postReactionRepository.findByWriterIdAndPostId(
                     Map.of("writerId", user.getId(), "postId", post.getId())
             ) != null);
+
             postWithWriters.add(pw);
         }
 
@@ -254,7 +265,7 @@ public class GroupController {
         }
     }
 
-    //모임 가입 승인
+    // 모임 가입 승인
     @GetMapping("/{groupId}/approve")
     public String approveHandle(@PathVariable("groupId") String groupId,
                                 @RequestParam("targetUserId") String targetUserId,
@@ -276,7 +287,7 @@ public class GroupController {
         return "redirect:/group/" + groupId;
     }
 
-    // 그룹 내 새 글 등록
+    // 그룹 내 새 게시글 등록
     @PostMapping("/{groupId}/post")
     public String postHandle(@PathVariable("groupId") String groupId,
                              @ModelAttribute Post post,
@@ -289,17 +300,17 @@ public class GroupController {
         post.setWroteAt(LocalDateTime.now());
         // 게시글 DB에 저장
 
-        // 🔥 이미지가 업로드된 경우 처리
+        // 이미지가 업로드된 경우 처리
         if (!image.isEmpty()) {
             String originalName = image.getOriginalFilename();
 
-            // 🔸 확장자만 추출 (예: .jpg)
+            // 확장자만 추출 (예: .jpg)
             String extension = originalName.substring(originalName.lastIndexOf("."));
 
-            // 🔸 UUID.확장자 형식으로 저장
+            // UUID.확장자 형식으로 저장
             String filename = UUID.randomUUID() + extension;
 
-            Path path = Paths.get("C:/uploads/" + filename); //
+            Path path = Paths.get("C:/resources/uploads/" + filename); //
 
             try {
                 Files.copy(image.getInputStream(), path);
@@ -313,6 +324,31 @@ public class GroupController {
 
         return "redirect:/group/" + groupId;
     }
+
+
+    // 그룹 내 게시글 삭제
+    @PostMapping("/{groupId}/post/{postId}/delete")
+    @Transactional
+    public String deletePostHandle(@PathVariable("groupId") String groupId,
+                                   @PathVariable("postId") int postId,
+                                   @SessionAttribute("user") User user) {
+
+        Post post = postRepository.findById(postId);
+
+        // 본인이 작성한 글인지 확인
+        if (post != null && post.getWriterId() == user.getId()) {
+
+            // 댓글 삭제
+            commentRepository.deleteByPostId(postId);
+
+            // 게시글 삭제
+            postRepository.deleteById(postId);
+        }
+
+        return "redirect:/group/" + groupId;
+    }
+
+
 
     // 그룹 내 게시글 조회
     @GetMapping("/{groupId}/post/{postId}")
@@ -373,6 +409,24 @@ public class GroupController {
     }
 
 
+    // 댓글 삭제 처리
+    @PostMapping("/{groupId}/post/{postId}/comment/{commentId}/delete")
+    public String deleteCommentHandle(@PathVariable("groupId") String groupId,
+                                      @PathVariable("postId") int postId,
+                                      @PathVariable("commentId") int commentId,
+                                      @SessionAttribute("user") User user) {
+
+        Comment comment = commentRepository.findById(commentId);
+
+        // 본인이 작성한 댓글만 삭제
+        if (comment != null && comment.getWriterId() == user.getId()) {
+            commentRepository.deleteById(commentId);
+        }
+
+        return "redirect:/group/" + groupId;
+    }
+
+
     // 게시글에 감정 남기기 요청 처리
     @PostMapping("/{groupId}/post/{postId}/reaction")
     public String postReactionHandle(@PathVariable("groupId") String groupId,
@@ -399,7 +453,6 @@ public class GroupController {
     }
 
 
-  
     // 내 글 목록 보기
     @GetMapping("/my-posts")
     public String myPostHandle(@SessionAttribute("user") User user, Model model) {
@@ -423,6 +476,6 @@ public class GroupController {
 
         return "group/my-posts";
     }
-  
+
 }
 
