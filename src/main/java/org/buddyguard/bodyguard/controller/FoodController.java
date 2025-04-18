@@ -77,7 +77,7 @@ public class FoodController {
                 .build();
         foodLogRepository.save(fl);
 
-        return "redirect:/food/diary";
+        return "redirect:/food/diary?eatenDate="+foodLog.getEatenDate();
     }
 
 
