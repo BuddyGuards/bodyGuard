@@ -13,4 +13,10 @@ public interface PostRepository {
     public List<Post> findByGroupId (String groupId);
 
     public Post findById(int postId);
+
+    // 내가 작성한 글 조회
+    public List<Post> findByWriterId(int writerId);
+
+    List<Post> findByWriterIdAndGroupId(int writerId, String groupId);
+
 }

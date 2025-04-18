@@ -128,17 +128,17 @@
 
     <form th:action="@{/my/profile-update}" method="post">
         <ul>
-            <li>닉네임 : <input type="text" th:value="${user.nickname}" name="nickname"/></li>
-            <li>성별 :
+            <li>닉네임<input type="text" th:value="${user.nickname}" name="nickname"/></li>
+            <li>성별
                 <select name="gender" id="genderSelect" onchange="updateProfileImage()">
                     <option value="남성" selected>남성</option>
                     <option value="여성">여성</option>
                 </select>
             </li>
-            <li>키 : <input type="number" step="0.1" th:value="${user.height}" name="height"/></li>
-            <li>몸무게 : <input type="number" step="0.1" th:value="${user.weight}" name="weight"/></li>
-            <li>나이 : <input type="number" th:value="${user.age}" name="age"/></li>
-            <li>목표 : <input type="text" th:value="${user.goal}" name="goal"/></li>
+            <li>키<input type="number" step="0.1" th:value="${user.height}" name="height"/></li>
+            <li>몸무게<input type="number" step="0.1" th:value="${user.weight}" name="weight"/></li>
+            <li>나이<input type="number" th:value="${user.age}" name="age"/></li>
+            <li>목표<input type="text" th:value="${user.goal}" name="goal"/></li>
         </ul>
         <button type="submit">수정하기</button>
         <button type="button" onclick="location.href='/my/profile'" class="back-btn">뒤로가기</button>

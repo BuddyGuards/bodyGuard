@@ -16,5 +16,5 @@ public class Post {
     private Integer writerId;
     private String content;
     private LocalDateTime wroteAt;
-
+    private String imageUrl;
 }
