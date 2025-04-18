@@ -124,7 +124,7 @@
                 float: right;
             }
 
-           
+
 
             .post-card {
                 background-color: white;
@@ -494,12 +494,10 @@
                             </form>
                         </div>
 
-
                         <!-- 게시글 내용 -->
                         <div class="post-content"
                              th:text="${postWithWriter.post.content}"
-                             style="white-space: pre-wrap;">내용
-                        </div>
+                             style="white-space: pre-wrap;">내용</div>
                         <!-- 게시글 이미지 출력 -->
                         <div th:if="${postWithWriter.post.imageUrl != null}"
                              style="background: #ffffff;
@@ -572,18 +570,13 @@
                             </form>
                         </div>
 
-                        <!-- 댓글 입력 폼 -->
+                        <!-- 댓글 입력 폼 (한 줄 입력용으로 수정) -->
                         <div class="comment-form" style="display: none; margin: 10px 0px;">
                             <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/comment'}"
-                                  method="post"
-                                  style="background-color: #f9f9f9; padding: 10px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
-
-        <textarea name="content" rows="3" placeholder="댓글을 입력하세요"
-                  style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; font-size: 0.9em; resize: vertical; box-sizing: border-box;"></textarea>
-
-                                <div style="text-align: right; margin-top: 8px;">
-                                    <button type="submit">등록</button>
-                                </div>
+                                  method="post">
+                                <input type="text" name="content" placeholder="댓글을 입력하세요"
+                                       style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-top: 6px;"><br>
+                                <button type="submit" style="margin-top: 8px;">등록</button>
                             </form>
                         </div>
 

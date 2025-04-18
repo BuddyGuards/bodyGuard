@@ -515,6 +515,7 @@
             이번 주 동안 3일 이상 식단을 기록하면<br><strong style="color:#4f46e5; font-weight: bold">뽀뽀</strong>를 해드려요!
         </p>
         <button id="eventCloseBtn">닫기</button>
+        <button id="eventDontShowTodayBtn" style="margin-left: 10px;">오늘 하루 보지 않기</button>
     </div>
 
     <div style="max-width: 1020px; margin: auto">
@@ -666,22 +667,49 @@
 
 <script>
     // 기존 코드들 아래에 추가해줘
+    const todayKey = `eventPopupHidden_${new Date().toISOString().slice(0, 10)}`;
 
     const eventPopup = document.getElementById('eventPopup');
     const eventOverlay = document.getElementById('eventOverlay');
     const eventCloseBtn = document.getElementById('eventCloseBtn');
 
-    // 자동 팝업 (예: 접속 2초 후 등장)
-    setTimeout(() => {
-        eventPopup.style.display = 'block';
-        eventOverlay.style.display = 'block';
-    }, 2000);
+
+
+    // 자동 팝업 (예: 접속 2초 후 등장), 단 오늘 하루 보지 않기 선택한 경우는 제외
+
+
+    if (!localStorage.getItem(todayKey)) {
+        // 저장된 값이 없으면 팝업 보여주기 (2초 뒤)
+        setTimeout(() => {
+            eventPopup.style.display = 'block';
+            eventOverlay.style.display = 'block';
+        }, 2000);
+    }
 
     // 닫기 버튼 이벤트
     eventCloseBtn.addEventListener('click', () => {
         eventPopup.style.display = 'none';
         eventOverlay.style.display = 'none';
+
+        // 닫기 눌렀을 경우 10초 뒤에 다시 자동 팝업
+        setTimeout(() => {
+            if (!localStorage.getItem(todayKey)) {
+                eventPopup.style.display = 'block';
+                eventOverlay.style.display = 'block';
+            }
+        }, 10000); // 10초 뒤
     });
+
+
+    // 오늘하루보지않기 버튼기능 추가
+    const dontShowBtn = document.getElementById('eventDontShowTodayBtn');
+
+    dontShowBtn.addEventListener('click', () => {
+        localStorage.setItem(todayKey, 'true'); // 오늘 날짜 기준으로 저장
+        eventPopup.style.display = 'none';
+        eventOverlay.style.display = 'none';
+    });
+
 
     // 오버레이 클릭 시 팝업 닫기
     eventOverlay.addEventListener('click', () => {
@@ -875,6 +903,27 @@
     }
     ////////////////////////////////////////////////
 </script>
+<script>
+    // 페이지가 열릴 때 localStorage에 저장된 다크모드 상태 확인
+    window.onload = function () {
+        const darkMode = localStorage.getItem("darkMode");
+        if (darkMode === "true") {
+            document.body.classList.add("dark-mode");
+        }
+    };
+
+    // 다크모드 토글 함수
+    function toggleDarkMode() {
+        const isDark = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", isDark); // 상태 저장
+    }
+
+
+
+</script>
+
+
+
 
 <footer>
     © 2025 bodyGuard | 몸과 마음을 지켜주는 감성 다이어리
