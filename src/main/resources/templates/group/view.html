@@ -170,6 +170,16 @@
             }
         }
 
+        .emoji-popup {
+            position: absolute;
+            padding: 10px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 1em;
+            display: none; /* 기본적으로 숨김 */
+            z-index: 1000; /* 팝업이 위에 오도록 설정 */
+        }
     </style>
 </head>
 <body>
@@ -205,8 +215,6 @@
                 <div style="font-size : 0.8em">
                     개설일 <span th:text="${#strings.replace(group.createdAt.toString(), 'T', '  ')}"></span>
                 </div>
-
-
                 <div th:if="${status == 'NOT_JOINED'}">
                     <p>
                         <a th:href="@{/group/{id}/join(id=${group.id})}">
@@ -233,7 +241,6 @@
                         </a>
                     </p>
                 </div>
-
                 <div style="font-size: 0.75em" th:if="${group.type == '공개'}">
                     누구나 모임을 검색해 찾을 수 있고, <b>가입할 수 있습니다</b>.
                 </div>
@@ -256,9 +263,10 @@
                     </p>
                 </form>
 
-                <!-- 게시글 목록 반복 -->
+                <!-- 게시글 목록 -->
                 <div th:each="postWithWriter : ${postWithWriters}">
                     <div class="post-card">
+
                         <!-- 작성자 및 날짜 -->
                         <div class="post-meta">
                             <span th:text="${postWithWriter.writer.nickname}">작성자</span> •
@@ -267,13 +275,11 @@
 
                         <!-- 게시글 내용 -->
                         <div class="post-content" th:text="${postWithWriter.post.content}">내용</div>
-
                         <!-- 댓글 토글 및 감정 버튼 영역 -->
                         <div style="margin-top: 10px; display: flex; align-items: center; gap: 16px;">
                             <!-- 답글쓰기 (텍스트 링크 스타일) -->
                             <span onclick="toggleCommentForm(this)"
                                   style="color: #555; font-size: 0.9em; cursor: pointer; text-decoration: underline;">답글쓰기</span>
-
 
                             <!-- 감정 이모지 통계 -->
                             <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/reaction'}"
@@ -282,39 +288,42 @@
 
                                 <!-- 감정이 있는 경우 -->
                                 <span th:each="t : ${postWithWriter.reactions}">
-                        <button type="submit" name="feeling" th:value="${t.key}"
-                                style="background: none; border: none; cursor: pointer; font-size: 1em;"
-                                th:title="'감정: ' + ${t.key} + ' (누르면 취소됨)'"><span th:switch="${t.key}">
-                            <span th:case="'happy'">😍</span>
-                            <span th:case="'excited'">😆</span>
-                            <span th:case="'sad'">😥</span>
-                            <span th:case="'angry'">😡</span>
-                            <span th:case="*">😐</span>
-                        </span>
-                            <span th:text="${t.value}" style="font-size: 0.8em; margin-left: 2px;"></span>
-                        </button>
-                    </span>
+                                    <button type="submit" name="feeling" th:value="${t.key}"
+                                            style="background: none; border: none; cursor: pointer; font-size: 1em;"
+                                            th:title="'감정: ' + ${t.key} + ' (누르면 취소됨)'"><span th:switch="${t.key}">
+                                        <span th:case="'happy'">😍</span>
+                                        <span th:case="'excited'">😆</span>
+                                        <span th:case="'sad'">😥</span>
+                                        <span th:case="'angry'">😡</span>
+                                        <span th:case="*">😐</span>
+                                    </span>
+                                        <span th:text="${t.value}" style="font-size: 0.8em; margin-left: 2px;"></span>
+                                    </button>
+                                </span>
 
                                 <!-- 감정이 없는 경우 기본 이모지 출력 -->
-                                <span th:if="${#maps.isEmpty(postWithWriter.reactions)}">
-                        <button type="submit" name="feeling" value="happy"
-                                style="background: none; border: none; font-size: 1em;">😍</button>
-                        <button type="submit" name="feeling" value="excited"
-                                style="background: none; border: none; font-size: 1em;">😆</button>
-                        <button type="submit" name="feeling" value="sad"
-                                style="background: none; border: none; font-size: 1em;">😥</button>
-                        <button type="submit" name="feeling" value="angry"
-                                style="background: none; border: none; font-size: 1em;">😡</button>
-                    </span>
+                                <div th:if="${! postWithWriter.alreadyReacted}">
+                                    <!-- 표정짓기 클릭 시 팝업 열기 -->
+                                    <span onclick="toggleEmojiPopup(this)" style="cursor: pointer; color: #555; font-size: 1em; text-decoration: underline;">감정 남기기</span>
+
+                                    <!-- 이모지 선택 팝업 -->
+                                    <div class="emoji-popup" style="display: none; position: absolute; padding: 10px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; font-size: 1em;">
+                                        <button type="submit" name="feeling" value="happy" style="background: none; border: none; font-size: 1em;">😍</button>
+                                        <button type="submit" name="feeling" value="excited" style="background: none; border: none; font-size: 1em;">😆</button>
+                                        <button type="submit" name="feeling" value="sad" style="background: none; border: none; font-size: 1em;">😥</button>
+                                        <button type="submit" name="feeling" value="angry" style="background: none; border: none; font-size: 1em;">😡</button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
 
-                        <!-- 댓글 입력 폼 (토글) -->
+                        <!-- 댓글 입력 폼 -->
                         <div class="comment-form" style="display: none; margin-top: 10px;">
                             <form th:action="@{'/group/' + ${group.id} + '/post/' + ${postWithWriter.post.id} + '/comment'}"
                                   method="post">
-                    <textarea name="content" rows="3" cols="50" placeholder="댓글을 입력하세요"
-                              style="margin-top: 6px;"></textarea><br>
+                                <textarea name="content" rows="3" cols="50" placeholder="댓글을 입력하세요"
+                                          style="margin-top: 6px;">
+                                </textarea><br>
                                 <button type="submit">등록</button>
                             </form>
                         </div>
@@ -334,6 +343,7 @@
         </div>
     </div>
 </div>
+
 <script>
     function toggleCommentForm(trigger) {
         const commentForm = trigger.parentElement.nextElementSibling;
@@ -342,6 +352,14 @@
             if (f !== commentForm) f.style.display = 'none';
         });
         commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+    }
+    function toggleEmojiPopup(trigger) {
+        const popup = trigger.parentElement.querySelector('.emoji-popup');
+        const allPopups = document.querySelectorAll('.emoji-popup');
+        allPopups.forEach(p => {
+            if (p !== popup) p.style.display = 'none'; // 다른 팝업은 닫기
+        });
+        popup.style.display = popup.style.display === 'none' ? 'block' : 'none'; // 클릭한 팝업만 열고 닫기
     }
 </script>
 </body>

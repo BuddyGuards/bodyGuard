@@ -19,5 +19,5 @@ public class PostWithWriter {
     private List<CommentWithWriter> comments;
 
     private Map<String, Integer> reactions;
-
+    private boolean alreadyReacted;
 }
