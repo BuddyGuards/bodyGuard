@@ -247,48 +247,52 @@
         }
 
         .results-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
             margin-top: 10px;
             padding-bottom: 10px;
+            max-height: 280px; /* 스크롤 되도록 제한 높이 추가 */
+            overflow-y: auto;
         }
 
         /* 카드 스타일 */
         .card {
-            width: 140px;
+            width: 100%;
+            height: 160px; /* 일정한 카드 높이 */
             border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 8px;
+            border-radius: 12px;
+            padding: 10px;
             background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
             cursor: pointer;
-            transition: transform 0.2s ease-in-out;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
             text-align: center;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px; /* h3와 p 사이 간격 */
         }
 
         .card:hover {
-            transform: scale(1.05);
-        }
-
-        .card img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
 
         .card h3 {
-            font-size: 14px;
-            margin: 8px 0;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 600;
             color: #333;
+            line-height: 1.4;
+            word-break: keep-all; /* 단어 단위 줄바꿈 */
+            margin: 0;
         }
 
         .card p {
-            font-size: 12px;
-            color: #666;
-            margin: 4px 0;
+            font-size: 13px;
+            color: #777;
+            margin: 0;
         }
         .darkmode-toggle {
             position: fixed;
@@ -801,13 +805,15 @@
 
     // 검색 결과를 카드로 표시하는 함수
     function displayResults(data) {
-        resultsContainer.innerHTML = data.map(food => `
-        <div class="card" data-id="${food.id}" data-kcal="${food.kcal}">
-
-            <h3>${food.name}</h3>
-            <p>${food.kcal} kcal</p>
-        </div>
-    `).join("");
+        resultsContainer.innerHTML = data.map(food => {
+            const name = food.name.replace(/_/g, ' '); // 모든 _ → 공백으로 변경
+            return `
+            <div class="card" data-id="${food.id}" data-kcal="${food.kcal}">
+                <h3>${name}</h3>
+                <p>${food.kcal} kcal</p>
+            </div>
+        `;
+        }).join("");
     }
 
     // 카드 클릭 시 음식 정보 폼에 채우기

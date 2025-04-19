@@ -268,17 +268,35 @@ public class GroupController {
     }
 
     // 모임 해산
-    @Transactional
     @GetMapping("/{groupId}/remove")
+    @Transactional
     public String removeHandle(@PathVariable("groupId") String groupId, @SessionAttribute("user") User user) {
         Group group = groupRepository.findById(groupId);
 
         if (group != null && group.getCreatorId() == user.getId()) {
+            // 1. 해당 그룹의 모든 게시글 가져오기
+            List<Post> posts = postRepository.findByGroupId(groupId);
+
+            for (Post post : posts) {
+                int postId = post.getId();
+
+                // 1-1. 게시글의 댓글 삭제
+                commentRepository.deleteByPostId(postId);
+
+                // 1-2. 게시글의 감정 반응 삭제
+                postReactionRepository.deleteByPostId(postId);
+
+                // 1-3. 게시글 삭제
+                postRepository.deleteById(postId);
+            }
+
+            // 2. 그룹 멤버 삭제
             groupMemberRepository.deleteByGroupId(groupId);
+
+            // 3. 그룹 삭제
             groupRepository.deleteById(groupId);
 
             return "redirect:/";
-
         } else {
             return "redirect:/group/" + groupId;
         }
