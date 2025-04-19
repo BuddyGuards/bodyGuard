@@ -257,17 +257,19 @@
   </div>
 </div>
 
-
 <div class="status-text" id="moodMessage">“당신은 지금 잘하고 있어요 💙”</div>
-
 
 <div class="group-main wrap">
 
+  <div class="group-main wrap">
+    <!-- 검색결과 or 게시글 여부에 따라 다르게 출력 -->
+    <div class="search-header">
+      <div style="font-size: 1.5em; margin-bottom: 30px;"
+           th:text="${isSearch} ? '검색결과 ' + ${count} : '전체글 ' + ${count}">
+      </div>
+      <a href="/group/create" class="create-group-btn">모임 만들기</a>
+    </div>
 
-  <div class="search-header">
-    <div th:text="'검색결과 ' + ${count}" style="font-size:1.5em; margin-bottom:30px;"></div>
-    <a href="/group/create" class="create-group-btn">모임 만들기</a>
-  </div>
   <div th:each="one : ${result}" class="group-card">
     <h3>
       <a th:href="@{/group/{id}(id=${one.group.id})}" th:text="${one.group.name}">모임명</a>

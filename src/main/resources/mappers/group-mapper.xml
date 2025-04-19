@@ -27,4 +27,8 @@
         delete from bodyguard.groups where id = #{id}
     </delete>
 
+    <select id="findAll" resultType="group">
+        select * from `groups` order by created_at desc
+    </select>
+
 </mapper>
