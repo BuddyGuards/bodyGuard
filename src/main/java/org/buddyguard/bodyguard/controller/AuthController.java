@@ -4,6 +4,8 @@ package org.buddyguard.bodyguard.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -86,13 +88,24 @@ public class AuthController {
 
     // 로그인 처리
     @PostMapping("/login")
-    public String loginPostHandel(@ModelAttribute LoginRequest loginRequest,
-                                  HttpSession session) {
+    public String loginPostHandle(@ModelAttribute LoginRequest loginRequest,
+                                  HttpSession session,
+                                  @RequestParam(value = "remember", required = false) String remember,
+                                  HttpServletResponse response) {
 
         User user = userRepository.findByEmail(loginRequest.getEmail());
 
         if (user != null && user.getPassword().equals(loginRequest.getPassword())) {
             session.setAttribute("user", user);
+
+            // 쿠키 부분
+            if ("on".equals(remember)) {
+                String loginKey = user.getProvider() + ":" + user.getId();
+                Cookie cookie = new Cookie("autoLogin", loginKey);
+                cookie.setMaxAge(60 * 60 * 24); // 하루
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }
 
             return "redirect:/index";
         }
@@ -102,9 +115,13 @@ public class AuthController {
 
     // 로그아웃
     @GetMapping("/logout")
-    public String logoutHandle(HttpSession session) {
-
+    public String logoutHandle(HttpSession session, HttpServletResponse response) {
         session.invalidate();
+
+        Cookie cookie = new Cookie("autoLogin", null);
+        cookie.setMaxAge(0); // 즉시 만료
+        cookie.setPath("/"); // 모든 경로에서 삭제
+        response.addCookie(cookie);
 
         return "redirect:/auth/login";
     }
