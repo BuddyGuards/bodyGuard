@@ -64,9 +64,12 @@ public class AuthController {
             user.setVerified("F");
 
             userRepository.save(user);
-            mailService.sendWelcomeHtmlMessage(user); // 환영 메일 발송
 
-            session.setAttribute("user", user);
+            // user가 null인 경우 방어
+            User savedUser = userRepository.findByEmail(user.getEmail());
+            mailService.sendWelcomeHtmlMessage(savedUser); // 환영 메일 발송
+
+            session.setAttribute("user", savedUser);
 
 
         }
@@ -290,10 +293,51 @@ public class AuthController {
         return "auth/find-password-success";
     }
 
+    // 비밀번호 변경기능
+    @GetMapping("/change-password")
+    public String changePasswordHandle(@SessionAttribute("user") User user, Model model) {
+        model.addAttribute("user", user);
+        return "auth/change-password";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(@SessionAttribute("user") User user,
+                                 @RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
+                                 HttpSession session,
+                                 Model model) {
+
+        // 1. 현재 비밀번호 확인
+        User found = userRepository.findById(user.getId());
+        if (!found.getPassword().equals(currentPassword)) {
+            model.addAttribute("error", "현재 비밀번호가 틀렸습니다.");
+            return "auth/change-password";
+        }
+
+        // 2. 새 비밀번호 확인
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("error", "새 비밀번호가 일치하지 않습니다.");
+            return "auth/change-password";
+        }
+
+        // 3. 비밀번호 업데이트
+        userRepository.updatePasswordById(user.getId(), newPassword);
+
+        // ✅ 세션에 저장된 user 정보도 갱신
+        user.setPassword(newPassword);
+        session.setAttribute("user", user);
+
+        // 4. 완료 메시지
+        model.addAttribute("success", "비밀번호가 변경되었습니다.");
+
+        return "redirect:/my/profile";
+    }
 
     // 이메일 토큰 유효성 검사
     @GetMapping("/email-verify")
-    public String emailVerifyHandle(@RequestParam("token") String token, Model model) {
+    public String emailVerifyHandle(@RequestParam("token") String token,
+                                    Model model, HttpSession session) {
 
         Verification found = verificationRepository.findByToken(token);
 
@@ -311,6 +355,9 @@ public class AuthController {
 
         String userEmail = found.getUserEmail();
         userRepository.updateVerifiedByEmail(userEmail);
+
+        User updatedUser = userRepository.findByEmail(userEmail);
+        session.setAttribute("user", updatedUser);
 
         return "auth/email-verify-success";
     }
