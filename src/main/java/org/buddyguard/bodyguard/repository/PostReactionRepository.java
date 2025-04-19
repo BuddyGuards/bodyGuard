@@ -23,5 +23,5 @@ public interface PostReactionRepository {
 
     public int deleteByPostId (int postId);
 
-    
+    public void deleteByWriterId(int writerId);
 }

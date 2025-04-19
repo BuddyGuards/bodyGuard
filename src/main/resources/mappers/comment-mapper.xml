@@ -40,4 +40,9 @@
         delete from comments where post_id = #{postId}
     </delete>
 
+    <!-- 회원 탈퇴 -->
+    <delete id="deleteByWriterId" parameterType="int">
+        delete from comments where writer_id = #{writerId}
+    </delete>
+
 </mapper>
