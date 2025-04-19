@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>마이페이지 | bodyGuard</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
     <style>
@@ -68,7 +68,7 @@
             text-align: center;
             margin-bottom: 40px;
             position: relative;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
         }
 
         .welcome-box h2 {
@@ -94,7 +94,7 @@
             background: white;
             border-radius: 16px;
             padding: 30px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
             align-items: center;
         }
 
@@ -154,6 +154,7 @@
             opacity: 0.07;
             z-index: -1;
         }
+
         .menu-toggle {
             position: fixed;
             top: 20px;
@@ -196,10 +197,12 @@
         .menu-item:hover {
             color: #00a591; /* 포인트 컬러 */
         }
+
         body.dark-mode {
             background-color: #121212;
             color: #f5f5f5;
         }
+
         /* 필요 시 메뉴, 카드 등도 다크 스타일 추가 */
     </style>
 </head>
@@ -220,7 +223,7 @@
         <h3>마이페이지</h3>
         <ul class="menu">
             <li><a th:href="@{/group/my-posts}">작성글 보기</a></li>
-            <li th:if="${user.provider == 'LOCAL'}">
+            <li th:if="${user.provider == 'LOCAL' and user.verified == 'F'}">
                 <a th:href="@{/auth/send-token}">계정 인증</a>
             </li>
             <li><a th:href="@{/auth/logout}">로그아웃</a></li>
@@ -260,7 +263,7 @@
 </div>
 
 <!-- 배경 일러스트 -->
-<img src="/images/bodyguard-bg-symbol.png" alt="bg" class="bg-illustration" />
+<img src="/images/bodyguard-bg-symbol.png" alt="bg" class="bg-illustration"/>
 
 <script>
     function toggleMenu() {

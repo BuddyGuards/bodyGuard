@@ -12,8 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buddyguard.bodyguard.entity.User;
 import org.buddyguard.bodyguard.entity.Verification;
-import org.buddyguard.bodyguard.repository.UserRepository;
-import org.buddyguard.bodyguard.repository.VerificationRepository;
+import org.buddyguard.bodyguard.repository.*;
 import org.buddyguard.bodyguard.request.FindPasswordRequest;
 import org.buddyguard.bodyguard.request.LoginRequest;
 import org.buddyguard.bodyguard.service.KakaoApiService;
@@ -23,6 +22,7 @@ import org.buddyguard.bodyguard.vo.KakaoTokenResponse;
 import org.buddyguard.bodyguard.vo.NaverProfileResponse;
 import org.buddyguard.bodyguard.vo.NaverTokenResponse;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,9 @@ public class AuthController {
     private UserRepository userRepository;
     private MailService mailService;
     private VerificationRepository verificationRepository;
-
+    private CommentRepository commentRepository;
+    private PostReactionRepository postReactionRepository;
+    private GroupMemberRepository groupMemberRepository;
 
 
     // 회원가입 페이지
@@ -71,8 +73,8 @@ public class AuthController {
 
             session.setAttribute("user", savedUser);
 
-
         }
+
         return "/auth/index";
     }
 
@@ -141,18 +143,29 @@ public class AuthController {
         return "auth/leave";
     }
 
-    // 회원 탈퇴 처리
+    @Transactional
     @PostMapping("/leave")
     public String leavePostHandle(@SessionAttribute("user") User user, HttpSession session) {
 
         if (user == null) {
-
-
             return "auth/login";
         }
 
-        verificationRepository.deleteByEmail(user.getEmail());
-        userRepository.deleteByEmail(user.getEmail());
+        int userId = user.getId();
+        String userEmail = user.getEmail();
+
+        // 댓글 삭제
+        commentRepository.deleteByWriterId(userId);
+        // 감정 삭제
+        postReactionRepository.deleteByWriterId(userId);
+        // 모임 멤버 삭제
+        groupMemberRepository.deleteByUserId(userId);
+        // 인증 정보 삭제
+        verificationRepository.deleteByEmail(userEmail);
+        // 사용자 삭제
+        userRepository.deleteByEmail(userEmail);
+
+        // 세션 무효화
         session.invalidate();
 
         return "redirect:/index";
@@ -176,7 +189,6 @@ public class AuthController {
 
         return "auth/soon";
     }
-
 
 
     // 카카오 소셜 로그인 처리

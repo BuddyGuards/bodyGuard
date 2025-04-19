@@ -43,4 +43,12 @@
     <select id="findApprovedMembers" resultType="groupMember" parameterType="string">
         select * from group_members where group_id = #{groupId} and joined_at is not null
     </select>
+
+    <delete id="deleteByWriterId" parameterType="int">
+        delete from post_reactions where writer_id = #{writerId}
+    </delete>
+
+    <delete id="deleteByUserId" parameterType="int">
+        delete from group_members where user_id = #{userId}
+    </delete>
 </mapper>
