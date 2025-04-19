@@ -34,4 +34,7 @@ public interface UserRepository {
                                          @Param("goal") String goal,
                                          @Param("id") Integer id);
 
+    public int updatePasswordById(@Param("id") int id,
+                                  @Param("newPassword") String newPassword);
+
 }

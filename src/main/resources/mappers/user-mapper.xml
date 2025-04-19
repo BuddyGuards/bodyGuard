@@ -49,4 +49,9 @@
         where id = #{id}
     </update>
 
+    <!-- 비밀번호 변경 -->
+    <update id="updatePasswordById">
+        UPDATE users SET password = #{newPassword} WHERE id = #{id}
+    </update>
+
 </mapper>
