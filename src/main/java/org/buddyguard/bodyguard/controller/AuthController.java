@@ -64,9 +64,12 @@ public class AuthController {
             user.setVerified("F");
 
             userRepository.save(user);
-            mailService.sendWelcomeHtmlMessage(user); // 환영 메일 발송
 
-            session.setAttribute("user", user);
+            // user가 null인 경우 방어
+            User savedUser = userRepository.findByEmail(user.getEmail());
+            mailService.sendWelcomeHtmlMessage(savedUser); // 환영 메일 발송
+
+            session.setAttribute("user", savedUser);
 
 
         }
