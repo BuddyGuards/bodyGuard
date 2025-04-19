@@ -20,7 +20,7 @@
             margin: 0;
             padding: 0;
             color: #1e1e1e;
-            background-image: url("/images/31.jpg");
+            background-color:#f0f0f0;
         }
 
         .background-blur {
@@ -41,17 +41,26 @@
 
 
         .diary-title {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 28px;
             text-align: center;
-            padding: 60px 20px 40px;
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: #D36B5F; /* 부드러운 코랄톤 */
-            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-            letter-spacing: -0.02em;
-            word-spacing: 0.05em;
-            border-bottom: 1px solid #f8d7d0;
-            position: relative;
-            text-shadow: 0.5px 0.5px 0 #fff0eb;
+            color: #5c9ded; /* 부드러운 블루 */
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 3px rgba(135, 191, 255, 0.15);
+            animation: fadeInUp 1s ease;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .meal-container {
@@ -462,26 +471,24 @@
 
         .bottom-report-btn {
             display: inline-block;
-            background-color: #F7D7D7; /* 은은한 핑크 */
-            color: #4C5C4C; /* 딥그린 or 차콜 톤 */
-            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            padding: 14px 28px;
+            background-color: #87bfff; /* 부드러운 블루 */
+            color: white;
+            padding: 12px 28px;
             border-radius: 30px;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
             text-decoration: none;
-            transition: all 0.3s ease;
-            border: 1px solid #e9c5c5;
-            letter-spacing: -0.02em;
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 0.4px;
+            box-shadow: 0 6px 16px rgba(135, 191, 255, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s;
         }
 
         .bottom-report-btn:hover {
-            background-color: #ECD0D0;
-            color: #222;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            background-color: #6eb4f9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(110, 180, 249, 0.4);
         }
+
         .event-btn-wrapper {
             display: flex;
             justify-content: center;

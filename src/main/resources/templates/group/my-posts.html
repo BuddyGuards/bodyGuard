@@ -3,26 +3,22 @@
 <head>
     <title>내가 쓴 글 목록</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Gowun+Dodum&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
 
         body {
-            background: #faf6f1;
+            background: linear-gradient(to bottom, #f6f3f8,#3057d5);
             font-family: 'Gowun Dodum', sans-serif;
             padding: 60px 20px;
-            color: #3c2f25;
-            background-image: url('/images/paper-texture.png');
-            background-size: cover;
-            background-repeat: no-repeat;
+            color: #3057d5;
         }
 
         h1 {
-            font-family: 'Nanum Myeongjo', serif;
             font-size: 32px;
-            color: #2b1e14;
+            color: #3057d5;
             text-align: center;
             margin-bottom: 50px;
             letter-spacing: 1px;
-            border-bottom: 2px dashed #c8b8a5;
+            border-bottom: 2px dashed #cbbad8;
             display: inline-block;
             padding-bottom: 12px;
         }
@@ -36,73 +32,90 @@
         }
 
         .post-card {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid #e2d7cb;
-            border-radius: 12px;
-            padding: 20px 24px;
-            box-shadow: 4px 4px 0 #d9c5ae;
+            background: #ffffff;
+            border: 1px solid #decfe8;
+            border-radius: 16px;
+            padding: 24px 28px;
+            box-shadow: 4px 4px 14px rgba(170, 150, 190, 0.08);
             position: relative;
             transition: transform 0.2s ease;
         }
 
         .post-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
 
         .post-title {
             font-size: 18px;
             font-weight: bold;
-            color: #3c2f25;
+            color: #3057d5;
         }
 
         .comment-count {
             font-size: 13px;
-            background: #d9c5ae;
+            background: #3057d5;
             color: white;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 30px;
             margin-left: 10px;
         }
 
         .post-meta {
-            margin-top: 10px;
-            font-size: 13px;
-            color: #6d5a4d;
-            font-family: 'Nanum Myeongjo', serif;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #3057d5;
         }
 
         .post-meta a {
-            color: #5a463a;
+            color: #3057d5;
             text-decoration: underline dotted;
-            transition: all 0.2s ease;
         }
 
         .post-meta a:hover {
-            color: #3e2e25;
+            color: #3057d5;
         }
 
         .stamp {
             position: absolute;
             top: -12px;
             right: -12px;
-            background: #bfa890;
+            background: #3057d5;
             color: white;
-            font-size: 10px;
-            padding: 6px 10px;
+            font-size: 11px;
+            padding: 7px 14px;
             border-radius: 100px;
             font-family: 'Gowun Dodum', sans-serif;
-            box-shadow: 2px 2px 0 #a0856f;
+            box-shadow: 2px 2px 0 #3057d5;
         }
 
-        /* 삭제 버튼 꾸미기 없음, 따로 스타일 지정 X */
         .delete-btn-form {
-            margin-top: 16px;
+            margin-top: 20px;
             text-align: right;
+        }
+
+        .delete-btn-form button {
+            background: transparent;
+            border: 1px solid #3057d5;
+            color: #3057d5;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn-form button:hover {
+            background: #f0e8f6;
+        }
+
+        img {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
         }
     </style>
 </head>
 <body>
-<h1>📜 내가 쓴 글</h1>
+<h1>💬 내가 쓴 글</h1>
 
 <div class="post-list">
     <div class="post-card" th:each="item : ${postWithGroups}">
@@ -113,11 +126,9 @@
             <span class="comment-count" th:text="${item.commentCount}">0</span>
         </p>
 
-        <div th:if="${item.post.imageUrl != null}" style="margin: 12px 0;">
+        <div th:if="${item.post.imageUrl != null}" style="margin: 14px 0;">
             <img th:src="@{${item.post.imageUrl}}" alt="첨부 이미지"
-                 style="width: 400px; height: 300px; object-fit: cover;
-                 display: block; margin: 0 auto;
-                 border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                 style="width: 100%; max-width: 420px; height: auto; display: block; margin: 0 auto;">
         </div>
 
         <p class="post-meta">
@@ -128,7 +139,6 @@
             <span th:text="${#temporals.format(item.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
         </p>
 
-        <!-- 삭제 버튼 (아무 스타일 없이 기본 버튼) -->
         <form th:action="@{/group/my-posts/delete}" method="post"
               onsubmit="return confirm('정말 삭제하시겠습니까?');"
               class="delete-btn-form">

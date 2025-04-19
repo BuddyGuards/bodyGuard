@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Pretendard', sans-serif;
-      background-color: #f5f5f5;
+      background-color: #e0f7f4; /* 연한 민트 */
       padding: 40px;
       color: #333;
     }
@@ -15,6 +15,9 @@
     h2 {
       text-align: center;
       margin-bottom: 40px;
+      font-size: 28px;
+      color: #00a591;
+      letter-spacing: 1px;
     }
 
     .chart-container {
@@ -26,70 +29,80 @@
       margin: 40px auto;
       width: 80%;
       border-collapse: collapse;
-      background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      background: #ffffffd0; /* 약간 투명한 화이트 */
+      box-shadow: 0 4px 20px rgba(0, 165, 145, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     th, td {
-      padding: 12px 16px;
-      border: 1px solid #ddd;
+      padding: 14px 18px;
+      border: 1px solid #d6ece9;
       text-align: center;
+      font-size: 15px;
+      color: #444;
     }
 
     th {
-      background-color: #f2f2f2;
-      font-weight: bold;
+      background-color: #f0fdfa;
+      color: #009688;
+      font-weight: 600;
     }
-    body.dark-mode {
-      background-color: #121212;
-      color: #f5f5f5;
+
+    caption {
+      caption-side: top;
+      font-size: 1.2em;
+      padding: 14px;
+      color: #00897b;
+      font-weight: 500;
+      letter-spacing: 0.5px;
     }
+
     .menu-toggle {
       position: fixed;
       top: 20px;
       left: 20px;
-      font-size: 24px;
+      font-size: 26px;
       background: none;
       border: none;
-      z-index: 1001;
+      color: #00897b;
       cursor: pointer;
+      z-index: 1001;
     }
 
     .side-menu {
       position: fixed;
       top: 0;
-      left: -250px; /* 숨김 */
+      left: -250px;
       width: 220px;
       height: 100vh;
-      background-color: rgba(255, 255, 255, 0.96);
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 2px 0 8px rgba(0, 165, 145, 0.1);
       padding-top: 80px;
       transition: left 0.3s ease;
       z-index: 1000;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 24px;
       padding-left: 30px;
     }
 
     .side-menu.active {
-      left: 0; /* 보여줌 */
+      left: 0;
     }
 
     .menu-item {
       text-decoration: none;
-      color: #333;
+      color: #00695c;
       font-weight: 500;
       font-size: 16px;
+      transition: color 0.2s ease;
     }
 
     .menu-item:hover {
-      color: #00a591; /* 포인트 컬러 */
+      color: #00a591;
     }
-    body.dark-mode {
-      background-color: #121212;
-      color: #f5f5f5;
-    }
+
   </style>
 </head>
 <body>
