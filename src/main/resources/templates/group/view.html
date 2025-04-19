@@ -311,28 +311,23 @@
             pointer-events: none;
         }
         .bg-side {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            width: 15vw;
-            background-size: contain;
+            background-size: cover;
             background-repeat: no-repeat;
-            background-position: left bottom;
-            z-index: 0;
-            pointer-events: none; /* 마우스 이벤트 안 받도록 */
-        }
-
-        .bg-side.right {
-            right: 0;
-            background-image: url('/images/11.jpg');
-            background-position: right bottom;
-            transform: none;
+            background-position: bottom;
+            opacity: 0.15;
+            width: 20vw;
         }
 
         .bg-side.left {
-            left: 0;
             background-image: url('/images/11.jpg');
-            background-position: left bottom;
+            left: 0;
+            background-position: bottom left;
+        }
+
+        .bg-side.right {
+            background-image: url('/images/11.jpg');
+            right: 0;
+            background-position: bottom right;
         }
 
 
