@@ -1,350 +1,398 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>bodyGuard | 홈</title>
-  <link rel="icon" th:href="@{/images/10.png}" type="image/png">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Pretendard', sans-serif;
-      background-color: #fff;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    <meta charset="UTF-8">
+    <title>bodyGuard | 홈</title>
+    <link rel="icon" th:href="@{/images/10.png}" type="image/png">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #fff;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
 
-    header {
-      padding: 20px 40px;
-      background-color: #fff;
-      border-bottom: 1px solid #e0e0e0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    }
-    .logo {
-      font-size: 24px;
-      color: #4f46e5;
-      font-weight: 600;
-    }
-    .nav-links a {
-      margin-left: 20px;
-      text-decoration: none;
-      color: #4f46e5;
-      font-weight: 500;
-    }
-    .nav-links a:hover {
-      text-decoration: underline;
-    }
+        header {
+            padding: 20px 40px;
+            background-color: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #4f46e5;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
 
 
-    .gate_wrap {
-      display: flex;
-      flex-wrap: wrap;
-      width: 100%;
-    }
-    .gate_item {
-      position: relative;
-      width: 33.333%;
-      height: 400px;
-      background-size: cover;
-      background-position: center;
-      cursor: pointer;
-      overflow: hidden;
-    }
-    @keyframes slideRight {
-      0% {
-        transform: translateX(0%);
-      }
-      33% {
-        transform: translateX(100%);
-      }
-      66% {
-        transform: translateX(200%);
-      }
-      100% {
-        transform: translateX(0%);
-      }
-    }
+        .gate_wrap {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+        }
 
-    .gate_item {
-      /* 기존 스타일 유지하면서 */
-      animation: slideLeftRight 10s ease-in-out infinite;
-    }
+        .gate_item {
+            position: relative;
+            width: 33.333%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
 
-    /* 각 카드에 약간 다른 타이밍 주기 */
-    .gate_item:nth-child(1) {
-      animation-delay: 0s;
-    }
-    .gate_item:nth-child(2) {
-      animation-delay: 2s;
-    }
-    .gate_item:nth-child(3) {
-      animation-delay: 4s;
-    }
+        @keyframes slideRight {
+            0% {
+                transform: translateX(0%);
+            }
+            33% {
+                transform: translateX(100%);
+            }
+            66% {
+                transform: translateX(200%);
+            }
+            100% {
+                transform: translateX(0%);
+            }
+        }
 
-    .gate_item::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.35); /* 어두운 필터 */
-      z-index: 1;
-    }
-    .gate_overlay {
-      z-index: 2;
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: transparent; /* 이건 이제 투명해도 돼 */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
+        .gate_item {
+            /* 기존 스타일 유지하면서 */
+            animation: slideLeftRight 10s ease-in-out infinite;
+        }
 
-    .overlay-text {
-      color: white;
-      font-size: 26px;
-      font-weight: 700;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-      z-index: 2;
-    }
-    /* 푸터 */
-    footer {
-      margin-top: auto;
-      background-color: #f8f8f8;
-      padding: 40px 20px;
-      text-align: center;
-      color: #888;
-      font-size: 14px;
-    }
-    footer a {
-      color: #888;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-    .slogan {
-      font-size: 18px;
-      color: #4f46e5;
-      margin-bottom: 10px;
-    }
-    .slogan-area {
-      padding: 80px 20px;
-      background: linear-gradient(to right, #f5f5f5, #f0f0ff);
-      text-align: center;
-    }
+        /* 각 카드에 약간 다른 타이밍 주기 */
+        .gate_item:nth-child(1) {
+            animation-delay: 0s;
+        }
 
-    .slogan-text {
-      font-size: 28px;
-      font-weight: 500;
-      font-style: italic;
-      color: #4f46e5;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      letter-spacing: 1px;
-      opacity: 0;
-      animation: fadeInUp 1.6s ease-out forwards;
-    }
-    .slider-wrapper {
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-      margin: 40px 0;
-    }
+        .gate_item:nth-child(2) {
+            animation-delay: 2s;
+        }
 
-    .slider-track {
-      display: flex;
-      animation: slideOneByOne 12s linear infinite;
-      width: max-content;
-    }
+        .gate_item:nth-child(3) {
+            animation-delay: 4s;
+        }
 
-    .slide {
-      flex: 0 0 100vw; /* 전체 화면 너비 하나씩 */
-      height: 400px;
-      background-size: cover;
-      background-position: center;
-    }
+        .gate_item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.35); /* 어두운 필터 */
+            z-index: 1;
+        }
 
-    @keyframes slideOneByOne {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-320px); }
-      50% { transform: translateX(-640px); }
-      75% { transform: translateX(-960px); }
-      100% { transform: translateX(0); }
-    }
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      animation: fadeIn 0.5s ease forwards;
-    }
+        .gate_overlay {
+            z-index: 2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent; /* 이건 이제 투명해도 돼 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
 
-    .modal-content {
-      background: white;
-      padding: 30px 40px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-      animation: slideUp 0.6s ease-out;
-    }
+        .overlay-text {
+            color: white;
+            font-size: 26px;
+            font-weight: 700;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+            z-index: 2;
+        }
 
-    .modal-content h2 {
-      margin-bottom: 15px;
-      font-size: 24px;
-      color: #4f46e5;
-    }
+        /* 푸터 */
+        footer {
+            margin-top: auto;
+            background-color: #f8f8f8;
+            padding: 40px 20px;
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
 
-    .modal-content p {
-      font-size: 16px;
-      margin-bottom: 25px;
-      color: #555;
-      line-height: 1.5;
-    }
+        footer a {
+            color: #888;
+            text-decoration: none;
+            margin: 0 10px;
+        }
 
-    .modal-content button {
-      padding: 10px 24px;
-      background-color: #4f46e5;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-    }
+        footer a:hover {
+            text-decoration: underline;
+        }
 
-    .modal-content button:hover {
-      background-color: #3730a3;
-    }
+        .slogan {
+            font-size: 18px;
+            color: #4f46e5;
+            margin-bottom: 10px;
+        }
 
-    @keyframes scrollSlide {
-      0% {
-        transform: translateX(0%);
-      }
-      100% {
-        transform: translateX(-50%); /* 절반 이동 (3칸) */
-      }
-    }
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+        .slogan-area {
+            padding: 80px 20px;
+            background: linear-gradient(to right, #f5f5f5, #f0f0ff);
+            text-align: center;
+        }
+
+        .slogan-text {
+            font-size: 28px;
+            font-weight: 500;
+            font-style: italic;
+            color: #4f46e5;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInUp 1.6s ease-out forwards;
+        }
+
+        .slider-wrapper {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .slider-track {
+            display: flex;
+            animation: slideOneByOne 12s linear infinite;
+            width: max-content;
+        }
+
+        .slide {
+            flex: 0 0 100vw; /* 전체 화면 너비 하나씩 */
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        @keyframes slideOneByOne {
+            0% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-320px);
+            }
+            50% {
+                transform: translateX(-640px);
+            }
+            75% {
+                transform: translateX(-960px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #4f46e5;
+        }
+
+        .modal-content p {
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .modal-content button {
+            padding: 10px 24px;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .modal-content button:hover {
+            background-color: #3730a3;
+        }
+
+        @keyframes scrollSlide {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-50%); /* 절반 이동 (3칸) */
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
 
 
 <header>
-  <div class="logo">bodyGuard</div>
-  <div class="nav-links">
-    <th:block th:if="${user != null}">
-      <span th:text="${user.nickname} + '님 반가워요'"></span>
-      <a th:href="@{/food/diary}">푸드다이어리</a>
-      <a th:href="@{/my/profile}">마이페이지</a>
-      <a th:href="@{/auth/logout}">로그아웃</a>
+    <div class="logo">bodyGuard</div>
+    <div class="nav-links">
+        <th:block th:if="${user != null}">
+            <span th:text="${user.nickname} + '님 반가워요'"></span>
+
+            <span th:if="${user.verified == 'T'}"
+                  style="background-color: #fff199; color: #444; font-size: 11px;
+                 padding: 2px 6px; border-radius: 6px;">
+      <span th:text="${user.provider} + ' / 인증'">provider / 인증</span>
+    </span>
+
+            <span th:if="${user.verified == 'F'}"
+                  style="background-color: #ffb3b3; color: #444; font-size: 11px;
+                 padding: 2px 6px; border-radius: 6px;">
+      <span th:text="${user.provider} + ' / 미인증'">provider / 미인증</span>
+    </span>
+
+    <a th:href="@{/food/diary}">푸드다이어리</a>
+    <a th:href="@{/my/profile}">마이페이지</a>
+    <a th:href="@{/auth/logout}">로그아웃</a>
     </th:block>
     <th:block th:unless="${user != null}">
-      <a th:href="@{/auth/login}">로그인</a>
-      <a th:href="@{/auth/signup}">회원가입</a>
+        <a th:href="@{/auth/login}">로그인</a>
+        <a th:href="@{/auth/signup}">회원가입</a>
     </th:block>
-  </div>
+    </div>
 </header>
 
 <main class="gate_wrap">
-  <div class="gate_item" style="background-image: url('/images/42.jpg');">
-    <div class="gate_overlay" onclick="location.href='/auth/about'">
-      <h2 class="overlay-text">BODY Guard 2025</h2>
+    <div class="gate_item" style="background-image: url('/images/42.jpg');">
+        <div class="gate_overlay" onclick="location.href='/auth/about'">
+            <h2 class="overlay-text">BODY Guard 2025</h2>
+        </div>
     </div>
-  </div>
-  <div class="gate_item" style="background-image: url('/images/41.jpg');">
-    <div class="gate_overlay" onclick="location.href='/group/search?word='">
-      <h2 class="overlay-text">게시판</h2>
+    <div class="gate_item" style="background-image: url('/images/41.jpg');">
+        <div class="gate_overlay" onclick="location.href='/group/search?word='">
+            <h2 class="overlay-text">게시판</h2>
+        </div>
     </div>
-  </div>
-  <div class="gate_item" style="background-image: url('/images/43.jpg');">
-    <div class="gate_overlay" onclick="location.href='/auth/soon'">
-      <h2 class="overlay-text">COMMING SOON</h2>
+    <div class="gate_item" style="background-image: url('/images/43.jpg');">
+        <div class="gate_overlay" onclick="location.href='/auth/soon'">
+            <h2 class="overlay-text">COMMING SOON</h2>
+        </div>
     </div>
-  </div>
-  <section class="slider-wrapper">
-    <div class="slider-track">
-      <div class="slide" style="background-image: url('/images/6.jpg');"></div>
-      <div class="slide" style="background-image: url('/images/7.jpg');"></div>
-      <div class="slide" style="background-image: url('/images/8.jpg');"></div>
+    <section class="slider-wrapper">
+        <div class="slider-track">
+            <div class="slide" style="background-image: url('/images/6.jpg');"></div>
+            <div class="slide" style="background-image: url('/images/7.jpg');"></div>
+            <div class="slide" style="background-image: url('/images/8.jpg');"></div>
 
-    </div>
-  </section>
+        </div>
+    </section>
 </main>
 
 
 <section class="slogan-area">
-  <p class="slogan-text">“작은 습관이 쌓여, 당신의 하루가 바뀝니다.”</p>
+    <p class="slogan-text">“작은 습관이 쌓여, 당신의 하루가 바뀝니다.”</p>
 </section>
 
 <div id="welcomeModal" class="modal" style="display: none;">
-  <div class="modal-content">
-    <h2>환영합니다! 🎉</h2>
-    <p>bodyGuard와 함께<br>당신의 건강한 루틴을 시작해보세요 💙</p>
-    <button id="closeModal">들어가기</button>
-    <button id="dontShowTodayBtn">오늘 하루 보지 않기</button>
-  </div>
+    <div class="modal-content">
+        <h2>환영합니다! 🎉</h2>
+        <p>bodyGuard와 함께<br>당신의 건강한 루틴을 시작해보세요 💙</p>
+        <button id="closeModal">들어가기</button>
+        <button id="dontShowTodayBtn">오늘 하루 보지 않기</button>
+    </div>
 </div>
 
 
 <footer>
-  <p class="slogan">“Every step counts with bodyMate”</p>
-  <p><strong>bodyGuard</strong> | 당신의 건강, 우리와 함께</p>
-  <p>© 2025 bodyGuard. All rights reserved.</p>
+    <p class="slogan">“Every step counts with bodyMate”</p>
+    <p><strong>bodyGuard</strong> | 당신의 건강, 우리와 함께</p>
+    <p>© 2025 bodyGuard. All rights reserved.</p>
 
 </footer>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // ✅ 한국 시간 기준으로 오늘 날짜 생성
-    const koreaNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
-    const year = koreaNow.getFullYear();
-    const month = String(koreaNow.getMonth() + 1).padStart(2, '0');
-    const day = String(koreaNow.getDate()).padStart(2, '0');
-    const todayKey = `welcomeModalHidden_${year}-${month}-${day}`; // ✅ "welcomeModalHidden_2025-04-18" 형식
+    document.addEventListener("DOMContentLoaded", function () {
+        // ✅ 한국 시간 기준으로 오늘 날짜 생성
+        const koreaNow = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Seoul"}));
+        const year = koreaNow.getFullYear();
+        const month = String(koreaNow.getMonth() + 1).padStart(2, '0');
+        const day = String(koreaNow.getDate()).padStart(2, '0');
+        const todayKey = `welcomeModalHidden_${year}-${month}-${day}`; // ✅ "welcomeModalHidden_2025-04-18" 형식
 
-    const modal = document.getElementById("welcomeModal");
-    const closeBtn = document.getElementById("closeModal");
-    const dontShowBtn = document.getElementById("dontShowTodayBtn");
+        const modal = document.getElementById("welcomeModal");
+        const closeBtn = document.getElementById("closeModal");
+        const dontShowBtn = document.getElementById("dontShowTodayBtn");
 
-    // ✅ 오늘 하루 보지 않기 안 눌렀다면 모달 보여주기
-    if (!localStorage.getItem(todayKey)) {
-      modal.style.display = "flex";
-    }
+        // ✅ 오늘 하루 보지 않기 안 눌렀다면 모달 보여주기
+        if (!localStorage.getItem(todayKey)) {
+            modal.style.display = "flex";
+        }
 
-    // ✅ '들어가기' 버튼: 단순히 닫기만
-    closeBtn.addEventListener("click", function () {
-      modal.style.display = "none";
+        // ✅ '들어가기' 버튼: 단순히 닫기만
+        closeBtn.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        // ✅ '오늘 하루 보지 않기' 버튼: localStorage에 저장 후 닫기
+        dontShowBtn.addEventListener("click", function () {
+            localStorage.setItem(todayKey, "true");
+            modal.style.display = "none";
+        });
     });
-
-    // ✅ '오늘 하루 보지 않기' 버튼: localStorage에 저장 후 닫기
-    dontShowBtn.addEventListener("click", function () {
-      localStorage.setItem(todayKey, "true");
-      modal.style.display = "none";
-    });
-  });
 </script>
 
 </body>
