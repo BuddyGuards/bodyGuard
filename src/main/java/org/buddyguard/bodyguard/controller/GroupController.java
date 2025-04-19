@@ -85,7 +85,7 @@ public class GroupController {
             result = groupRepository.findAll();
             model.addAttribute("isSearch", false); // 전체글 표시
 
-        // 검색어가 있으면
+            // 검색어가 있으면
         } else {
             result = groupRepository.findByNameLikeOrGoalLike("%" + wordValue + "%");
             model.addAttribute("isSearch", true); // 검색결과 표시
@@ -158,6 +158,17 @@ public class GroupController {
             }
 
             model.addAttribute("pendingUsers", pendingUsers);
+
+            // 멤버 강퇴
+            List<GroupMember> approvedMembers = groupMemberRepository.findApprovedMembers(group.getId());
+            List<User> approvedUsers = new ArrayList<>();
+
+            for (GroupMember gm : approvedMembers) {
+                User u = userRepository.findById(gm.getUserId());
+                if (u != null) approvedUsers.add(u);
+            }
+
+            model.addAttribute("approvedUsers", approvedUsers);
         }
 
         // 그룹 게시글 리스트 구성
@@ -294,6 +305,37 @@ public class GroupController {
 
         return "redirect:/group/" + groupId;
     }
+
+    // 그룹 리더가 멤버 강퇴
+    @Transactional
+    @PostMapping("/{groupId}/kick")
+    public String kickMemberHandle(@PathVariable("groupId") String groupId,
+                                   @RequestParam("targetUserId") int targetUserId,
+                                   @SessionAttribute("user") User user) {
+
+        Group group = groupRepository.findById(groupId);
+
+        // 리더가 아니면 강퇴 불가
+        if (group == null || group.getCreatorId() != user.getId()) {
+            return "redirect:/group/" + groupId;
+        }
+
+        // 리더 자신은 강퇴 불가
+        if (user.getId() == targetUserId) {
+            return "redirect:/group/" + groupId;
+        }
+
+        Map<String, Object> map = Map.of("groupId", groupId, "userId", targetUserId);
+        GroupMember member = groupMemberRepository.findByUserIdAndGroupId(map);
+
+        if (member != null && member.getJoinedAt() != null) {
+            groupMemberRepository.deleteById(member.getId());
+            groupRepository.subtractMemberCountById(groupId);
+        }
+
+        return "redirect:/group/" + groupId;
+    }
+
 
     // 그룹 내 새 게시글 등록
     @PostMapping("/{groupId}/post")
