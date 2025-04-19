@@ -36,7 +36,11 @@
 
 
     <select id="findPendingMembers" resultType="groupmember">
-        select * from group_members
-        where group_id = #{groupId} and joined_at is null
+        select * from group_members where group_id = #{groupId} and joined_at is null
+    </select>
+
+    <!-- 멤버 강퇴 -->
+    <select id="findApprovedMembers" resultType="groupMember" parameterType="string">
+        select * from group_members where group_id = #{groupId} and joined_at is not null
     </select>
 </mapper>

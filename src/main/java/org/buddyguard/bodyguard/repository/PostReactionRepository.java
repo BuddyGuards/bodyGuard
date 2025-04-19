@@ -21,5 +21,7 @@ public interface PostReactionRepository {
 
     public List<FeelingStats> countFeelingByPostId(@Param("postId") int postId);
 
+    public int deleteByPostId (int postId);
+
     
 }

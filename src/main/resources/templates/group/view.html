@@ -393,7 +393,9 @@
                 </div>
                 <div th:if="${status == 'PENDING'}">
                     <p>
-                        <button style="width: 100%; padding: 5px; font-size:1em;" disabled>승인 대기중</button>
+                        <a th:href="@{/group/{groupId}/cancel(groupId=${group.id})}">
+                            <button style="width: 100%; padding: 5px; font-size:1em;">신청 철회하기</button>
+                        </a>
                     </p>
                 </div>
                 <div th:if="${status == 'MEMBER'}">
@@ -438,6 +440,31 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 현재 가입된 멤버 목록 (리더만 보임) -->
+                <div th:if="${status == 'LEADER'}" style="margin-top: 20px;">
+                    <br>
+                    <hr style="border: none; border-top: 1px solid #ccc; margin: 16px 0;">
+                    <h4 style="font-size: 0.9em; margin-bottom: 8px;">현재 가입 멤버</h4>
+
+                    <div th:each="user : ${approvedUsers}" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 0.8em;">
+                        <span th:text="${user.nickname}">닉네임</span>
+
+                        <!-- 리더 표시 -->
+                        <span th:if="${group.creatorId == user.id}"
+                              style="color: #d09e36; font-weight: bold; margin-left: 6px;">👑</span>
+                        </span>
+
+                        <!-- 리더 본인은 강퇴버튼 안보이게 -->
+                        <th:block th:if="${user.id != sessionUserId}">
+                            <form th:action="@{/group/{groupId}/kick(groupId=${group.id})}" method="post"
+                                  onsubmit="return confirm('정말 강퇴하시겠습니까?');">
+                                <input type="hidden" name="targetUserId" th:value="${user.id}" />
+                                <button type="submit" style="font-size: 0.75em; padding: 2px 6px;">강퇴</button>
+                            </form>
+                        </th:block>
+                    </div>
+                </div>
             </div>
 
 
@@ -477,9 +504,9 @@
 
                             <!-- 왼쪽: 작성자 + 날짜 -->
                             <span>
-        <span th:text="${postWithWriter.writer.nickname}">작성자</span> •
-        <span th:text="${#temporals.format(postWithWriter.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
-    </span>
+                                <span th:text="${postWithWriter.writer.nickname}">작성자</span> •
+                                <span th:text="${#temporals.format(postWithWriter.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                            </span>
 
                             <!-- 오른쪽: 삭제 버튼 (본인 글일 때만) -->
                             <form th:if="${postWithWriter.post.writerId == sessionUserId}"
@@ -517,7 +544,6 @@
                 height: auto;
                 border-radius: 12px;">
                         </div>
-
 
                         <!-- 댓글 토글 및 감정 버튼 영역 -->
                         <div style="margin: 10px 0px; display: flex; align-items: center; gap: 16px;">

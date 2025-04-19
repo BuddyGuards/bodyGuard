@@ -27,4 +27,11 @@
         delete from bodyguard.groups where id = #{id}
     </delete>
 
+    <select id="findAll" resultType="group">
+        select * from `groups` order by created_at desc
+    </select>
+
+    <select id="findApprovedMembers" resultType="groupMember" parameterType="string">
+        select * from group_members where group_id = #{groupId} and joined_at is not null
+    </select>
 </mapper>

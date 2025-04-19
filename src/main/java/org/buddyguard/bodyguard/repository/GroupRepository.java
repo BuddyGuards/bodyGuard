@@ -19,4 +19,7 @@ public interface GroupRepository {
 
     public int deleteById (String id);
 
+    public List<Group> findAll();
+
+
 }

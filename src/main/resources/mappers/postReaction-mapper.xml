@@ -29,4 +29,7 @@
         group by feeling
     </select>
 
+    <delete id="deleteByPostId">
+        DELETE FROM post_reactions WHERE post_id = #{postId}
+    </delete>
 </mapper>

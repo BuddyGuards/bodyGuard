@@ -25,4 +25,7 @@ public interface GroupMemberRepository {
 
     public List<GroupMember> findPendingMembers(String groupId);
 
+    public List<GroupMember> findApprovedMembers(String groupId);
+
+
 }
