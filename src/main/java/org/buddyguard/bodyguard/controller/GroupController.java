@@ -76,23 +76,26 @@ public class GroupController {
     @GetMapping("/search")
     public String searchHandle(@RequestParam("word") Optional<String> word, Model model) {
 
-        // 검색어가 없으면
-        if (word.isEmpty()) {
-            return "redirect:/";
+        String wordValue = word.orElse("").trim(); // null-safe + 공백 제거
+
+        List<Group> result;
+
+        // 검색어가 비어 있으면
+        if (wordValue.isEmpty()) {
+            result = groupRepository.findAll();
+            model.addAttribute("isSearch", false); // 전체글 표시
+
+        // 검색어가 있으면
+        } else {
+            result = groupRepository.findByNameLikeOrGoalLike("%" + wordValue + "%");
+            model.addAttribute("isSearch", true); // 검색결과 표시
         }
 
-        String wordValue = word.get();
-
-        List<Group> result = groupRepository.findByNameLikeOrGoalLike("%" + wordValue + "%");
         List<GroupWithCreator> convertedResult = new ArrayList<>();
-
         for (Group one : result) {
             User found = userRepository.findById(one.getCreatorId());
-            GroupWithCreator c = GroupWithCreator.builder().group(one).creator(found).build();
-            convertedResult.add(c);
+            convertedResult.add(GroupWithCreator.builder().group(one).creator(found).build());
         }
-
-        System.out.println("search count : " + result.size());
 
         model.addAttribute("count", convertedResult.size());
         model.addAttribute("result", convertedResult);
