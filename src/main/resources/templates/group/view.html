@@ -398,7 +398,9 @@
                 </div>
                 <div th:if="${status == 'PENDING'}">
                     <p>
-                        <button style="width: 100%; padding: 5px; font-size:1em;" disabled>승인 대기중</button>
+                        <a th:href="@{/group/{groupId}/cancel(groupId=${group.id})}">
+                            <button style="width: 100%; padding: 5px; font-size:1em;">신청 철회하기</button>
+                        </a>
                     </p>
                 </div>
                 <div th:if="${status == 'MEMBER'}">
