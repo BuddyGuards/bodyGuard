@@ -226,6 +226,7 @@
             <li th:if="${user.provider == 'LOCAL' and user.verified == 'F'}">
                 <a th:href="@{/auth/send-token}">계정 인증</a>
             </li>
+            <li><a th:href="@{/auth/change-password}">비밀번호 변경</a></li>
             <li><a th:href="@{/auth/logout}">로그아웃</a></li>
             <li><a th:href="@{/auth/leave}">회원탈퇴</a></li>
         </ul>
