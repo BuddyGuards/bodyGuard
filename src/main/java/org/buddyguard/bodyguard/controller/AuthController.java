@@ -336,7 +336,8 @@ public class AuthController {
 
     // 이메일 토큰 유효성 검사
     @GetMapping("/email-verify")
-    public String emailVerifyHandle(@RequestParam("token") String token, Model model) {
+    public String emailVerifyHandle(@RequestParam("token") String token,
+                                    Model model, HttpSession session) {
 
         Verification found = verificationRepository.findByToken(token);
 
@@ -354,6 +355,9 @@ public class AuthController {
 
         String userEmail = found.getUserEmail();
         userRepository.updateVerifiedByEmail(userEmail);
+
+        User updatedUser = userRepository.findByEmail(userEmail);
+        session.setAttribute("user", updatedUser);
 
         return "auth/email-verify-success";
     }
