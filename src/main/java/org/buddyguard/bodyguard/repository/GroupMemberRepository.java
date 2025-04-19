@@ -27,5 +27,5 @@ public interface GroupMemberRepository {
 
     public List<GroupMember> findApprovedMembers(String groupId);
 
-
+    public void deleteByUserId(int userId);
 }
