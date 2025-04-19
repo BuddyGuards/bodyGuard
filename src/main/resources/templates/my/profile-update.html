@@ -7,27 +7,29 @@
     <style>
         body {
             font-family: 'Pretendard', sans-serif;
-            background-color: #fdfcfa;
-            color: #222;
+            background-color: #f8fafc;
+            color: #1e293b;
             margin: 0;
             padding: 0;
         }
 
         .wrap {
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 24px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            max-width: 520px;
+            margin: 48px auto;
+            padding: 32px;
+            background-color: #ffffff;
+            border: 1.5px solid #c7d2fe;
+            border-radius: 24px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
         }
 
         .index-header h2 {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
             text-align: center;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
+            color: #3b4d82;
         }
 
         .preview-box {
@@ -35,8 +37,9 @@
             height: 120px;
             border-radius: 50%;
             overflow: hidden;
-            margin: 0 auto 16px auto;
-            border: 2px solid #eee;
+            margin: 0 auto 20px auto;
+            border: 2px solid #c7d2fe;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
 
         .preview-box img {
@@ -52,25 +55,35 @@
         }
 
         li {
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             font-size: 14px;
+            color: #334155;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
-            padding: 10px;
+            padding: 10px 12px;
             margin-top: 6px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            background-color: #fafafa;
+            border-radius: 10px;
+            border: 1.5px solid #dbeafe;
+            background-color: #f9fbff;
             font-size: 14px;
             font-family: inherit;
+            transition: border 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #93c5fd;
+            outline: none;
+            background-color: #ffffff;
         }
 
         button {
             width: 100%;
-            padding: 12px;
-            background-color: #111;
+            padding: 13px;
+            background-color: #4f46e5;
             color: white;
             border: none;
             border-radius: 12px;
@@ -78,23 +91,26 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.3s;
-            margin-top: 16px;
+            margin-top: 20px;
         }
 
         button:hover {
-            background-color: #333;
+            background-color: #4338ca;
         }
 
         .back-btn {
             background-color: transparent;
-            color: #555;
+            color: #64748b;
             text-decoration: underline;
-            margin-top: 8px;
+            font-size: 13px;
+            display: block;
+            text-align: center;
+            margin-top: 12px;
         }
     </style>
+
 </head>
 <body>
-<button onclick="toggleDarkMode()">🌙 다크모드</button>
 <div class="wrap">
     <div class="index-header">
         <h2>마이페이지</h2>

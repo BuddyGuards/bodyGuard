@@ -32,4 +32,8 @@
     <delete id="deleteByPostId">
         DELETE FROM post_reactions WHERE post_id = #{postId}
     </delete>
+
+    <delete id="deleteByWriterId" parameterType="int">
+        delete from post_reactions where writer_id = #{writerId}
+    </delete>
 </mapper>

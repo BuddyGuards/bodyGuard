@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>마이페이지 | bodyGuard</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard&display=swap" rel="stylesheet">
     <style>
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: linear-gradient(to bottom, #ffffff, #f6f6f6);
+            background: #ffffff;
             color: #222;
             min-height: 100vh;
         }
@@ -29,7 +29,7 @@
         .sidebar {
             width: 240px;
             padding-right: 20px;
-            border-right: 1px solid #ddd;
+            border-right: 1px solid #dbeafe;
         }
 
         .sidebar h3 {
@@ -62,13 +62,16 @@
         }
 
         .welcome-box {
-            background: #f4f4fe;
+            background: #ffffff;
+            border: 1.5px solid #c7d2fe;
             border-radius: 16px;
             padding: 50px 30px;
             text-align: center;
             margin-bottom: 40px;
             position: relative;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.06);
+
         }
 
         .welcome-box h2 {
@@ -94,8 +97,11 @@
             background: white;
             border-radius: 16px;
             padding: 30px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.06);
+
             align-items: center;
+            border: 1.5px solid #c7d2fe;
         }
 
         .profile-img {
@@ -105,7 +111,7 @@
             border-radius: 50%;
             overflow: hidden;
             margin-right: 30px;
-            border: 2px solid #e5e5e5;
+            border: 2px solid #c7d2fe;
         }
 
         .profile-img img {
@@ -132,20 +138,21 @@
         .edit-btn {
             margin-top: 14px;
             display: inline-block;
-            background: #4f46e5;
-            color: white;
+            background: transparent;
+            border: 1.5px solid #4f46e5;
+            color: #4f46e5;
             padding: 10px 18px;
             border-radius: 8px;
             font-size: 14px;
             text-decoration: none;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
 
         .edit-btn:hover {
-            background: #3730a3;
+            background: #4f46e5;
+            color: white;
         }
 
-        /* 배경 일러스트 */
         .bg-illustration {
             position: fixed;
             bottom: 30px;
@@ -154,6 +161,7 @@
             opacity: 0.07;
             z-index: -1;
         }
+
         .menu-toggle {
             position: fixed;
             top: 20px;
@@ -168,7 +176,7 @@
         .side-menu {
             position: fixed;
             top: 0;
-            left: -250px; /* 숨김 */
+            left: -250px;
             width: 220px;
             height: 100vh;
             background-color: rgba(255, 255, 255, 0.96);
@@ -183,7 +191,7 @@
         }
 
         .side-menu.active {
-            left: 0; /* 보여줌 */
+            left: 0;
         }
 
         .menu-item {
@@ -194,13 +202,17 @@
         }
 
         .menu-item:hover {
-            color: #00a591; /* 포인트 컬러 */
+            color: #4f46e5;
         }
+
         body.dark-mode {
             background-color: #121212;
             color: #f5f5f5;
         }
+
+
         /* 필요 시 메뉴, 카드 등도 다크 스타일 추가 */
+
     </style>
 </head>
 <body>
@@ -210,7 +222,7 @@
 <!-- 왼쪽 사이드 메뉴 -->
 <div id="sideMenu" class="side-menu">
     <a href="/index" class="menu-item">🏠 홈</a>
-    <a href="/food/diary" class="menu-item">🍽 다이어리</a>
+    <a href="/my/diary" class="menu-item">🍽 다이어리</a>
     <a href="javascript:history.back()" class="menu-item">← 뒤로가기</a>
 </div>
 
@@ -220,7 +232,9 @@
         <h3>마이페이지</h3>
         <ul class="menu">
             <li><a th:href="@{/group/my-posts}">작성글 보기</a></li>
-            <li><a th:href="@{/auth/send-token}">계정 인증</a></li>
+            <li th:if="${user.provider == 'LOCAL' and user.verified == 'F'}">
+                <a th:href="@{/auth/send-token}">계정 인증</a>
+            </li>
             <li><a th:href="@{/auth/change-password}">비밀번호 변경</a></li>
             <li><a th:href="@{/auth/logout}">로그아웃</a></li>
             <li><a th:href="@{/auth/leave}">회원탈퇴</a></li>
@@ -259,7 +273,7 @@
 </div>
 
 <!-- 배경 일러스트 -->
-<img src="/images/bodyguard-bg-symbol.png" alt="bg" class="bg-illustration" />
+<img src="/images/bodyguard-bg-symbol.png" alt="bg" class="bg-illustration"/>
 
 <script>
     function toggleMenu() {

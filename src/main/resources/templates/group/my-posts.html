@@ -3,28 +3,28 @@
 <head>
     <title>내가 쓴 글 목록</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard&display=swap');
 
         body {
-            background: linear-gradient(to bottom, #f6f3f8,#3057d5);
-            font-family: 'Gowun Dodum', sans-serif;
+            background: #f0f4ff; /* 연한 파란 배경 */
+            font-family: 'Pretendard', sans-serif;
             padding: 60px 20px;
-            color: #3057d5;
+            color: #1e293b;
         }
 
         h1 {
-            font-size: 32px;
-            color: #3057d5;
+            font-size: 24px;
+            color: #1e293b;
             text-align: center;
-            margin-bottom: 50px;
-            letter-spacing: 1px;
-            border-bottom: 2px dashed #cbbad8;
+            margin-bottom: 48px;
+            letter-spacing: -0.3px;
+            border-bottom: 1px dashed #93c5fd;
             display: inline-block;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
         }
 
         .post-list {
-            max-width: 680px;
+            max-width: 720px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
@@ -32,60 +32,56 @@
         }
 
         .post-card {
-            background: #ffffff;
-            border: 1px solid #decfe8;
-            border-radius: 16px;
-            padding: 24px 28px;
-            box-shadow: 4px 4px 14px rgba(170, 150, 190, 0.08);
+            background: white;
+            border: 2px solid #93c5fd; /* 파란 테두리 */
+            border-radius: 18px;
+            padding: 28px 32px;
+            box-shadow: 0 6px 16px rgba(147, 197, 253, 0.1);
             position: relative;
             transition: transform 0.2s ease;
         }
 
         .post-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
         }
 
         .post-title {
             font-size: 18px;
-            font-weight: bold;
-            color: #3057d5;
+            font-weight: 600;
+            color: #1d4ed8;
         }
 
         .comment-count {
-            font-size: 13px;
-            background: #3057d5;
+            font-size: 12px;
+            background: #60a5fa;
             color: white;
             padding: 4px 12px;
-            border-radius: 30px;
+            border-radius: 999px;
             margin-left: 10px;
         }
 
         .post-meta {
             margin-top: 12px;
             font-size: 14px;
-            color: #3057d5;
+            color: #475569;
         }
 
         .post-meta a {
-            color: #3057d5;
+            color: #3b82f6;
             text-decoration: underline dotted;
-        }
-
-        .post-meta a:hover {
-            color: #3057d5;
         }
 
         .stamp {
             position: absolute;
             top: -12px;
             right: -12px;
-            background: #3057d5;
+            background: #60a5fa;
             color: white;
             font-size: 11px;
-            padding: 7px 14px;
-            border-radius: 100px;
-            font-family: 'Gowun Dodum', sans-serif;
-            box-shadow: 2px 2px 0 #3057d5;
+            padding: 6px 14px;
+            border-radius: 999px;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.04);
+            letter-spacing: 0.3px;
         }
 
         .delete-btn-form {
@@ -95,22 +91,23 @@
 
         .delete-btn-form button {
             background: transparent;
-            border: 1px solid #3057d5;
-            color: #3057d5;
+            border: 1.5px solid #93c5fd;
+            color: #3b82f6;
             padding: 6px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 13px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .delete-btn-form button:hover {
-            background: #f0e8f6;
+            background: #e0edff;
         }
 
         img {
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+            max-width: 100%;
         }
     </style>
 </head>

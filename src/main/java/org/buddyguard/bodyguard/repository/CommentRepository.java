@@ -23,5 +23,7 @@ public interface CommentRepository {
 
     public void deleteByPostId(int postId);
 
+    public void deleteByWriterId(int writerId);
+
 
 }
