@@ -41,7 +41,7 @@ public class GroupController {
     public String createHandle(Model model,
                                @SessionAttribute("user") @Nullable User user) {
 
-        if(user == null){
+        if (user == null) {
             return "auth/login";
         }
         return "group/create";
@@ -354,7 +354,6 @@ public class GroupController {
     }
 
 
-
     // 그룹 내 게시글 조회
     @GetMapping("/{groupId}/post/{postId}")
     public String viewPost(@PathVariable("groupId") String groupId,
@@ -480,6 +479,23 @@ public class GroupController {
         model.addAttribute("postWithGroups", postWithGroups);
 
         return "group/my-posts";
+    }
+
+    // 내 글 목록 보기에서 게시글 삭제
+    @Transactional
+    @PostMapping("/my-posts/delete")
+    public String deleteMyPost(@RequestParam("postId") int postId,
+                               @SessionAttribute("user") User user) {
+
+        Post post = postRepository.findById(postId);
+
+        // 본인 글인지 확인
+        if (post != null && post.getWriterId() == user.getId()) {
+            commentRepository.deleteByPostId(postId);   // 댓글 먼저 삭제
+            postRepository.deleteById(postId);          // 게시글 삭제
+        }
+
+        return "redirect:/group/my-posts";
     }
 
 }

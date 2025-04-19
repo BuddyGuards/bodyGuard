@@ -22,4 +22,6 @@ public interface PostRepository {
     // 게시글 삭제
     public void deleteById(int id);
 
+
+
 }

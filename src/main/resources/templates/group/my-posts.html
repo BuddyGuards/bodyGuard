@@ -10,7 +10,7 @@
             font-family: 'Gowun Dodum', sans-serif;
             padding: 60px 20px;
             color: #3c2f25;
-            background-image: url('/images/paper-texture.png'); /* 종이 질감 이미지가 있다면 */
+            background-image: url('/images/paper-texture.png');
             background-size: cover;
             background-repeat: no-repeat;
         }
@@ -81,7 +81,6 @@
             color: #3e2e25;
         }
 
-        /* 작은 스탬프 느낌 효과 */
         .stamp {
             position: absolute;
             top: -12px;
@@ -94,6 +93,12 @@
             font-family: 'Gowun Dodum', sans-serif;
             box-shadow: 2px 2px 0 #a0856f;
         }
+
+        /* 삭제 버튼 꾸미기 없음, 따로 스타일 지정 X */
+        .delete-btn-form {
+            margin-top: 16px;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -102,17 +107,17 @@
 <div class="post-list">
     <div class="post-card" th:each="item : ${postWithGroups}">
         <div class="stamp">bodyGuard</div>
+
         <p class="post-title">
             <span th:text="${item.post.content}">포스트 내용</span>
             <span class="comment-count" th:text="${item.commentCount}">0</span>
         </p>
 
-        <!-- 🔽 이미지가 있을 경우 출력 -->
         <div th:if="${item.post.imageUrl != null}" style="margin: 12px 0;">
             <img th:src="@{${item.post.imageUrl}}" alt="첨부 이미지"
                  style="width: 400px; height: 300px; object-fit: cover;
-            display: block; margin: 0 auto;
-            border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                 display: block; margin: 0 auto;
+                 border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
         </div>
 
         <p class="post-meta">
@@ -122,6 +127,17 @@
             &nbsp;•&nbsp;
             <span th:text="${#temporals.format(item.post.wroteAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
         </p>
+
+        <!-- 삭제 버튼 (아무 스타일 없이 기본 버튼) -->
+        <form th:action="@{/group/my-posts/delete}" method="post"
+              onsubmit="return confirm('정말 삭제하시겠습니까?');"
+              class="delete-btn-form">
+            <input type="hidden" name="postId" th:value="${item.post.id}" />
+            <input type="hidden" th:if="${_csrf != null}"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}" />
+            <button type="submit">삭제</button>
+        </form>
     </div>
 </div>
 </body>
