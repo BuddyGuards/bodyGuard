@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인 | BodyGuard</title>
-  <link rel="icon" th:href="@{/images/10.png}" type="image/png">
+  <link rel="icon" th:href="@{/images/logo.png}" type="image/png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,7 +122,7 @@
 <div class="login-container">
   <div class="logo">
     <a href="/">
-      <img src="/images/10.png" alt="로고" />
+      <img src="/images/logo.png" alt="로고" />
     </a>
   </div>
 
@@ -134,9 +134,10 @@
 
       <div class="sub-links">
         <a th:href="@{/auth/signup}">회원가입</a>
-        <a th:href="@{/auth/find-password}">비밀번호찾기</a>
+        <a th:href="@{/auth/find-password}">비밀번호 찾기</a>
       </div>
 
+      <br>
       <label>비밀번호</label>
       <input type="password" name="password" placeholder="비밀번호"/>
 

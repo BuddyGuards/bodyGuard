@@ -310,8 +310,8 @@
     <a th:href="@{/auth/logout}"><b>로그아웃</b></a>
     </th:block>
     <th:block th:unless="${user != null}">
-        <a th:href="@{/auth/login}">로그인</a>
-        <a th:href="@{/auth/signup}">회원가입</a>
+        <a th:href="@{/auth/login}"><b>로그인</b></a>
+        <a th:href="@{/auth/signup}"><b>회원가입</b></a>
     </th:block>
     </div>
 </header>
