@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>bodyGuard | 홈</title>
+    <title>홈 | BodyGuard</title>
     <link rel="icon" th:href="@{/images/10.png}" type="image/png">
     <style>
         * {
@@ -305,13 +305,13 @@
       <span th:text="${user.provider} + ' / 미인증'">provider / 미인증</span>
     </span>
 
-    <a th:href="@{/food/diary}">푸드다이어리</a>
-    <a th:href="@{/my/profile}">마이페이지</a>
-    <a th:href="@{/auth/logout}">로그아웃</a>
+    <a th:href="@{/food/diary}"><b>푸드 다이어리</b></a>
+    <a th:href="@{/my/profile}"><b>마이페이지</b></a>
+    <a th:href="@{/auth/logout}"><b>로그아웃</b></a>
     </th:block>
     <th:block th:unless="${user != null}">
-        <a th:href="@{/auth/login}">로그인</a>
-        <a th:href="@{/auth/signup}">회원가입</a>
+        <a th:href="@{/auth/login}"><b>로그인</b></a>
+        <a th:href="@{/auth/signup}"><b>회원가입</b></a>
     </th:block>
     </div>
 </header>
@@ -319,7 +319,7 @@
 <main class="gate_wrap">
     <div class="gate_item" style="background-image: url('/images/42.jpg');">
         <div class="gate_overlay" onclick="location.href='/auth/about'">
-            <h2 class="overlay-text">BODY Guard 2025</h2>
+            <h2 class="overlay-text">BodyGuard 2025</h2>
         </div>
     </div>
     <div class="gate_item" style="background-image: url('/images/41.jpg');">
@@ -350,7 +350,7 @@
 <div id="welcomeModal" class="modal" style="display: none;">
     <div class="modal-content">
         <h2>환영합니다! 🎉</h2>
-        <p>bodyGuard와 함께<br>당신의 건강한 루틴을 시작해보세요 💙</p>
+        <p>BodyGuard와 함께<br>당신의 건강한 루틴을 시작해보세요 💙</p>
         <button id="closeModal">들어가기</button>
         <button id="dontShowTodayBtn">오늘 하루 보지 않기</button>
     </div>
@@ -359,8 +359,8 @@
 
 <footer>
     <p class="slogan">“Every step counts with bodyMate”</p>
-    <p><strong>bodyGuard</strong> | 당신의 건강, 우리와 함께</p>
-    <p>© 2025 bodyGuard. All rights reserved.</p>
+    <p><strong>BodyGuard</strong> | 당신의 건강, 우리와 함께</p>
+    <p>© 2025 BodyGuard. All rights reserved.</p>
 
 </footer>
 

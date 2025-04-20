@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>모임 검색 | bodyGuard</title>
+    <title>모임 검색 | BodyGuard</title>
     <style>
         * {
             box-sizing: border-box;
@@ -241,25 +241,26 @@
 
 <div class="bottom-border-div">
 
-  <div class="index-header">
-    <div class="logo-area">
-      <a th:href="@{/index}">
-        <img th:src="@{/images/home.png}" style="height: 70px"/>
-      </a>
+    <div class="index-header">
+        <div class="logo-area">
+            <a th:href="@{/index}">
+                <img th:src="@{/images/home2.png}" style="height: 50px"/>
+            </a>
+        </div>
+        <div class="search-area">
+            <form th:action="@{/group/search}" method="get">
+                <input type="text" name="word" class="search-input" placeholder="모임 검색" th:value="${param.word}">
+            </form>
+        </div>
+        <div class="user-area">
+            <a th:href="@{/my/profile}">
+                <img th:src="@{/images/profile.png}" style="height: 50px"/>
+            </a>
+        </div>
     </div>
-    <div class="search-area">
-      <form th:action="@{/group/search}" method="get">
-        <input type="text" name="word" class="search-input" placeholder="모임 검색" th:value="${param.word}">
-      </form>
-    </div>
-    <div class="user-area">
-      <a th:href="@{/my/profile}">
-        <img th:src="@{/images/13.png}" style="height: 70px"/>
-      </a>
-    </div>
-  </div>
 
 </div>
+
 
 <div class="status-text" id="moodMessage">“당신은 지금 잘하고 있어요 💙”</div>
 

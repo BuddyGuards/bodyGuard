@@ -16,23 +16,25 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class MyController {
 
-    private final UserRepository userRepository;
-    private final UserService userService;
+    private UserRepository userRepository;
+    private UserService userService;
 
-    // 마이페이지 화면 핸들러
+    // 마이페이지 화면
     @GetMapping("/profile")
-    public String profileHandle(Model model, @SessionAttribute("user") @Nullable User user) {
+    public String profileHandle(@SessionAttribute("user") @Nullable User user,
+                                Model model) {
 
         if (user == null) {
             return "redirect:/auth/login";
         }
 
         model.addAttribute("user", user);
+
         return "my/profile";
     }
 
 
-    // 마이페이지 업데이트 핸들러
+    // 마이페이지 업데이트
     @GetMapping("/profile-update")
     public String profileUpdateHandle(Model model, @SessionAttribute("user") @Nullable User user) {
 
@@ -45,15 +47,18 @@ public class MyController {
         return "my/profile-update";
     }
 
-    // 마이페이지 업데이트 처리 핸들러
+    // 마이페이지 업데이트 처리
     @PostMapping("/profile-update")
     public String updateProfile(@SessionAttribute("user") User user, HttpSession session,
                                 @ModelAttribute ProfileUpdateRequest profileUpdateRequest) {
 
+        // 프로필 업데이트 요청 처리
         userService.updateUserProfile(user.getId(), profileUpdateRequest);
 
+        //  DB에서 업데이트된 사용자 정보 조회
         User updatedUser = userRepository.findById(user.getId());
 
+        // 세션에 업데이트된 사용자 정보 저장
         session.setAttribute("user", updatedUser);
 
         return "redirect:/my/profile";
