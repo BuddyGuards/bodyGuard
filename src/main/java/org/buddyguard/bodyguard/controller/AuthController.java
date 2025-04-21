@@ -376,10 +376,9 @@ public class AuthController {
         user.setPassword(newPassword);
         session.setAttribute("user", user);
 
-        // 변경 완료 메시지
-        model.addAttribute("success", "비밀번호가 변경되었습니다.");
 
-        return "redirect:/my/profile";
+
+        return "auth/change-password-success";
     }
 
 
