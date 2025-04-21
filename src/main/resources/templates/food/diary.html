@@ -413,52 +413,60 @@
             z-index: 1001;
             color: black; /* 배경에 따라 조정 */
         }
+        /* 오버레이 배경 */
         .overlay-menu {
-            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('/images/46.png') no-repeat center center;
-            background-size: cover;
-            backdrop-filter: brightness(0.6);
             z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
+        /* 활성화 시 보이기 */
+        .overlay-menu.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* 메뉴 콘텐츠 (슬라이드 되는 부분) */
         .menu-content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding: 6rem 2.5rem 2.5rem 2.5rem;
-            font-family: 'Pretendard', sans-serif;
-            font-size: 1.4rem;
-            color: black;
-            gap: 1.5rem;
+            width: 260px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            padding: 60px 20px;
+            position: relative;
         }
 
-        .menu-item {
-            color: black;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.3rem;
-            transition: all 0.2s ease;
+        /* 활성화 시 메뉴 들어오기 */
+        .overlay-menu.active .menu-content {
+            transform: translateX(0);
         }
 
-        .menu-item:hover {
-            text-decoration: underline;
-        }
-
-        .menu-item:first-child {
-            margin-top: 1.5rem;
-        }
-
+        /* 닫기 버튼 */
         .close-btn {
-            background: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
             border: none;
-            font-size: 1.8rem;
-            color: black;
+            background: none;
             cursor: pointer;
+        }
+
+        /* 메뉴 아이템 */
+        .menu-item {
+            display: block;
+            font-size: 1.2rem;
+            color: #333;
+            text-decoration: none;
+            margin: 20px 0;
         }
         .delete-btn {
             background: none;
@@ -517,8 +525,9 @@
 <body>
 <button class="menu-toggle">☰</button>
 
-<div class="overlay-menu" id="overlayMenu" >
+<div class="overlay-menu" id="overlayMenu">
     <div class="menu-content">
+        <button class="close-btn">✕</button>
         <a href="/index" class="menu-item">🏠 홈</a>
         <a href="/my/profile" class="menu-item">🍽 마이페이지</a>
         <a href="javascript:history.back()" class="menu-item">← 뒤로가기</a>
@@ -884,20 +893,26 @@
     });
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggleBtn = document.querySelector(".menu-toggle");
-        const overlay = document.getElementById("overlayMenu");
-        const closeBtn = document.querySelector(".close-btn");
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.querySelector('.menu-toggle');
+        const overlay = document.getElementById('overlayMenu');
+        const closeBtn = document.querySelector('.close-btn');
 
-        toggleBtn.addEventListener("click", () => {
-            overlay.style.display = "block";
+        toggleBtn.addEventListener('click', () => {
+            overlay.classList.add('active');
         });
 
-        closeBtn.addEventListener("click", () => {
-            overlay.style.display = "none";
+        closeBtn.addEventListener('click', () => {
+            overlay.classList.remove('active');
+        });
+
+        // 배경 클릭 시 닫기
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.classList.remove('active');
+            }
         });
     });
-
 </script>
 <script>
     function removeMeal(button) {
@@ -964,7 +979,7 @@
 
 
 <footer>
-    © 2025 bodyGuard | 몸과 마음을 지켜주는 감성 다이어리
+    © BodyGuard | 당신의 건강, 우리와 함께
 </footer>
 </body>
 </html>
