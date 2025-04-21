@@ -25,4 +25,9 @@
     <delete id="deleteById">
         delete from posts where id = #{id}
     </delete>
+
+    <delete id="deleteByWriterId" parameterType="int">
+        DELETE FROM posts
+        WHERE writer_id = #{writerId}
+    </delete>
 </mapper>

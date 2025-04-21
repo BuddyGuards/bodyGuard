@@ -89,4 +89,9 @@
         ON food_logs.food_id = foods.id
         where eaten_date = #{eatenDate}  and user_id = #{userId}
     </select>
+
+    <delete id="deleteByUserId" parameterType="int">
+        DELETE FROM food_logs
+        WHERE user_id = #{userId}
+    </delete>
 </mapper>

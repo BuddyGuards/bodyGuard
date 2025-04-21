@@ -1,6 +1,7 @@
 package org.buddyguard.bodyguard.repository;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.buddyguard.bodyguard.entity.Post;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public interface PostRepository {
     // 게시글 삭제
     public void deleteById(int id);
 
+
+    public int deleteByWriterId(@Param("writerId") int writerId);
 
 
 }

@@ -34,4 +34,9 @@
     <select id="findApprovedMembers" resultType="groupMember" parameterType="string">
         select * from group_members where group_id = #{groupId} and joined_at is not null
     </select>
+
+    <delete id="deleteByCreatorId" parameterType="int">
+        DELETE FROM bodyguard.groups
+        WHERE creator_id = #{creatorId}
+    </delete>
 </mapper>

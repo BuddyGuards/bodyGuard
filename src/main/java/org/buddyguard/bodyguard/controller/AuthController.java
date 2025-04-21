@@ -46,6 +46,10 @@ public class AuthController {
     private PostReactionRepository postReactionRepository;
     private GroupMemberRepository groupMemberRepository;
 
+    private FoodLogRepository foodLogRepository;
+    private PostRepository postRepository;
+    private GroupRepository groupRepository;
+
 
     // 회원가입 페이지
     @GetMapping("/signup")
@@ -174,10 +178,23 @@ public class AuthController {
         postReactionRepository.deleteByWriterId(userId);
         // 모임 멤버 삭제
         groupMemberRepository.deleteByUserId(userId);
+
+        // 푸드 다이어리 삭제
+        foodLogRepository.deleteByUserId(userId);
+
+        // 게시글 삭제
+        postRepository.deleteByWriterId(userId);
+
+        // 모임 삭제
+        groupRepository.deleteByCreatorId(userId);
+
+
         // 인증 정보 삭제
         verificationRepository.deleteByEmail(userEmail);
         // 사용자 삭제
         userRepository.deleteByEmail(userEmail);
+
+
 
         // 세션 초기화
         session.invalidate();
